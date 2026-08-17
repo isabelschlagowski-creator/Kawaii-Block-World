@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#f7b6d8">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>Kawaii Block World</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:system-ui,-apple-system,sans-serif;background:#9bdcff;touch-action:none}
+button,input{font:inherit}
+#game{position:fixed;inset:0;background:linear-gradient(#9bdcff 0 42%,#8dcc72 42%);overflow:hidden}
+.cloud{position:absolute;background:#fff;border-radius:50px;opacity:.8}
+#world{position:absolute;inset:0;transition:.12s}
+.tile{position:absolute;width:62px;height:62px;border:1px solid #0001;display:flex;align-items:center;justify-content:center;font-size:35px}
+.grass{background:#7fbd5d}.path{background:#d9c58e}.floor{background:#d7aa78}
+.wall{background:#f4e9dd;border:4px solid #d7c3b2}.water{background:#77cce8}
+#player{position:absolute;width:48px;height:48px;border-radius:16px;background:#ffd6e9;border:3px solid #fff;box-shadow:0 4px 10px #0003;display:grid;place-items:center;font-size:28px;z-index:8}
+.npc{position:absolute;width:48px;height:48px;border-radius:16px;border:3px solid white;box-shadow:0 4px 10px #0003;display:grid;place-items:center;font-size:26px;z-index:7}
+.bubble{position:absolute;bottom:53px;left:50%;transform:translateX(-50%);background:white;padding:5px 8px;border-radius:10px;font-size:11px;white-space:nowrap;box-shadow:0 2px 7px #0002}
+#top{position:fixed;left:10px;right:10px;top:max(10px,env(safe-area-inset-top));display:flex;justify-content:space-between;z-index:20;pointer-events:none}
+.pill{background:#fffde;border:2px solid #fff;border-radius:18px;padding:8px 12px;font-weight:800;box-shadow:0 4px 12px #0002}
+#hotbar{position:fixed;left:50%;transform:translateX(-50%);bottom:max(12px,env(safe-area-inset-bottom));display:flex;gap:5px;background:#fffcc;padding:6px;border-radius:16px;z-index:25;max-width:94vw;overflow:auto}
+.slot{min-width:58px;height:58px;border:3px solid #e6c5d5;background:white;border-radius:12px;display:grid;place-items:center;font-size:26px}
+.slot.sel{border-color:#ff72b5;transform:translateY(-4px)}
+#dpad{position:fixed;left:15px;bottom:95px;width:150px;height:150px;z-index:25}
+.move{position:absolute;width:50px;height:50px;border:0;border-radius:15px;background:#fffde;box-shadow:0 4px 12px #0002;font-size:25px}
+#up{left:50px}#down{left:50px;bottom:0}#left{left:0;top:50px}#right{right:0;top:50px}
+#actions{position:fixed;right:15px;bottom:95px;z-index:25;display:grid;gap:8px}
+.act{width:76px;height:55px;border:0;border-radius:15px;background:#fffde;box-shadow:0 4px 12px #0002;font-weight:900}
+#chatBtn{position:fixed;right:15px;top:75px;z-index:26;border:0;border-radius:18px;background:#ff8fc6;color:#fff;padding:11px 16px;font-weight:900;box-shadow:0 5px 15px #0002}
+#chat{display:none;position:fixed;right:12px;top:125px;width:min(360px,88vw);height:390px;background:#fffef8;border-radius:22px;z-index:40;box-shadow:0 12px 35px #0004;overflow:hidden}
+#chatHead{padding:12px;background:#ffd6e9;font-weight:900;display:flex;justify-content:space-between}
+#messages{height:285px;overflow:auto;padding:10px}
+.msg{margin:6px 0;padding:8px 10px;border-radius:12px;background:#f3eafa;font-size:13px}.me{background:#dff6ea;margin-left:30px}
+#chatForm{display:flex;padding:8px;gap:6px;border-top:1px solid #eee}
+#chatInput{min-width:0;flex:1;border:2px solid #f2c9dd;border-radius:12px;padding:9px}
+#send{border:0;border-radius:12px;background:#ff8fc6;color:white;font-weight:900;padding:0 12px}
+#start{position:fixed;inset:0;z-index:100;background:linear-gradient(#9bdcff,#ffe1f0);display:grid;place-items:center;padding:18px}
+.card{background:#fffef5;border:4px solid #fff;border-radius:28px;padding:25px;text-align:center;width:min(550px,94vw);box-shadow:0 20px 50px #0003}
+.card h1{font-size:clamp(32px,8vw,52px);margin:0 0 8px;color:#644c6c}
+.card p{color:#65586a;line-height:1.45}
+#play{border:0;background:#65b64f;color:#fff;border-radius:15px;padding:15px 32px;font-size:22px;font-weight:1000;box-shadow:inset 0 -5px #367d2b}
+#notice{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:50;background:#fff;padding:12px 18px;border-radius:16px;font-weight:900;opacity:0;pointer-events:none;transition:.2s}
+</style>
+</head>
+<body>
+<div id="game"><div id="world"></div></div>
+<div id="top"><div class="pill">🎀 Kawaii Block World</div><div class="pill">💗 <span id="hearts">5</span></div></div>
+<button id="chatBtn">💬 Chat</button>
+<div id="chat"><div id="chatHead"><span>💬 Les habitants</span><button id="closeChat">✕</button></div><div id="messages"></div><form id="chatForm"><input id="chatInput" maxlength="80" placeholder="Écris un message…"><button id="send">➤</button></form></div>
+<div id="hotbar"></div>
+<div id="dpad"><button class="move" id="up">▲</button><button class="move" id="down">▼</button><button class="move" id="left">◀</button><button class="move" id="right">▶</button></div>
+<div id="actions"><button class="act" id="place">🪑 Poser</button><button class="act" id="remove">🧹 Enlever</button></div>
+<div id="notice"></div>
+<div id="start"><div class="card"><h1>🌸 Kawaii Block World</h1><p>Construis ta maison, décore-la avec de jolis meubles et rencontre les habitants robots. Ils se promènent et discutent avec toi 💕</p><p><b>Cette première version est spécialement faite pour fonctionner au toucher sur iPad.</b></p><button id="play">▶ JOUER</button></div></div>
+<script>
+const TILE=62,W=26,H=20,world=document.getElementById('world');
+const map=Array.from({length:H},()=>Array.from({length:W},()=>({g:'grass',o:''})));
+for(let y=0;y<H;y++)for(let x=0;x<W;x++){if(x===12||x===13||y===15)map[y][x].g='path'}
+for(let y=3;y<=12;y++)for(let x=3;x<=10;x++)map[y][x].g='floor';
+for(let x=3;x<=10;x++){map[3][x].o='🧱';map[12][x].o='🧱'}for(let y=3;y<=12;y++){map[y][3].o='🧱';map[y][10].o='🧱'}
+map[12][6].o='';map[12][7].o='';
+[['🛋️',5,6],['🛋️',6,6],['🛏️',8,5],['🪴',9,10],['🪑',5,9],['🪵',6,9],['💡',8,10],['🍳',9,8]].forEach(a=>map[a[2]][a[1]].o=a[0]);
+const ITEMS=[['🛋️','Canapé'],['🛏️','Lit'],['🪑','Chaise'],['🪵','Table'],['💡','Lampe'],['🪴','Plante'],['🧸','Peluche'],['🌸','Fleur'],['🧱','Bloc']];
+let sel=0,px=13,py=16,dir=0;
+function renderMap(){world.innerHTML='';for(let y=0;y<H;y++)for(let x=0;x<W;x++){let d=document.createElement('div');d.className='tile '+map[y][x].g;d.style.left=x*TILE+'px';d.style.top=y*TILE+'px';d.textContent=map[y][x].o;world.appendChild(d)}world.appendChild(player);npcs.forEach(n=>world.appendChild(n.el));positionAll()}
+const player=document.createElement('div');player.id='player';player.textContent='👧';
+const npcData=[['Emma','👩','Salut ! 💕',15,9],['Léo','👦','Je construis une maison !',18,13],['Mia','👧','Tu veux jouer ?',21,6],['Noah','🧑','J’adore décorer !',6,16],['Lina','👩','Coucou 🌸',16,4],['Tom','👦','On explore ?',22,16]];
+const npcs=npcData.map(a=>{let e=document.createElement('div');e.className='npc';e.textContent=a[1];e.style.background=['#ffd4e7','#d9e8ff','#e8ddff','#d8f4e3'][Math.floor(Math.random()*4)];let b=document.createElement('div');b.className='bubble';b.textContent=a[2];e.appendChild(b);return{name:a[0],x:a[3],y:a[4],el:e}});
+function positionAll(){player.style.left=px*TILE+7+'px';player.style.top=py*TILE+7+'px';npcs.forEach(n=>{n.el.style.left=n.x*TILE+7+'px';n.el.style.top=n.y*TILE+7+'px'});let ox=innerWidth/2-(px*TILE+TILE/2),oy=innerHeight/2-(py*TILE+TILE/2);world.style.transform=`translate(${ox}px,${oy}px)`}
+function blocked(x,y){return x<0||y<0||x>=W||y>=H||map[y][x].o==='🧱'||npcs.some(n=>n.x===x&&n.y===y)}
+function move(dx,dy,d){dir=d;let nx=px+dx,ny=py+dy;if(!blocked(nx,ny)){px=nx;py=ny;positionAll()}}
+function front(){let a=[[0,-1],[1,0],[0,1],[-1,0]][dir];return{x:px+a[0],y:py+a[1]}}
+function note(t){let n=document.getElementById('notice');n.textContent=t;n.style.opacity=1;clearTimeout(note.t);note.t=setTimeout(()=>n.style.opacity=0,900)}
+function place(){let p=front();if(p.x<0||p.y<0||p.x>=W||p.y>=H)return;if(map[p.y][p.x].o){note('Cette case est occupée 😊');return}map[p.y][p.x].o=ITEMS[sel][0];renderMap();note(ITEMS[sel][1]+' posé ✨')}
+function remove(){let p=front();if(p.x<0||p.y<0||p.x>=W||p.y>=H)return;if(map[p.y][p.x].o&&map[p.y][p.x].o!=='🧱'){map[p.y][p.x].o='';renderMap();note('Objet enlevé 🧹')}}
+const hb=document.getElementById('hotbar');function hot(){hb.innerHTML='';ITEMS.forEach((it,i)=>{let b=document.createElement('button');b.className='slot'+(i===sel?' sel':'');b.innerHTML=`<span>${it[0]}</span>`;b.title=it[1];b.onclick=()=>{sel=i;hot();note(it[1])};hb.appendChild(b)})}hot();
+function bind(id,fn){let e=document.getElementById(id);e.addEventListener('pointerdown',ev=>{ev.preventDefault();fn()})}
+bind('up',()=>move(0,-1,0));bind('right',()=>move(1,0,1));bind('down',()=>move(0,1,2));bind('left',()=>move(-1,0,3));bind('place',place);bind('remove',remove);
+document.getElementById('play').onclick=()=>{document.getElementById('start').style.display='none';renderMap();addMsg('Emma','Bienvenue dans Kawaii Block World ! 🌸')};
+document.getElementById('chatBtn').onclick=()=>document.getElementById('chat').style.display='block';
+document.getElementById('closeChat').onclick=()=>document.getElementById('chat').style.display='none';
+function addMsg(who,text,me=false){let m=document.createElement('div');m.className='msg'+(me?' me':'');m.textContent=(me?'Toi':who)+' : '+text;document.getElementById('messages').appendChild(m);m.scrollIntoView()}
+const answers=['Ouiii 😍','Bonne idée !','Je viens avec toi 🌸','On construit quelque chose ? 🏡','J’adore ta maison !','Tu veux qu’on décore ? ✨','Coucou 💕','On va explorer !'];
+document.getElementById('chatForm').onsubmit=e=>{e.preventDefault();let i=document.getElementById('chatInput'),t=i.value.trim();if(!t)return;addMsg('',t,true);i.value='';setTimeout(()=>{let n=npcs[Math.floor(Math.random()*npcs.length)];addMsg(n.name,answers[Math.floor(Math.random()*answers.length)])},450)};
+setInterval(()=>{npcs.forEach(n=>{if(Math.random()<.35){let a=[[0,-1],[1,0],[0,1],[-1,0]][Math.floor(Math.random()*4)],nx=n.x+a[0],ny=n.y+a[1];if(nx>0&&ny>0&&nx<W-1&&ny<H-1&&map[ny][nx].o!=='🧱'&&!(nx===px&&ny===py)){n.x=nx;n.y=ny}}});positionAll()},1500);
+</script>
+</body></html>

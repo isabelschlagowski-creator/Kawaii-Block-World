@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<rect width="512" height="512" rx="110" fill="#ffd5e9"/>
+<rect x="92" y="205" width="328" height="230" rx="25" fill="#fff8ef"/>
+<path d="M65 230L256 72l191 158" fill="#e9b2d0" stroke="#fff" stroke-width="24" stroke-linejoin="round"/>
+<rect x="210" y="310" width="92" height="125" rx="14" fill="#c99dff"/>
+<rect x="120" y="270" width="72" height="72" rx="12" fill="#9cddff"/>
+<rect x="320" y="270" width="72" height="72" rx="12" fill="#9cddff"/>
+<circle cx="275" cy="374" r="8" fill="#fff"/>
+<text x="256" y="185" font-size="88" text-anchor="middle">🌸</text>
+</svg>

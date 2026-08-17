@@ -1,0 +1,9 @@
+{
+  "name": "Kawaii Block World",
+  "short_name": "Kawaii World",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffddea",
+  "theme_color": "#f7b6d8",
+  "icons": []
+}
