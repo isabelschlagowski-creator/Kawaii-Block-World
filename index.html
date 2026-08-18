@@ -1,614 +1,239 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Anna City V1 000 000 000</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
+<title>BlockWorld Chat</title>
 <style>
-*{box-sizing:border-box;-webkit-user-select:none;user-select:none}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#78c9ff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
-#game{width:100%;height:100%;display:block;touch-action:none}
-.ui{position:fixed;inset:0;pointer-events:none;color:#fff;z-index:1000}
-.panel{background:#10243be8;border:1px solid #ffffff28;border-radius:13px;box-shadow:0 8px 20px #0005}
-#profile{position:absolute;left:12px;top:12px;padding:9px 12px;width:225px;font-weight:900}
-#profile small{display:block;color:#c8ddff;font-size:11px;margin-top:2px}
-#topbar{position:absolute;left:50%;top:12px;transform:translateX(-50%);display:flex;gap:7px;pointer-events:auto}
-.topBtn{touch-action:manipulation;-webkit-tap-highlight-color:transparent;width:49px;height:49px;border:0;border-radius:11px;background:#173653e8;color:#fff;font-size:22px;box-shadow:0 5px 14px #0004}
-#money{position:absolute;right:12px;top:12px;padding:8px 12px;text-align:right;font-weight:900}
-#mini{position:absolute;right:12px;top:78px;width:125px;height:88px;border:2px solid #fff7;background:#4e7d45;border-radius:11px}
-#mini:before{content:"";position:absolute;inset:0;background:
-linear-gradient(90deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%),
-linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%)}
-#mini:after{content:"▲";position:absolute;left:53px;top:32px;font-size:20px}
-#leftMenu{position:absolute;left:12px;top:105px;display:grid;gap:6px;pointer-events:auto}
-.menuBtn{touch-action:manipulation;-webkit-tap-highlight-color:transparent;width:128px;height:40px;border:0;border-radius:9px;background:#142b43ed;color:white;text-align:left;padding:0 11px;font-weight:850}
-#rightTools{position:absolute;right:12px;top:180px;display:grid;gap:7px;pointer-events:auto}
-.toolBtn{touch-action:manipulation;-webkit-tap-highlight-color:transparent;width:58px;height:58px;border:0;border-radius:11px;background:#142b43ed;color:white;font-size:22px}
-#cross{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:30px;text-shadow:0 2px 4px #000}
-#hint{position:absolute;left:50%;bottom:93px;transform:translateX(-50%);background:#11263ddd;border-radius:9px;padding:7px 11px;font-size:11px;font-weight:850;white-space:nowrap}
-#hotbar{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:5px;padding:7px;background:#0e1d2de8;border-radius:13px;pointer-events:auto}
-.slot{touch-action:manipulation;-webkit-tap-highlight-color:transparent;width:54px;height:54px;border:2px solid #ffffff4a;border-radius:9px;background:#263d58;color:#fff;font-size:25px}
-.slot.sel{border-color:#ffd84a;box-shadow:0 0 0 2px #ffd84a35;transform:translateY(-4px)}
-.modal{display:none;position:absolute;z-index:1200;left:50%;top:50%;transform:translate(-50%,-50%);width:min(860px,94vw);max-height:82vh;overflow:auto;padding:16px;pointer-events:auto}
-.modal h2{margin:0 0 10px}.close{float:right;border:0;border-radius:8px;padding:7px 10px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
-.card{touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:88px;border:0;border-radius:11px;background:#f6f8fb;color:#142438;font-weight:850;padding:8px}
-.card b{display:block;font-size:28px;margin-bottom:4px}
-.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
-.tab{touch-action:manipulation;-webkit-tap-highlight-color:transparent;border:0;border-radius:9px;padding:9px 11px;background:#314a66;color:#fff;font-weight:850}
-.tab.active{background:#875ed3}
-#catalogInfo{background:#ffffff12;padding:9px;border-radius:9px;margin-bottom:10px;font-size:13px}
-#chat{display:none;position:absolute;z-index:1200;right:14px;bottom:86px;width:min(390px,88vw);height:430px;padding:12px;pointer-events:auto}
-#msgs{height:310px;overflow:auto;margin:8px 0}
-.msg{max-width:88%;padding:8px 10px;border-radius:12px;margin:6px 0;font-size:13px}
-.me{margin-left:auto;background:#587df2}.npc{background:#35485f}
-.chatrow{display:flex;gap:6px}.chatrow input{flex:1;border:0;border-radius:9px;padding:10px;user-select:text}.chatrow button{border:0;border-radius:9px;padding:0 14px;background:#c45ee5;color:white;font-size:19px}
-#status{position:absolute;left:50%;top:73px;transform:translateX(-50%);background:#10243be8;border-radius:9px;padding:7px 11px;font-weight:800;opacity:0;transition:.15s}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#83c9ff;font-family:Arial,Helvetica,sans-serif;touch-action:none}
+#game{position:fixed;inset:0}
+canvas{display:block;width:100%;height:100%}
+#hud{position:fixed;inset:0;pointer-events:none;color:white;text-shadow:0 2px 3px #000}
+#top{position:absolute;top:max(10px,env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start}
+.badge{background:rgba(0,0,0,.45);backdrop-filter:blur(5px);border:2px solid rgba(255,255,255,.45);border-radius:12px;padding:8px 11px;font-weight:800}
+#cross{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:34px;font-weight:300}
+#hotbar{position:absolute;bottom:max(12px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;gap:6px;pointer-events:auto}
+.slot{width:48px;height:48px;border:3px solid rgba(255,255,255,.65);border-radius:8px;background:rgba(25,25,25,.55);display:grid;place-items:center;font-size:25px;box-shadow:0 3px 8px #0008}
+.slot.sel{border-color:#fff;background:rgba(255,255,255,.25);transform:translateY(-4px)}
+#joy{position:absolute;left:24px;bottom:88px;width:142px;height:142px;border-radius:50%;background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.35);pointer-events:auto}
+#knob{position:absolute;left:46px;top:46px;width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.6);box-shadow:0 2px 8px #0006}
+#look{position:absolute;right:0;top:0;width:48%;height:100%;pointer-events:auto}
+.btn{position:absolute;pointer-events:auto;border:none;color:white;font-weight:900;text-shadow:0 2px 3px #000;background:rgba(20,20,20,.45);border:2px solid rgba(255,255,255,.5);border-radius:50%;width:62px;height:62px;font-size:24px;backdrop-filter:blur(4px)}
+#jump{right:28px;bottom:118px}
+#break{right:102px;bottom:74px}
+#place{right:28px;bottom:50px}
+#chatBtn{right:22px;top:70px;width:74px;height:46px;border-radius:15px;font-size:16px}
+#help{left:12px;top:70px;width:auto;height:auto;padding:10px 12px;border-radius:12px;font-size:14px}
+#chat{position:fixed;right:12px;top:130px;width:min(360px,calc(100vw - 24px));height:340px;background:rgba(14,18,24,.88);border:2px solid rgba(255,255,255,.45);border-radius:16px;display:none;flex-direction:column;z-index:20;box-shadow:0 10px 35px #0008;overflow:hidden}
+#chat.open{display:flex}
+#chatHead{padding:10px 12px;background:rgba(255,255,255,.1);color:#fff;font-weight:900;display:flex;justify-content:space-between}
+#chatClose{border:0;background:#ffffff22;color:#fff;border-radius:9px;padding:3px 9px;font-size:18px}
+#msgs{flex:1;overflow:auto;padding:10px;color:#fff;font-size:14px}
+.msg{margin:0 0 8px;padding:7px 9px;border-radius:10px;background:#ffffff12}
+.me{background:#2b86ff55}
+.npc{background:#4caf5055}
+#chatForm{display:flex;padding:8px;gap:7px;background:#0004}
+#chatInput{flex:1;border:1px solid #ffffff55;border-radius:10px;padding:10px;font-size:16px;background:#fff;color:#111}
+#send{border:0;border-radius:10px;padding:0 14px;font-weight:900;background:#62c765;color:#fff}
+#start{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:linear-gradient(#86d0ff,#d8f3ff 65%,#79b85d)}
+#card{width:min(520px,90vw);background:rgba(20,25,20,.85);color:#fff;border:3px solid #ffffffaa;border-radius:22px;padding:24px;text-align:center;box-shadow:0 18px 50px #0008}
+#card h1{font-size:39px;margin:0 0 8px;letter-spacing:-1px}
+#card p{line-height:1.45}
+#play{font-size:22px;font-weight:900;border:0;border-radius:14px;padding:15px 28px;background:#6ccb5f;color:#fff;box-shadow:inset 0 -5px 0 #3d9637}
+#tip{font-size:12px;opacity:.75}
 </style>
 </head>
 <body>
-<canvas id="game"></canvas>
-
-<div class="ui">
-  <div id="profile" class="panel">👧 Anna ♥ Anna City<small>V1 000 000 000 · VITESSE NORMALE · NIVEAU 28 · MODE CRÉATIF · BLOCS ∞</small></div>
-  <div id="topbar">
-    <button class="topBtn" id="saveBtn">💾</button>
-    <button class="topBtn" id="peopleBtn">👥</button>
-    <button class="topBtn" id="chatBtn">💬</button>
-  </div>
-  <div id="money" class="panel">🪙 125 860<br>💎 3 250</div>
-  <div id="mini"></div>
-
-  <div id="leftMenu">
-    <button class="menuBtn" id="bagBtn">🎒 Inventaire</button>
-    <button class="menuBtn" id="catalogBtn">🏗️ Catalogue</button>
-    <button class="menuBtn" id="avatarBtn">👤 Avatar</button>
-    <button class="menuBtn" id="furnitureBtn">🛋️ Meubles</button>
-    <button class="menuBtn" id="vehicleBtn">🚗 Véhicules</button>
-    <button class="menuBtn" id="questsBtn">⭐ Quêtes</button>
-    <button class="menuBtn" id="mapBtn">🗺️ Carte</button>
-  </div>
-
-  <div id="rightTools">
-    <button class="toolBtn" id="breakBtn">⛏️</button>
-    <button class="toolBtn" id="placeBtn">🧱</button>
-    <button class="toolBtn" id="jumpBtn">⬆️</button>
-  </div>
-
-  <div id="cross">＋</div>
-  <div id="hint">👈 gauche : marcher · 👉 droite : regarder · ✌️ pincer : zoom</div>
-  <div id="hotbar"></div>
-  <div id="status"></div>
-
-  <div class="modal panel" id="inventoryModal">
-    <button class="close" id="inventoryClose">✕</button>
-    <h2>🎒 Inventaire créatif</h2>
-    <div class="grid" id="inventoryGrid"></div>
-  </div>
-
-  <div class="modal panel" id="catalogModal">
-    <button class="close" id="catalogClose">✕</button>
-    <h2>🏗️ Catalogue de la ville</h2>
-    <div id="catalogInfo">Choisis une catégorie, puis un modèle. Le bâtiment sera placé devant toi et restera modifiable bloc par bloc.</div>
-    <div class="tabs" id="catalogTabs"></div>
-    <div class="grid" id="catalogGrid"></div>
-  </div>
-
-  <div class="modal panel" id="avatarModal">
-    <button class="close" id="avatarClose">✕</button>
-    <h2>👤 Avatar d’Anna</h2>
-    <div class="grid" id="avatarGrid"></div>
-  </div>
-
-  
-<div class="modal panel" id="furnitureModal">
-  <button class="close" id="furnitureClose">✕</button>
-  <h2>🛋️ Meubles incroyables</h2>
-  <div class="tabs" id="furnitureTabs"></div>
-  <div class="grid" id="furnitureGrid"></div>
+<div id="game"></div>
+<div id="hud">
+ <div id="top"><div class="badge">❤️❤️❤️❤️❤️</div><div class="badge" id="coords">X 0 · Y 0 · Z 0</div></div>
+ <div id="cross">＋</div>
+ <div id="look"></div>
+ <div id="joy"><div id="knob"></div></div>
+ <button class="btn" id="jump">⬆</button>
+ <button class="btn" id="break">⛏</button>
+ <button class="btn" id="place">＋</button>
+ <button class="btn" id="chatBtn">💬 CHAT</button>
+ <button class="btn" id="help">🎮 Bouge à gauche · regarde à droite</button>
+ <div id="hotbar">
+  <div class="slot sel" data-type="grass">🌿</div>
+  <div class="slot" data-type="dirt">🟫</div>
+  <div class="slot" data-type="stone">⬜</div>
+  <div class="slot" data-type="wood">🪵</div>
+  <div class="slot" data-type="brick">🧱</div>
+ </div>
 </div>
 
-<div class="modal panel" id="peopleModal">
-    <button class="close" id="peopleClose">✕</button>
-    <h2>👥 Habitants dans le monde</h2>
-    <div class="grid" id="peopleGrid"></div>
-  </div>
-
-  <div id="chat" class="panel">
-    <button class="close" id="chatClose">✕</button>
-    <h3>💬 Chat du monde</h3>
-    <div id="msgs"></div>
-    <div class="chatrow"><input id="chatInput" placeholder="Écris un message…"><button id="sendBtn">➤</button></div>
-  </div>
+<div id="chat">
+ <div id="chatHead"><span>💬 Discussion du monde</span><button id="chatClose">×</button></div>
+ <div id="msgs">
+  <div class="msg npc"><b>Lina :</b> Salut ! Je suis dans le village près de la grande maison. 👋</div>
+  <div class="msg npc"><b>Noah :</b> Tu peux construire ce que tu veux ici !</div>
+ </div>
+ <form id="chatForm"><input id="chatInput" autocomplete="off" placeholder="Écris ton message…"/><button id="send">Envoyer</button></form>
 </div>
 
-<script src="https://cdn.babylonjs.com/babylon.js"></script>
-<script>
-(()=>{
-const $=id=>document.getElementById(id);
-const canvas=$('game');
-const engine=new BABYLON.Engine(canvas,true,{preserveDrawingBuffer:true,stencil:true});
-const scene=new BABYLON.Scene(engine);
-scene.clearColor=new BABYLON.Color4(.48,.79,1,1);
-scene.collisionsEnabled=true;
-scene.gravity=new BABYLON.Vector3(0,-.42,0);
+<div id="start">
+ <div id="card">
+  <h1>⛏️ BlockWorld</h1>
+  <p>Explore un monde 3D, saute, détruis et pose des blocs. Les commandes sont adaptées à l’iPad et le chat est accessible avec le bouton 💬.</p>
+  <button id="play">JOUER</button>
+  <p id="tip">Astuce : glisse ton doigt sur la moitié droite pour tourner la caméra.</p>
+ </div>
+</div>
 
-const camera=new BABYLON.UniversalCamera('Anna',new BABYLON.Vector3(0,3,10),scene);
-camera.applyGravity=true; camera.checkCollisions=true;
-camera.ellipsoid=new BABYLON.Vector3(.32,.82,.32);
-camera.minZ=.08; camera.fov=.9;
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js';
 
-new BABYLON.HemisphericLight('sky',new BABYLON.Vector3(0,1,0),scene).intensity=1.05;
+const game=document.getElementById('game');
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x8ed2ff);
+scene.fog=new THREE.Fog(0x8ed2ff,22,72);
+const camera=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,.05,120);
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(innerWidth,innerHeight);
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+game.appendChild(renderer.domElement);
 
-// PIXELATED VOXEL MATERIALS
-function pixelTexture(name, topHex, dirtHex, mode){
-  const tex=new BABYLON.DynamicTexture(name,{width:64,height:64},scene,false);
-  const ctx=tex.getContext();
-  function fill(hex){ctx.fillStyle=hex;ctx.fillRect(0,0,64,64)}
-  fill(mode==='dirt'?dirtHex:topHex);
-  // pixel speckles
-  const colors=mode==='dirt'?['#73492c','#9a6840','#6a4329','#aa7548']:['#4ea63e','#6bc653','#3f9135','#78d05e'];
-  for(let i=0;i<140;i++){
-    ctx.fillStyle=colors[Math.floor(Math.random()*colors.length)];
-    const s=[2,3,4][Math.floor(Math.random()*3)];
-    ctx.fillRect(Math.floor(Math.random()*32)*2,Math.floor(Math.random()*32)*2,s,s);
-  }
-  tex.update(false);
-  tex.updateSamplingMode(BABYLON.Texture.NEAREST_NEAREST);
-  return tex;
-}
-function matColor(name,hex,alpha=1){
-  const m=new BABYLON.StandardMaterial(name,scene);
-  m.diffuseColor=BABYLON.Color3.FromHexString(hex);m.alpha=alpha;
-  if(alpha<1)m.transparencyMode=BABYLON.Material.MATERIAL_ALPHABLEND;
-  return m;
-}
-const grassMat=new BABYLON.StandardMaterial('grassVoxel',scene);
-grassMat.diffuseTexture=pixelTexture('grassPixels','#59b746','#855631','grass');
-grassMat.diffuseTexture.uScale=1;grassMat.diffuseTexture.vScale=1;
-const dirtMat=new BABYLON.StandardMaterial('dirtVoxel',scene);
-dirtMat.diffuseTexture=pixelTexture('dirtPixels','#59b746','#855631','dirt');
+const hemi=new THREE.HemisphereLight(0xdff4ff,0x56703c,2.1); scene.add(hemi);
+const sun=new THREE.DirectionalLight(0xffffff,2.2); sun.position.set(25,38,15); sun.castShadow=true;
+sun.shadow.mapSize.set(1024,1024); sun.shadow.camera.left=-35;sun.shadow.camera.right=35;sun.shadow.camera.top=35;sun.shadow.camera.bottom=-35; scene.add(sun);
 
 const mats={
-  grass:grassMat,dirt:dirtMat,
-  stone:matColor('stone','#858b91'),white:matColor('white','#eceae3'),
-  glass:matColor('glass','#8fdcea',.42),wood:matColor('wood','#ae7a49'),
-  dark:matColor('dark','#3b4046'),leaf:matColor('leaf','#4a994b'),
-  water:matColor('water','#35badc',.74),pink:matColor('pink','#df62a4'),
-  purple:matColor('purple','#8256cf'),blue:matColor('blue','#487ce1'),
-  cyan:matColor('cyan','#39bdd6'),green:matColor('green','#3db56a'),
-  yellow:matColor('yellow','#dfb93e'),orange:matColor('orange','#dc8234'),
-  red:matColor('red','#c94a42'),black:matColor('black','#222831'),
-  skin:matColor('skin','#d9a47e'),hair:matColor('hair','#5b3828')
+ grass:new THREE.MeshLambertMaterial({color:0x6caf45}),
+ dirt:new THREE.MeshLambertMaterial({color:0x8d633c}),
+ stone:new THREE.MeshLambertMaterial({color:0xa6a7aa}),
+ wood:new THREE.MeshLambertMaterial({color:0x9d713f}),
+ leaf:new THREE.MeshLambertMaterial({color:0x4e9638}),
+ brick:new THREE.MeshLambertMaterial({color:0xb35c47}),
+ sand:new THREE.MeshLambertMaterial({color:0xd8c88a}),
+ water:new THREE.MeshLambertMaterial({color:0x4b9bdd,transparent:true,opacity:.72})
 };
-
-function box(name,x,y,z,sx,sy,sz,material,kind='decor',collision=true){
-  const b=BABYLON.MeshBuilder.CreateBox(name,{size:1},scene);
-  b.position.set(x,y,z); b.scaling.set(sx,sy,sz); b.material=material;
-  b.checkCollisions=collision; b.isPickable=true; b.metadata={kind};
-  return b;
+const geo=new THREE.BoxGeometry(1,1,1);
+const blocks=new Map(), meshes=[];
+const key=(x,y,z)=>`${x},${y},${z}`;
+function addBlock(x,y,z,t='grass'){
+ if(blocks.has(key(x,y,z))) return;
+ const m=new THREE.Mesh(geo,mats[t]||mats.grass); m.position.set(x,y,z); m.userData={x,y,z,t}; m.castShadow=t!=='water'; m.receiveShadow=true;
+ scene.add(m); blocks.set(key(x,y,z),m); meshes.push(m);
+}
+function removeBlock(m){
+ if(!m)return; scene.remove(m); blocks.delete(key(m.userData.x,m.userData.y,m.userData.z)); const i=meshes.indexOf(m); if(i>=0)meshes.splice(i,1);
 }
 
-// TRUE VOXEL GROUND: visible grass blocks with dirt underneath
-const CH=12, chunks=new Map();
-function makeChunk(cx,cz){
-  const key=cx+','+cz;if(chunks.has(key))return;
-  const root=new BABYLON.TransformNode('chunk',scene);
-  for(let x=0;x<CH;x++)for(let z=0;z<CH;z++){
-    const wx=cx*CH+x-CH/2, wz=cz*CH+z-CH/2;
-    const top=box('grassBlock',wx,.5,wz,1,1,1,mats.grass,'ground',true);top.parent=root;
-    const dirt=box('dirtBlock',wx,-.5,wz,1,1,1,mats.dirt,'ground',true);dirt.parent=root;
-  }
-  chunks.set(key,root);
+// terrain
+for(let x=-22;x<=22;x++) for(let z=-22;z<=22;z++){
+ const h=Math.floor(1.0*Math.sin(x*.22)+.7*Math.cos(z*.26));
+ addBlock(x,h,z,'grass'); addBlock(x,h-1,z,'dirt'); addBlock(x,h-2,z,'stone');
 }
-function streamChunks(){
-  const cx=Math.round(camera.position.x/CH),cz=Math.round(camera.position.z/CH);
-  for(let x=cx-2;x<=cx+2;x++)for(let z=cz-2;z<=cz+2;z++)makeChunk(x,z);
-  for(const [k,r] of [...chunks]){
-    const [x,z]=k.split(',').map(Number);
-    if(Math.abs(x-cx)>3||Math.abs(z-cz)>3){r.dispose();chunks.delete(k)}
-  }
+// pond
+for(let x=-6;x<=-1;x++) for(let z=7;z<=12;z++){ removeBlock(blocks.get(key(x,0,z))); addBlock(x,0,z,'water'); }
+// trees
+function tree(x,z){
+ let ground=-4;
+ for(let y=5;y>=-4;y--) if(blocks.has(key(x,y,z))){ground=y;break;}
+ for(let y=1;y<=4;y++)addBlock(x,ground+y,z,'wood');
+ for(let dx=-2;dx<=2;dx++)for(let dz=-2;dz<=2;dz++)for(let dy=3;dy<=5;dy++) if(Math.abs(dx)+Math.abs(dz)+(dy===5?1:0)<4)addBlock(x+dx,ground+dy,z+dz,'leaf');
 }
-streamChunks();
+[[-12,-9],[11,-11],[15,7],[-15,12],[7,14]].forEach(p=>tree(...p));
 
-// BUILDING BLOCKS
-const palette=[
- ['grass','🟩','Herbe'],['dirt','🟫','Terre'],['stone','🪨','Pierre'],['white','⬜','Béton blanc'],
- ['glass','🪟','Verre'],['wood','🪵','Bois'],['dark','⬛','Béton foncé'],['leaf','🌿','Feuille'],
- ['water','🟦','Eau'],['pink','🩷','Rose'],['purple','💜','Violet'],['blue','🔵','Bleu'],
- ['cyan','🩵','Cyan'],['green','💚','Vert'],['yellow','💛','Jaune'],['orange','🧡','Orange'],['red','❤️','Rouge']
+// house + village marker
+for(let x=5;x<=10;x++)for(let z=-1;z<=5;z++) addBlock(x,1,z,'wood');
+for(let y=2;y<=5;y++)for(let x=5;x<=10;x++)for(let z=-1;z<=5;z++){
+ const wall=x===5||x===10||z===-1||z===5;
+ const door=(z===-1&&(x===7||x===8)&&y<4);
+ if(wall&&!door)addBlock(x,y,z,'brick');
+}
+for(let x=4;x<=11;x++)for(let z=-2;z<=6;z++)addBlock(x,6,z,'wood');
+
+// player
+const player={pos:new THREE.Vector3(0,3,7),vel:new THREE.Vector3(),yaw:Math.PI,pitch:-.12,onGround:false};
+camera.position.copy(player.pos);
+let selected='grass';
+document.querySelectorAll('.slot').forEach(s=>s.addEventListener('pointerdown',e=>{
+ e.preventDefault(); selected=s.dataset.type; document.querySelectorAll('.slot').forEach(a=>a.classList.remove('sel')); s.classList.add('sel');
+}));
+
+// joystick
+const joy=document.getElementById('joy'),knob=document.getElementById('knob');
+let joyId=null,moveX=0,moveY=0;
+function joySet(e){
+ const r=joy.getBoundingClientRect(), cx=r.left+r.width/2,cy=r.top+r.height/2;
+ let dx=e.clientX-cx,dy=e.clientY-cy; const max=46,mag=Math.hypot(dx,dy)||1;
+ if(mag>max){dx=dx/mag*max;dy=dy/mag*max}
+ moveX=dx/max;moveY=dy/max;knob.style.transform=`translate(${dx}px,${dy}px)`;
+}
+joy.addEventListener('pointerdown',e=>{e.preventDefault();joyId=e.pointerId;joy.setPointerCapture(e.pointerId);joySet(e)});
+joy.addEventListener('pointermove',e=>{if(e.pointerId===joyId)joySet(e)});
+function joyEnd(e){if(e.pointerId===joyId){joyId=null;moveX=moveY=0;knob.style.transform='translate(0,0)'}}
+joy.addEventListener('pointerup',joyEnd);joy.addEventListener('pointercancel',joyEnd);
+
+// look
+const look=document.getElementById('look');let lookId=null,lx=0,ly=0;
+look.addEventListener('pointerdown',e=>{if(e.target!==look)return;lookId=e.pointerId;lx=e.clientX;ly=e.clientY;look.setPointerCapture(e.pointerId)});
+look.addEventListener('pointermove',e=>{if(e.pointerId!==lookId)return;let dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;player.yaw-=dx*.006;player.pitch-=dy*.004;player.pitch=Math.max(-1.35,Math.min(1.2,player.pitch))});
+look.addEventListener('pointerup',e=>{if(e.pointerId===lookId)lookId=null});
+look.addEventListener('pointercancel',e=>{if(e.pointerId===lookId)lookId=null});
+
+document.getElementById('jump').addEventListener('pointerdown',e=>{e.preventDefault();if(player.onGround){player.vel.y=7.5;player.onGround=false}});
+const ray=new THREE.Raycaster();
+function target(){
+ ray.setFromCamera(new THREE.Vector2(0,0),camera);
+ const hits=ray.intersectObjects(meshes,false);
+ return hits.find(h=>h.distance<6.5);
+}
+document.getElementById('break').addEventListener('pointerdown',e=>{e.preventDefault(); const h=target(); if(h)removeBlock(h.object)});
+document.getElementById('place').addEventListener('pointerdown',e=>{e.preventDefault(); const h=target(); if(h){const p=h.object.position.clone().add(h.face.normal);addBlock(Math.round(p.x),Math.round(p.y),Math.round(p.z),selected)}});
+
+// keyboard too
+const keys={};addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.code==='Space'&&player.onGround){player.vel.y=7.5;player.onGround=false}});
+addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+
+function groundY(x,z){
+ let y=-5;
+ for(let yy=10;yy>=-5;yy--){const b=blocks.get(key(Math.round(x),yy,Math.round(z)));if(b&&b.userData.t!=='water'){y=yy+.5;break}}
+ return y;
+}
+let last=performance.now();
+function tick(now){
+ requestAnimationFrame(tick); const dt=Math.min(.032,(now-last)/1000);last=now;
+ let sx=moveX+(keys['d']?1:0)-(keys['a']?1:0), sy=-moveY+(keys['w']?1:0)-(keys['s']?1:0);
+ const len=Math.hypot(sx,sy);if(len>1){sx/=len;sy/=len}
+ const speed=4.2;
+ const f=new THREE.Vector3(-Math.sin(player.yaw),0,-Math.cos(player.yaw));
+ const r=new THREE.Vector3(Math.cos(player.yaw),0,-Math.sin(player.yaw));
+ player.pos.addScaledVector(f,sy*speed*dt);player.pos.addScaledVector(r,sx*speed*dt);
+ player.vel.y-=18*dt;player.pos.y+=player.vel.y*dt;
+ const gy=groundY(player.pos.x,player.pos.z)+1.55;
+ if(player.pos.y<gy){player.pos.y=gy;player.vel.y=0;player.onGround=true}else player.onGround=false;
+ camera.position.copy(player.pos);
+ camera.rotation.order='YXZ';camera.rotation.y=player.yaw;camera.rotation.x=player.pitch;
+ document.getElementById('coords').textContent=`X ${player.pos.x.toFixed(0)} · Y ${player.pos.y.toFixed(0)} · Z ${player.pos.z.toFixed(0)}`;
+ renderer.render(scene,camera);
+}
+requestAnimationFrame(tick);
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+
+// chat
+const chat=document.getElementById('chat'),input=document.getElementById('chatInput'),msgs=document.getElementById('msgs');
+document.getElementById('chatBtn').addEventListener('pointerdown',e=>{e.preventDefault();chat.classList.add('open');setTimeout(()=>input.focus(),100)});
+document.getElementById('chatClose').onclick=()=>chat.classList.remove('open');
+function addMsg(cls,name,text){const d=document.createElement('div');d.className='msg '+cls;d.innerHTML=`<b>${name} :</b> ${text.replace(/[<>]/g,'')}`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}
+const answers=[
+ "Je suis près de la maison en briques 😄",
+ "Tu peux casser un bloc avec ⛏ et en poser un avec ＋.",
+ "J’adore ton monde ! Construis-moi une chambre avec une grande fenêtre.",
+ "Le petit lac est derrière la colline 🌊",
+ "On peut faire un château ensuite ! 🏰",
+ "Oui ! Je te suis dans l’aventure 😄"
 ];
-let selected='white',placed=[];
-
-function addPlaced(x,y,z,key,save=true){
-  const b=box('placed',x,y,z,1,1,1,mats[key]||mats.white,'placed',true);
-  b.metadata.key=key;placed.push(b);if(save)saveWorld();return b;
-}
-function saveWorld(){
-  try{
-    localStorage.setItem('annaV1000000000',JSON.stringify(
-      placed.filter(b=>!b.isDisposed()).map(b=>({x:b.position.x,y:b.position.y,z:b.position.z,k:b.metadata.key||'white'}))
-    ));
-  }catch(e){}
-}
-try{JSON.parse(localStorage.getItem('annaV1000000000')||'[]').forEach(o=>addPlaced(o.x,o.y,o.z,o.k,false))}catch(e){}
-
-function status(t){
-  const s=$('status');s.textContent=t;s.style.opacity=1;clearTimeout(status.t);status.t=setTimeout(()=>s.style.opacity=0,1200);
-}
-function pick(){
-  return scene.pickWithRay(camera.getForwardRay(9),m=>m.isPickable!==false);
-}
-function placeBlock(){
-  const p=pick();if(!p.hit){status('Vise un bloc ou le sol');return}
-  const n=p.getNormal(true)||BABYLON.Axis.Y;
-  const q=p.pickedPoint.add(n.scale(.55));
-  const x=Math.round(q.x),y=Math.max(1.5,Math.round(q.y)),z=Math.round(q.z);
-  addPlaced(x,y,z,selected,true);status('Bloc posé ✅');
-}
-function breakBlock(){
-  const p=pick();
-  if(p.hit&&p.pickedMesh.metadata?.kind==='placed'){
-    const m=p.pickedMesh;placed=placed.filter(b=>b!==m);m.dispose();saveWorld();status('Bloc cassé');
-  }else status('Tu peux casser les blocs que tu as construits');
-}
-
-// HOTBAR / INVENTORY
-const hotbar=$('hotbar'),invGrid=$('inventoryGrid');
-palette.slice(0,10).forEach((it,i)=>{
-  const b=document.createElement('button');b.className='slot'+(i===3?' sel':'');b.textContent=it[1];
-  b.onclick=()=>{selected=it[0];document.querySelectorAll('.slot').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');status(it[2])};
-  hotbar.appendChild(b);
+document.getElementById('chatForm').addEventListener('submit',e=>{
+ e.preventDefault();const t=input.value.trim();if(!t)return;addMsg('me','Moi',t);input.value='';
+ setTimeout(()=>addMsg('npc',Math.random()>.5?'Lina':'Noah',answers[Math.floor(Math.random()*answers.length)]),450);
 });
-palette.forEach(it=>{
-  const b=document.createElement('button');b.className='card';b.innerHTML='<b>'+it[1]+'</b>'+it[2];
-  b.onclick=()=>{selected=it[0];$('inventoryModal').style.display='none';status(it[2]+' sélectionné')};
-  invGrid.appendChild(b);
-});
-
-// CATALOG
-const catalogs={
- '🏠 Maisons':[
-  ['🏡','Maison moderne',7,6,5],['🏘️','Maison familiale',9,7,5],['🏠','Petite maison',5,5,4],['🌴','Villa contemporaine',11,8,6]
- ],
- '🏪 Magasins':[
-  ['👗','Boutique de mode',7,6,4],['🧸','Magasin de jouets',8,6,4],['🎮','Boutique gaming',7,6,4],['🛒','Supermarché',12,8,4],
-  ['🥐','Boulangerie',6,5,4],['💎','Bijouterie',6,5,4],['📚','Librairie',7,6,4],['🏬','Grand magasin',14,10,6]
- ],
- '🍕 Restaurants':[
-  ['🍕','Pizzeria',7,6,4],['🍔','Burger',7,6,4],['🍣','Sushi',7,6,4],['🍰','Café',6,5,4],['🍦','Glacier',5,5,3]
- ],
- '🌳 Parcs':[
-  ['🌷','Jardin fleuri',8,8,1],['🛝','Aire de jeux',10,8,1],['⛲','Parc avec fontaine',10,10,1],['🌴','Parc tropical',12,10,1]
- ],
- '🏢 Immeubles':[
-  ['🏢','Petit immeuble',8,7,9],['🏙️','Tour moderne',9,8,15],['🏨','Hôtel',11,9,10],['🏫','École',13,10,5],
-  ['🏥','Hôpital',14,11,6],['🏦','Banque',9,7,6],['🏤','Mairie',11,8,6],['🏬','Centre commercial',15,12,7]
- ]
-};
-let currentCat=Object.keys(catalogs)[0];
-function renderCatalogTabs(){
-  const t=$('catalogTabs');t.innerHTML='';
-  Object.keys(catalogs).forEach(k=>{
-    const b=document.createElement('button');b.className='tab'+(k===currentCat?' active':'');b.textContent=k;
-    b.onclick=()=>{currentCat=k;renderCatalogTabs();renderCatalogCards()};t.appendChild(b);
-  });
-}
-function renderCatalogCards(){
-  const g=$('catalogGrid');g.innerHTML='';
-  catalogs[currentCat].forEach((m,i)=>{
-    const b=document.createElement('button');b.className='card';b.innerHTML='<b>'+m[0]+'</b>'+m[1];
-    b.onclick=()=>{buildTemplate(currentCat,m,i);$('catalogModal').style.display='none'};
-    g.appendChild(b);
-  });
-}
-function buildTemplate(cat,m,index){
-  let f=camera.getDirection(BABYLON.Axis.Z);f.y=0;if(f.lengthSquared())f.normalize();
-  const cx=Math.round(camera.position.x+f.x*11),cz=Math.round(camera.position.z+f.z*11);
-  const [emoji,name,w,d,h]=m;
-  if(cat.includes('Parcs')){
-    for(let x=-Math.floor(w/2);x<=Math.floor(w/2);x++)for(let z=-Math.floor(d/2);z<=Math.floor(d/2);z++){
-      if(Math.random()<.10)addPlaced(cx+x,1.5,cz+z,'leaf',false);
-    }
-  }else{
-    const halfW=Math.floor(w/2),halfD=Math.floor(d/2);
-    for(let y=0;y<h;y++){
-      for(let x=-halfW;x<=halfW;x++)for(let z=-halfD;z<=halfD;z++){
-        const edge=Math.abs(x)===halfW||Math.abs(z)===halfD;
-        if(!edge)continue;
-        // doorway
-        if(z===halfD&&Math.abs(x)<=1&&y<3)continue;
-        let key='white';
-        if(y>=2&&y<=3&&z===halfD&&Math.abs(x)>1&&Math.abs(x)<halfW)key='glass';
-        else if(index%3===1)key='wood';
-        else if(index%3===2)key='dark';
-        addPlaced(cx+x,1.5+y,cz+z,key,false);
-      }
-    }
-    // floor + roof
-    for(let x=-halfW;x<=halfW;x++)for(let z=-halfD;z<=halfD;z++){
-      addPlaced(cx+x,1.5,cz+z,index%2?'wood':'white',false);
-      addPlaced(cx+x,1.5+h,cz+z,'white',false);
-    }
-  }
-  saveWorld();status(name+' construit ✅');
-}
-renderCatalogTabs();renderCatalogCards();
-
-
-// REAL FURNITURE CATALOG
-const furnitureCatalog={
- '🛋️ Salon':[['🛋️','Canapé luxe','sofa'],['📺','TV géante','tv'],['☕','Table basse','coffee'],['🪴','Grande plante','plant']],
- '🛏️ Chambre':[['🛏️','Lit moderne','bed'],['🗄️','Armoire','wardrobe'],['💡','Lampe design','lamp'],['🪞','Miroir','mirror']],
- '🍳 Cuisine':[['🍳','Cuisine équipée','kitchen'],['🧊','Réfrigérateur','fridge'],['🍽️','Table à manger','dining'],['🪑','Chaise','chair']],
- '🎮 Gaming':[['🖥️','Setup gaming','gaming'],['🪑','Fauteuil gamer','gamerchair'],['🎧','Coin musique','music'],['📚','Bibliothèque','books']]
-};
-let furnitureCat=Object.keys(furnitureCatalog)[0];
-function renderFurniture(){
- const tabs=$('furnitureTabs'),grid=$('furnitureGrid');tabs.innerHTML='';grid.innerHTML='';
- Object.keys(furnitureCatalog).forEach(k=>{
-  const b=document.createElement('button');b.className='tab'+(k===furnitureCat?' active':'');b.textContent=k;
-  b.onclick=()=>{furnitureCat=k;renderFurniture()};tabs.appendChild(b);
- });
- furnitureCatalog[furnitureCat].forEach(f=>{
-  const b=document.createElement('button');b.className='card';b.innerHTML='<b>'+f[0]+'</b>'+f[1];
-  b.onclick=()=>{placeFurniture(f[2]);$('furnitureModal').style.display='none';status(f[1]+' placé ✨')};grid.appendChild(b);
- });
-}
-function furnitureRoot(type,x,z){
- const root=new BABYLON.TransformNode('furniture',scene);root.position.set(x,1.05,z);root.metadata={kind:'furniture',type};
- function part(px,py,pz,sx,sy,sz,ma){const o=box('furniture',px,py,pz,sx,sy,sz,ma,'furniture',true);o.parent=root;return o}
- if(type==='sofa'){part(0,.45,0,3,.55,1,mats.purple);part(0,1,.4,3,.75,.35,mats.purple);part(-1.35,.75,0,.3,.8,1,mats.purple);part(1.35,.75,0,.3,.8,1,mats.purple)}
- else if(type==='tv'){part(0,1.25,0,3,1.7,.15,mats.black);part(0,.3,0,2.2,.4,.65,mats.dark)}
- else if(type==='coffee'){part(0,.45,0,2.2,.15,1.2,mats.glass);part(-.8,.2,0,.12,.5,.12,mats.dark);part(.8,.2,0,.12,.5,.12,mats.dark)}
- else if(type==='plant'){part(0,.45,0,.75,.8,.75,mats.white);for(let i=0;i<5;i++){let s=BABYLON.MeshBuilder.CreateSphere('leaf',{diameter:1.1,segments:8},scene);s.position.set((Math.random()-.5)*.7,1.2+Math.random()*.8,(Math.random()-.5)*.7);s.material=mats.leaf;s.parent=root}}
- else if(type==='bed'){part(0,.35,0,2.6,.5,4,mats.white);part(0,.65,-1.55,2.6,.7,.3,mats.pink);part(-.65,.7,-1.2,1,.25,.8,mats.white);part(.65,.7,-1.2,1,.25,.8,mats.white)}
- else if(type==='wardrobe'){part(0,1.3,0,2.4,2.6,.7,mats.wood);part(0,1.3,.37,.05,2.4,.05,mats.dark)}
- else if(type==='lamp'){part(0,.7,0,.15,1.4,.15,mats.dark);let s=BABYLON.MeshBuilder.CreateSphere('lamp',{diameter:.75,segments:12},scene);s.position.set(0,1.55,0);s.material=mats.yellow;s.parent=root}
- else if(type==='mirror'){part(0,1.3,0,1.5,2.4,.12,mats.glass)}
- else if(type==='kitchen'){part(0,.55,0,3.8,1.1,.8,mats.white);part(0,1.2,.3,3.8,.12,.8,mats.dark)}
- else if(type==='fridge'){part(0,1.25,0,1.3,2.5,1.2,mats.white);part(.35,1.25,.62,.06,2,.05,mats.dark)}
- else if(type==='dining'){part(0,.8,0,3,.15,1.7,mats.wood);for(let x of [-1.1,1.1])for(let z2 of [-.6,.6])part(x,.4,z2,.12,.8,.12,mats.dark)}
- else if(type==='chair'||type==='gamerchair'){part(0,.55,0,.9,.15,.9,type==='gamerchair'?mats.purple:mats.wood);part(0,1,.35,.9,1,.18,type==='gamerchair'?mats.purple:mats.wood)}
- else if(type==='gaming'){part(0,.75,0,2.8,.15,1,mats.dark);part(0,1.55,.35,2.2,1.2,.12,mats.black);part(0,.9,-.15,.65,.12,.3,mats.purple)}
- else if(type==='music'){part(-.55,.8,0,.8,1.6,.65,mats.black);part(.55,.8,0,.8,1.6,.65,mats.black)}
- else if(type==='books'){part(0,1.25,0,2.5,2.5,.45,mats.wood);for(let y=.35;y<2.3;y+=.55)part(0,y,.25,2.3,.08,.45,mats.dark)}
- return root;
-}
-function placeFurniture(type){
- let f=camera.getDirection(BABYLON.Axis.Z);f.y=0;if(f.lengthSquared())f.normalize();
- furnitureRoot(type,Math.round(camera.position.x+f.x*4),Math.round(camera.position.z+f.z*4));
-}
-renderFurniture();
-
-
-// NPCs: MANY PEOPLE
-const names=['Talcado','Awariz','Yoananas','Johanna','Inès','Léo','Camille','Noah','Mila','Lou','Hugo','Zoé','Adam','Nina','Tom','Sarah','Lucas','Chloé','Ethan','Manon','Jade','Emma','Lina','Maël','Lola','Arthur','Rose','Louis','Eva','Nora','Liam','Sofia','Gabriel','Alice','Enzo','Louna','Sacha','Clara','Nolan','Maya'];
-const people=[];
-function human(name,x,z,i){
-  const root=new BABYLON.TransformNode(name,scene);
-  root.position.set(x,1,z);
-
-  const shirts=[mats.pink,mats.purple,mats.blue,mats.cyan,mats.green,mats.yellow,mats.red,mats.white];
-  const pants=[mats.dark,mats.blue,mats.black,mats.purple];
-  const shirt=shirts[i%shirts.length], pant=pants[i%pants.length];
-  const hairColors=[mats.hair,mats.black,mats.yellow,mats.red,mats.dark];
-  const hairMat=hairColors[i%hairColors.length];
-
-  // Slightly varied human proportions
-  const scale=0.92 + (i%5)*0.03;
-  root.scaling.set(scale,scale,scale);
-
-  function cyl(n,px,py,pz,h,diam,ma){
-    const m=BABYLON.MeshBuilder.CreateCylinder(n,{height:h,diameter:diam,tessellation:16},scene);
-    m.position.set(px,py,pz);m.material=ma;m.parent=root;m.checkCollisions=false;m.isPickable=true;m.metadata={kind:'npc'};return m;
-  }
-  function sphere(n,px,py,pz,d,ma){
-    const m=BABYLON.MeshBuilder.CreateSphere(n,{diameter:d,segments:16},scene);
-    m.position.set(px,py,pz);m.material=ma;m.parent=root;m.checkCollisions=false;m.isPickable=true;m.metadata={kind:'npc'};return m;
-  }
-  function boxp(n,px,py,pz,sx,sy,sz,ma){
-    const m=box(n,px,py,pz,sx,sy,sz,ma,'npc',false);m.parent=root;return m;
-  }
-
-  // shoes
-  boxp('shoeL',-.18,.12,.08,.30,.18,.48,mats.black);
-  boxp('shoeR', .18,.12,.08,.30,.18,.48,mats.black);
-
-  // lower legs
-  const legL=cyl('legL',-.18,.55,0,.78,.22,pant);
-  const legR=cyl('legR', .18,.55,0,.78,.22,pant);
-
-  // hips / waist
-  boxp('hips',0,.98,0,.62,.34,.36,pant);
-
-  // torso shaped with shoulder/chest blocks
-  boxp('torso',0,1.46,0,.72,.86,.38,shirt);
-  boxp('shoulders',0,1.78,0,.88,.20,.40,shirt);
-
-  // neck
-  cyl('neck',0,1.96,0,.18,.18,mats.skin);
-
-  // arms: upper + forearm + hands
-  const upperL=cyl('upperL',-.53,1.55,0,.58,.18,shirt); upperL.rotation.z=-.05;
-  const upperR=cyl('upperR', .53,1.55,0,.58,.18,shirt); upperR.rotation.z=.05;
-  const foreL=cyl('foreL',-.56,1.15,0,.52,.15,mats.skin);
-  const foreR=cyl('foreR', .56,1.15,0,.52,.15,mats.skin);
-  sphere('handL',-.56,.88,0,.18,mats.skin);
-  sphere('handR', .56,.88,0,.18,mats.skin);
-
-  // head
-  const head=sphere('head',0,2.30,0,.62,mats.skin);
-
-  // ears
-  sphere('earL',-.31,2.30,0,.10,mats.skin);
-  sphere('earR', .31,2.30,0,.10,mats.skin);
-
-  // face: eyes, pupils, nose, mouth
-  const whiteEye=new BABYLON.StandardMaterial('eyeWhite'+i,scene);whiteEye.diffuseColor=new BABYLON.Color3(1,1,1);
-  const lipMat=new BABYLON.StandardMaterial('lip'+i,scene);lipMat.diffuseColor=BABYLON.Color3.FromHexString('#8b3a3a');
-  for(const ex of [-.12,.12]){
-    const ew=sphere('eyeWhite',ex,2.35,.285,.095,whiteEye);
-    sphere('pupil',ex,2.35,.335,.045,mats.black);
-  }
-  sphere('nose',0,2.25,.315,.07,mats.skin);
-  const mouth=boxp('mouth',0,2.14,.322,.14,.025,.025,lipMat);
-
-  // hair with multiple style parts
-  const cap=BABYLON.MeshBuilder.CreateSphere('hairCap',{diameter:.66,segments:16,slice:.55},scene);
-  cap.position.set(0,2.48,-.02);cap.material=hairMat;cap.parent=root;
-
-  if(i%4===0){
-    // long hair
-    boxp('hairBack',0,2.20,-.23,.58,.72,.16,hairMat);
-    boxp('hairL',-.27,2.20,-.02,.12,.68,.18,hairMat);
-    boxp('hairR', .27,2.20,-.02,.12,.68,.18,hairMat);
-  }else if(i%4===1){
-    // ponytail
-    sphere('pony',0,2.31,-.39,.30,hairMat);
-  }else if(i%4===2){
-    // side locks
-    boxp('lockL',-.29,2.27,.02,.10,.48,.12,hairMat);
-    boxp('lockR', .29,2.27,.02,.10,.48,.12,hairMat);
-  }else{
-    // short hair volume
-    boxp('hairTop',0,2.57,-.02,.52,.15,.48,hairMat);
-  }
-
-  // outfit details
-  if(i%3===0){
-    boxp('jacketL',-.34,1.48,.20,.08,.65,.05,mats.white);
-    boxp('jacketR', .34,1.48,.20,.08,.65,.05,mats.white);
-  }
-  if(i%5===0){
-    // skirt overlay
-    boxp('skirt',0,.93,0,.68,.42,.45,shirt);
-  }
-
-  root.metadata={
-    name,
-    target:new BABYLON.Vector3(x,1,z),
-    speed:.0035+Math.random()*.0015,
-    upperL,upperR,foreL,foreR,legL,legR,
-    phase:Math.random()*6
-  };
-  people.push(root);
-}
-names.forEach((n,i)=>human(n,-22+Math.random()*44,-22+Math.random()*44,i));
-
-const pg=$('peopleGrid');
-people.forEach(p=>{const b=document.createElement('button');b.className='card';b.innerHTML='<b>🧍</b>'+p.metadata.name;b.onclick=()=>{$('peopleModal').style.display='none';status(p.metadata.name+' est dans le monde')};pg.appendChild(b)});
-
-// AVATAR MENU
-['👧 Classique','👩🏻 Brune','👩🏼 Blonde','🧑🏽 Sport','👸 Princesse','🥷 Ninja','🧢 Street','🎾 Tennis'].forEach(a=>{
- const b=document.createElement('button');b.className='card';b.innerHTML='<b>'+a.split(' ')[0]+'</b>'+a.split(' ').slice(1).join(' ');
- b.onclick=()=>{$('avatarModal').style.display='none';status('Avatar changé')};$('avatarGrid').appendChild(b);
-});
-
-
-// iPad-safe button binding: pointerup + click fallback, with duplicate guard.
-function tap(id, fn){
-  const el=$(id);
-  if(!el) return;
-  let last=0;
-  const run=(e)=>{
-    if(e){ e.preventDefault(); e.stopPropagation(); }
-    const now=Date.now();
-    if(now-last<250) return;
-    last=now;
-    el.animate([{transform:'scale(.96)'},{transform:'scale(1)'}],{duration:120});
-    fn();
-  };
-  el.addEventListener('pointerup',run,{passive:false});
-  el.addEventListener('touchend',run,{passive:false});
-  el.addEventListener('click',run,{passive:false});
-}
-
-// BUTTONS: EXPLICIT, NO GLOBAL-ID DEPENDENCY
-tap('inventoryClose',()=>{$('inventoryModal').style.display='none';status('Inventaire fermé')});
-tap('catalogClose',()=>{$('catalogModal').style.display='none';status('Catalogue fermé')});
-tap('avatarClose',()=>{$('avatarModal').style.display='none';status('Avatar fermé')});
-tap('peopleClose',()=>{$('peopleModal').style.display='none';status('Habitants fermé')});
-tap('furnitureClose',()=>{$('furnitureModal').style.display='none';status('Meubles fermés')});
-
-tap('bagBtn',()=>{$('inventoryModal').style.display='block';status('Inventaire ouvert 🎒')});
-tap('catalogBtn',()=>{$('catalogModal').style.display='block';status('Catalogue ouvert 🏗️')});
-tap('avatarBtn',()=>{$('avatarModal').style.display='block';status('Avatar ouvert 👤')});
-tap('peopleBtn',()=>{$('peopleModal').style.display='block';status('Habitants ouverts 👥')});
-
-tap('placeBtn',()=>placeBlock());
-tap('breakBtn',()=>breakBlock());
-tap('jumpBtn',()=>{camera.cameraDirection.y+=.16;status('Saut ⬆️')});
-tap('saveBtn',()=>{saveWorld();status('Sauvegardé 💾')});
-
-tap('furnitureBtn',()=>{$('furnitureModal').style.display='block';status('Meubles ouverts 🛋️')});
-tap('vehicleBtn',()=>status('Bouton Véhicules OK ✅'));
-tap('questsBtn',()=>status('Bouton Quêtes OK ✅'));
-tap('mapBtn',()=>status('Bouton Carte OK ✅'));
-
-// CHAT
-function addMsg(name,text){
- const d=document.createElement('div');d.className='msg '+(name==='Anna'?'me':'npc');d.innerHTML='<b>'+name+'</b><br>'+text;$('msgs').appendChild(d);$('msgs').scrollTop=$('msgs').scrollHeight;
-}
-tap('chatBtn',()=>{$('chat').style.display='block';status('Chat ouvert 💬')});
-tap('chatClose',()=>{$('chat').style.display='none';status('Chat fermé')});
-async function sendChat(){
- const q=$('chatInput').value.trim();if(!q)return;$('chatInput').value='';addMsg('Anna',q);
- const nearest=[...people].sort((a,b)=>BABYLON.Vector3.Distance(a.position,camera.position)-BABYLON.Vector3.Distance(b.position,camera.position))[0];
- const n=nearest?.metadata?.name||'Talcado';
- let ans='Coucou Anna 😊';
- if(/constru|bloc|poser/i.test(q))ans='Choisis ton bloc en bas, vise le sol avec le + puis touche 🧱. Pour un bâtiment entier, ouvre 🏗️ Catalogue.';
- else if(/catalogue|immeuble|magasin/i.test(q))ans='Ouvre 🏗️ Catalogue à gauche : il y a Maisons, Magasins, Restaurants, Parcs et Immeubles.';
- else if(/vite|lent/i.test(q))ans='Je t’ai mise en vitesse lente maintenant 🙂';
- else ans=['Je suis là 😊','Bonne idée !','On peut construire ça ensemble 😄','Je me promène dans ton monde !'][Math.floor(Math.random()*4)];
- addMsg(n,ans);
-}
-tap('sendBtn',()=>sendChat());$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')sendChat()});
-addMsg('Talcado','Coucou Anna ❤️ Cette fois le catalogue est à gauche et tu peux vraiment poser les blocs.');
-
-// TOUCH CONTROLS — SLOW
-let moveT=null,lookT=null,pinch=null,mx=0,my=0;
-function isUI(t){return t&&t.closest&&t.closest('button,input,.modal,#chat,#hotbar,#leftMenu,#rightTools,#topbar,#profile,#money,#mini')}
-canvas.addEventListener('touchstart',e=>{
- if(isUI(e.target))return;e.preventDefault();
- if(e.touches.length>=2){const a=e.touches[0],b=e.touches[1];pinch=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)}
- for(const t of e.changedTouches){
-   if(t.clientX<innerWidth*.5&&!moveT)moveT={id:t.identifier,x0:t.clientX,y0:t.clientY};
-   else if(!lookT)lookT={id:t.identifier,x:t.clientX,y:t.clientY};
- }
-},{passive:false});
-canvas.addEventListener('touchmove',e=>{
- if(isUI(e.target))return;e.preventDefault();
- if(e.touches.length>=2){const a=e.touches[0],b=e.touches[1],d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);if(pinch)camera.fov=Math.max(.5,Math.min(1.25,camera.fov*(pinch/d)));pinch=d}
- for(const t of e.changedTouches){
-  if(moveT&&t.identifier===moveT.id){mx=Math.max(-1,Math.min(1,(t.clientX-moveT.x0)/85));my=Math.max(-1,Math.min(1,(t.clientY-moveT.y0)/85))}
-  if(lookT&&t.identifier===lookT.id){camera.rotation.y+=(t.clientX-lookT.x)*.0035;camera.rotation.x=Math.max(-1.15,Math.min(1.15,camera.rotation.x+(t.clientY-lookT.y)*.0027));lookT.x=t.clientX;lookT.y=t.clientY}
- }
-},{passive:false});
-canvas.addEventListener('touchend',e=>{
- for(const t of e.changedTouches){if(moveT&&t.identifier===moveT.id){moveT=null;mx=my=0}if(lookT&&t.identifier===lookT.id)lookT=null}
- if(e.touches.length<2)pinch=null;
-},{passive:false});
-
-// LOOP
-scene.onBeforeRenderObservable.add(()=>{
- streamChunks();
- let f=camera.getDirection(BABYLON.Axis.Z);f.y=0;if(f.lengthSquared())f.normalize();
- let r=camera.getDirection(BABYLON.Axis.X);r.y=0;if(r.lengthSquared())r.normalize();
- // VERY SLOW, deliberate speed
- camera.cameraDirection.addInPlace(f.scale(-my*.021));
- camera.cameraDirection.addInPlace(r.scale(mx*.019));
-
- people.forEach(p=>{
-   if(Math.random()<.003)p.metadata.target.set(-28+Math.random()*56,1,-28+Math.random()*56);
-   const dx=p.metadata.target.x-p.position.x,dz=p.metadata.target.z-p.position.z,d=Math.hypot(dx,dz);
-   if(d>.6){p.position.x+=dx/d*p.metadata.speed;p.position.z+=dz/d*p.metadata.speed;p.rotation.y=Math.atan2(dx,dz);p.metadata.phase+=.075;const a=Math.sin(p.metadata.phase)*.45;if(p.metadata.upperL){p.metadata.upperL.rotation.x=a;p.metadata.upperR.rotation.x=-a;p.metadata.foreL.rotation.x=a*.55;p.metadata.foreR.rotation.x=-a*.55;p.metadata.legL.rotation.x=-a*.45;p.metadata.legR.rotation.x=a*.45}}
- });
-});
-engine.runRenderLoop(()=>scene.render());
-window.addEventListener('resize',()=>engine.resize());
-})();
+document.getElementById('play').onclick=()=>document.getElementById('start').style.display='none';
 </script>
-<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1400;background:#7b4ce2;color:white;padding:6px 12px;border-radius:999px;font:800 12px system-ui;pointer-events:none">✨ ANNA CITY V1 000 000 000 · VITESSE NORMALE</div>
-<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1600;background:#7b4ce2;color:#fff;padding:7px 13px;border-radius:999px;font:900 12px system-ui;pointer-events:none">🚀 ANNA CITY V1 000 000 000</div>
-</body></html>
+</body>
+</html>
