@@ -1,196 +1,157 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#ffb8d8">
-<title>Kawaii Block World 3D</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Anna City</title>
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;overflow:hidden;background:#8fd4ff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
-#c{width:100%;height:100%;display:block}
-#start{position:fixed;inset:0;z-index:100;background:linear-gradient(#8fd4ff,#ffe0ee);display:grid;place-items:center;padding:20px}
-.card{width:min(600px,94vw);background:#fffdf7;border-radius:28px;padding:26px;text-align:center;box-shadow:0 20px 60px #0003;border:4px solid #fff}
-.card h1{margin:0 0 10px;color:#634e6d;font-size:clamp(36px,8vw,54px)}
-.card p{color:#6f5d75;line-height:1.45}
-#play{border:0;border-radius:16px;background:#62b34f;color:white;padding:15px 32px;font-size:22px;font-weight:1000;box-shadow:inset 0 -5px #367d2c}
-#hud{display:none;position:fixed;inset:0;pointer-events:none}
-.top{position:absolute;top:max(10px,env(safe-area-inset-top));left:10px;display:flex;gap:7px}
-.pill{background:#fffde;border:2px solid #fff;padding:8px 11px;border-radius:15px;font-weight:900;color:#604d69;box-shadow:0 4px 12px #0002}
-#cross{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:30px;color:white;text-shadow:0 2px 5px #000}
-#joy{position:absolute;left:18px;bottom:112px;width:132px;height:132px;border-radius:50%;background:#ffffff40;border:2px solid #fff8;pointer-events:auto}
-#nub{position:absolute;left:42px;top:42px;width:48px;height:48px;border-radius:50%;background:#fff9}
-#actions{position:absolute;right:14px;bottom:112px;display:grid;gap:8px;pointer-events:auto}
-.act{width:80px;height:58px;border:0;border-radius:15px;background:#fffde;color:#604d69;font-weight:900;box-shadow:0 4px 12px #0002}
-#menuBtns{position:absolute;right:10px;top:max(10px,env(safe-area-inset-top));display:flex;gap:6px;pointer-events:auto}
-.ui{border:0;border-radius:14px;background:#fffde;color:#604d69;padding:9px 11px;font-weight:900;box-shadow:0 4px 12px #0002}
-#hotbar{position:absolute;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:5px;background:#fffbd;padding:6px;border-radius:15px;max-width:94vw;overflow:auto;pointer-events:auto}
-.slot{flex:0 0 56px;height:56px;border:3px solid #e6bfd2;background:white;border-radius:11px;font-size:25px}
-.slot.sel{border-color:#ff6caf;transform:translateY(-4px)}
-.panel{display:none;position:fixed;inset:4%;z-index:120;background:#fffdf8;border-radius:28px;box-shadow:0 20px 60px #0005;padding:16px;overflow:auto}
-.head{position:sticky;top:0;background:#fffdf8;display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;z-index:2}
-.close{border:0;border-radius:12px;background:#ffd6e8;padding:9px 12px;font-weight:900}
-.tabs{display:flex;gap:7px;overflow:auto;margin-bottom:10px}
-.tab{border:0;border-radius:14px;padding:9px 12px;background:#eee5f0;font-weight:800;white-space:nowrap}
-.tab.on{background:#ff91c5;color:white}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
-.item{border:0;border-radius:16px;background:white;box-shadow:0 3px 12px #0002;padding:10px 5px;min-height:85px;font-size:11px;font-weight:800;color:#604d69}
-.item span{display:block;font-size:30px;margin-bottom:4px}
-#skinPreview{width:210px;height:255px;margin:12px auto;border-radius:25px;background:linear-gradient(#dff6ff,#ffe3f0);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;font-size:80px}
-.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-.opt{border:3px solid transparent;border-radius:15px;background:white;padding:8px;font-size:27px}
-.opt.on{border-color:#ff71b4}
-#chat{display:none;position:fixed;right:12px;top:65px;width:min(360px,88vw);height:390px;background:#fffdf8;border-radius:22px;z-index:130;box-shadow:0 15px 40px #0004;overflow:hidden}
-.chatHead{padding:11px;background:#ffd7e8;display:flex;justify-content:space-between;font-weight:900}
-#msgs{height:295px;overflow:auto;padding:8px}
-.msg{background:#f1e9f5;margin:6px 0;padding:8px 10px;border-radius:11px;font-size:13px}
-.me{background:#dcf4e6;margin-left:28px}
-#form{display:flex;gap:6px;padding:8px;border-top:1px solid #eee}
-#inp{min-width:0;flex:1;border:2px solid #ffd1e4;border-radius:11px;padding:9px}
-#send{border:0;border-radius:11px;background:#ff8fc5;color:white;font-weight:900;padding:0 12px}
-#toast{position:absolute;top:18%;left:50%;transform:translateX(-50%);background:white;padding:10px 15px;border-radius:14px;font-weight:900;color:#604d69;opacity:0;transition:.2s}
-@media(max-width:700px){.grid{grid-template-columns:repeat(3,1fr)}.panel{inset:2%}}
+html,body{margin:0;height:100%;overflow:hidden;background:#7ec8ff;font-family:Arial,sans-serif;touch-action:none}*{box-sizing:border-box}
+canvas{width:100%;height:100%;display:block}
+#start{position:fixed;inset:0;display:grid;place-items:center;background:linear-gradient(#7ec8ff,#e7f6ff);z-index:30}
+.card{background:#fff;padding:24px;border-radius:22px;width:min(90vw,560px);text-align:center;box-shadow:0 20px 50px #0004}.card button{border:0;background:#4caf50;color:#fff;padding:14px 26px;border-radius:12px;font-size:20px;font-weight:bold}
+#hud{display:none;position:fixed;inset:0;pointer-events:none}.pill{background:#17202be8;color:#fff;padding:8px 10px;border-radius:10px;font-weight:bold}
+#tl{position:absolute;top:10px;left:10px}.topbtns{position:absolute;right:10px;top:10px;display:flex;gap:5px;pointer-events:auto}.topbtns button,.act{border:0;border-radius:10px;background:#17202be8;color:#fff;font-weight:bold}
+.topbtns button{width:42px;height:42px;padding:0;font-size:20px;display:grid;place-items:center}
+.act{padding:9px 11px}
+#joy{position:absolute;left:18px;bottom:95px;width:125px;height:125px;border-radius:50%;background:#fff4;border:2px solid #fff7;pointer-events:auto}#nub{position:absolute;left:39px;top:39px;width:47px;height:47px;border-radius:50%;background:#fff9}
+#acts{position:absolute;right:14px;bottom:95px;display:grid;gap:7px;pointer-events:auto}.act{width:78px;height:54px;background:#fffde;color:#253243}
+#bar{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;background:#111c;padding:5px;border-radius:10px;pointer-events:auto}.slot{width:52px;height:52px;border:2px solid #7d8791;border-radius:7px;background:#24313d;color:#fff;font-size:23px}.sel{border-color:#fff}
+.panel{display:none;position:fixed;inset:4%;z-index:40;background:#f5f7fa;border-radius:18px;padding:14px;overflow:auto}.head{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#26334d;color:#fff;border-radius:9px;padding:8px 10px}
+.tabs{display:flex;gap:6px;overflow:auto}.tab{border:0;padding:8px 10px;border-radius:9px;background:#dfe5ec;font-weight:bold}.tab.on{background:#26334d;color:#fff}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}.item{border:0;background:#fff;border-radius:11px;padding:8px;font-weight:bold;min-height:72px}.item span{display:block;font-size:26px}
+#chat{display:none;position:fixed;right:12px;top:62px;width:min(360px,88vw);height:380px;background:#111820ee;color:#fff;z-index:50;border-radius:14px;overflow:hidden}.ch{padding:10px;background:#202b36;display:flex;justify-content:space-between}.msgs{height:285px;overflow:auto;padding:8px}.msg{margin:6px 0;font-size:13px}.msg b{color:#7ec8ff}.me b{color:#ff86bb}.form{display:flex;padding:8px;gap:6px}.form input{flex:1;min-width:0;background:#1d2831;border:1px solid #46515d;border-radius:8px;color:#fff;padding:9px}.form button{border:0;border-radius:8px;background:#fff;padding:0 12px}
+#cross{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:28px;color:#fff;text-shadow:0 2px 4px #000}
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
-
-<div id="start"><div class="card">
-<h1>🎀 Kawaii Block World 3D</h1>
-<p>Construis ton monde, place des meubles incroyables, crée ton look et rencontre des habitants robots.</p>
-<p><b>iPad :</b> joystick à gauche pour marcher · glisse sur l'écran pour regarder.</p>
-<button id="play">▶ JOUER</button>
-</div></div>
-
+<div id="start"><div class="card"><h1>Anna City</h1><p>Monde plat, construction libre et ta grande villa vide à aménager.</p><button id="play">JOUER</button></div></div>
 <div id="hud">
-<div class="top"><div class="pill">🏡 Créatif</div><div class="pill" id="selectedLabel">🟩 Herbe</div></div>
-<div id="menuBtns"><button class="ui" id="bagBtn">🎒 Sac</button><button class="ui" id="lookBtn">👗 Look</button><button class="ui" id="chatBtn">💬</button></div>
-<div id="cross">＋</div>
+<div id="tl" class="pill">👧 Anna ♥ Talcado</div>
+<div class="topbtns">
+<button id="bagBtn" title="Inventaire" aria-label="Inventaire">🎒</button>
+<button id="lookBtn" title="Look" aria-label="Look">👗</button>
+<button id="chatBtn" title="Chat" aria-label="Chat">💬</button>
+</div><div id="cross">+</div>
 <div id="joy"><div id="nub"></div></div>
-<div id="actions"><button class="act" id="place">✨ Poser</button><button class="act" id="remove">⛏️ Casser</button><button class="act" id="jump">⬆️ Sauter</button></div>
-<div id="hotbar"></div><div id="toast"></div>
+<div id="acts"><button id="place" class="act">🧱 Poser</button><button id="remove" class="act">⛏️ Casser</button><button id="jump" class="act">⬆️ Sauter</button></div>
+<div id="bar"></div>
+</div>
+<div class="panel" id="bag"><div class="head"><h2>Inventaire</h2><button class="close">Fermer</button></div><div class="tabs" id="tabs"></div><div class="grid" id="grid"></div></div>
+
+<div class="panel" id="look">
+  <div class="head"><h2>👗 Look</h2><button class="close" id="lookClose">Fermer</button></div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px">
+    <button class="item"><span>🎀</span>Nœud</button>
+    <button class="item"><span>👚</span>Tenue rose</button>
+    <button class="item"><span>🧥</span>Veste</button>
+    <button class="item"><span>👟</span>Chaussures</button>
+    <button class="item"><span>👑</span>Couronne</button>
+    <button class="item"><span>👜</span>Sac</button>
+    <button class="item"><span>🕶️</span>Lunettes</button>
+    <button class="item"><span>💎</span>Bijoux</button>
+  </div>
 </div>
 
-<div class="panel" id="bag"><div class="head"><h2>🎒 Inventaire</h2><button class="close">✕ Fermer</button></div><div class="tabs" id="tabs"></div><div class="grid" id="grid"></div></div>
-
-<div class="panel" id="look"><div class="head"><h2>👗 Studio Look</h2><button class="close">✕ Fermer</button></div>
-<div id="skinPreview"><div id="facePrev">👧🏻</div><div style="font-size:38px" id="stylePrev">🎀 👗</div></div>
-<h3>Visage</h3><div class="row" id="faces"></div><h3>Tenue</h3><div class="row" id="outfits"></div><h3>Accessoire</h3><div class="row" id="accs"></div></div>
-
-<div id="chat"><div class="chatHead"><span>💬 Mes amis robots</span><button class="close" id="chatClose">✕</button></div><div id="msgs"></div><form id="form"><input id="inp" maxlength="80" placeholder="Écris un message…"><button id="send">➤</button></form></div>
-
+<div id="chat"><div class="ch"><b>Chat</b><button class="close" id="chatClose">✕</button></div><div class="msgs" id="msgs"></div><form class="form" id="form"><input id="input" placeholder="Écrire un message..."><button>➤</button></form></div>
 <script src="https://cdn.babylonjs.com/babylon.js"></script>
 <script>
-(()=>{
-const canvas=document.getElementById('c');
-const engine=new BABYLON.Engine(canvas,true,{adaptToDeviceRatio:true});
-const scene=new BABYLON.Scene(engine);
-scene.clearColor=new BABYLON.Color4(.55,.82,1,1);
-scene.gravity=new BABYLON.Vector3(0,-.55,0);
-scene.collisionsEnabled=true;
-scene.fogMode=BABYLON.Scene.FOGMODE_LINEAR;scene.fogStart=30;scene.fogEnd=75;scene.fogColor=new BABYLON.Color3(.55,.82,1);
+const cv=document.getElementById('c'),engine=new BABYLON.Engine(cv,true),scene=new BABYLON.Scene(engine);
+scene.clearColor=new BABYLON.Color4(.48,.78,1,1);scene.gravity=new BABYLON.Vector3(0,-.55,0);scene.collisionsEnabled=true;
+const cam=new BABYLON.UniversalCamera('cam',new BABYLON.Vector3(0,4,22),scene);cam.applyGravity=true;cam.checkCollisions=true;cam.ellipsoid=new BABYLON.Vector3(.45,.9,.45);cam.minZ=.1;
+new BABYLON.HemisphericLight('h',new BABYLON.Vector3(0,1,0),scene).intensity=1;
+function mat(n,h,a=1){let m=new BABYLON.StandardMaterial(n,scene);m.diffuseColor=BABYLON.Color3.FromHexString(h);m.alpha=a;return m}
+const M={grass:mat('g','#78b95a'),white:mat('w','#f7f7f2'),pink:mat('p','#d94f96'),violet:mat('v','#8f5be8'),cyan:mat('c','#35c9dd'),blue:mat('b','#3d78d8'),green:mat('gr','#56a85f'),road:mat('r','#2d3338'),black:mat('bl','#20252b'),glass:mat('gl','#8bdcf1',.4),yellow:mat('y','#f4c542'),red:mat('re','#d84646'),wood:mat('wo','#a1744d')};
+function box(n,x,y,z,sx,sy,sz,m,col=true){let b=BABYLON.MeshBuilder.CreateBox(n,{size:1},scene);b.position.set(x,y,z);b.scaling.set(sx,sy,sz);b.material=m;b.checkCollisions=col;b.metadata={kind:n};return b}
+const chunks=new Set();function chunk(cx,cz){let k=cx+','+cz;if(chunks.has(k))return;chunks.add(k);for(let x=0;x<20;x++)for(let z=0;z<20;z++)box('ground',cx*20+x,0,cz*20+z,1,1,1,M.grass,true)}
+function ensure(){let cx=Math.floor(cam.position.x/20),cz=Math.floor(cam.position.z/20);for(let dx=-3;dx<=3;dx++)for(let dz=-3;dz<=3;dz++)chunk(cx+dx,cz+dz)}ensure();
 
-const camera=new BABYLON.UniversalCamera("cam",new BABYLON.Vector3(0,4,10),scene);
-camera.minZ=.1;camera.checkCollisions=true;camera.applyGravity=true;camera.ellipsoid=new BABYLON.Vector3(.45,.9,.45);
+const blocks=new Map(),K=(x,y,z)=>`${x},${y},${z}`;function addBlock(x,y,z,t){if(blocks.has(K(x,y,z)))return;let b=box('block',x,y,z,1,1,1,M[t]||M.white,true);b.metadata={kind:'block',x,y,z};blocks.set(K(x,y,z),b)}
 
-const light=new BABYLON.HemisphericLight("h",new BABYLON.Vector3(0,1,0),scene);light.intensity=.95;
-const sun=new BABYLON.DirectionalLight("s",new BABYLON.Vector3(-.4,-1,.25),scene);sun.position=new BABYLON.Vector3(20,35,-20);sun.intensity=.7;
+function villa(){
+let z=-18,y=1.05;
+box('villa',0,y,z,28,.2,22,M.white);
+box('villa',-13,y+2.2,z,1,4.4,22,M.white);box('villa',13,y+2.2,z,1,4.4,22,M.white);box('villa',0,y+2.2,z-10.5,26,4.4,1,M.white);
+box('villa',-8,y+2.2,z+10.5,8,4.4,1,M.white);box('villa',8,y+2.2,z+10.5,8,4.4,1,M.white);box('villa',0,y+2.2,z+10.45,7,3.6,.15,M.glass,false);
+box('villa',0,y+4.6,z,25,.35,19,M.white);
+box('villa',-11.5,y+6.6,z,1,4,17,M.white);box('villa',11.5,y+6.6,z,1,4,17,M.white);box('villa',0,y+6.6,z-8,23,4,1,M.white);
+box('villa',-7.8,y+6.6,z+8,6.5,4,1,M.white);box('villa',7.8,y+6.6,z+8,6.5,4,1,M.white);box('villa',0,y+6.6,z+7.95,8,3.3,.12,M.glass,false);
+box('villa',0,y+8.7,z-1,19,.35,14,M.white);
+box('villa',-9,y+10.6,z-1,1,3.8,14,M.white);box('villa',9,y+10.6,z-1,1,3.8,14,M.white);box('villa',0,y+10.6,z-7.5,18,3.8,1,M.white);
+box('villa',-6,y+10.6,z+5.5,5.5,3.8,1,M.white);box('villa',6,y+10.6,z+5.5,5.5,3.8,1,M.white);box('villa',0,y+10.6,z+5.45,5.5,3.2,.12,M.glass,false);
+box('villa',0,y+12.6,z-1,19,.35,14,M.white);
+box('villa',-12.2,y+6,z+6,1.2,10,1.4,M.pink);box('villa',12.2,y+6,z+6,1.2,10,1.4,M.pink);box('villa',-8.2,y+10.5,z+5,1,3.7,1,M.violet);
+box('villa',4,y+5.1,z+2,8,.25,8,M.white);box('water',4,y+5.3,z+2,6.8,.2,6.8,mat('wa','#2dc6e8',.8),false);
+box('villa',-4,y+1.15,z+3,7,.25,6,M.white);box('water',-4,y+1.3,z+3,5.8,.2,4.8,mat('wb','#35cbe8',.8),false);
+box('water',12.5,y+4.5,z+4,.35,7,.8,mat('wf','#32d9ef',.65),false);
+box('water',-12.5,y+4.2,z+4,.35,6.5,.8,mat('wg','#32d9ef',.65),false);
+box('villa',-8,y+1.7,z+8,7,3.3,4,M.white);box('villa',-8,y+1.8,z+10.05,5.5,2.4,.15,M.black,false);
+for(let i=0;i<8;i++)box('villa',-1.5,y+.25+i*.38,z+11-i*.65,5,.35,.7,M.white);
+for(const [x,zz] of [[-12,-8],[12,-8],[-13,8],[13,8],[-7,11],[7,11]]){box('decor',x,y+1.4,z+zz,.5,2.8,.5,M.wood);box('decor',x,y+3.2,z+zz,2.2,1.8,2.2,M.green,false)}
+}villa();
 
-function mat(name,hex){let m=new BABYLON.StandardMaterial(name,scene);m.diffuseColor=BABYLON.Color3.FromHexString(hex);m.specularColor=new BABYLON.Color3(.08,.08,.08);return m}
-const M={grass:mat('grass','#72b958'),dirt:mat('dirt','#8b5b38'),stone:mat('stone','#8f9296'),wood:mat('wood','#9b704b'),white:mat('white','#f4eee8'),pink:mat('pink','#ebb7cf'),lav:mat('lav','#cbb9ee'),cream:mat('cream','#f5e7d2'),walnut:mat('walnut','#6c4d3a'),green:mat('green','#5e9957'),gold:mat('gold','#d4b66f'),grey:mat('grey','#9d9d9d'),glass:mat('glass','#8ad8ef')};M.glass.alpha=.5;
+function road(x,z){box('road',x,.58,z,4,.18,20,M.road,false)}
+function building(x,z,type){box('building',x,3,z,8,5,6,M.white);box('building',x,5.8,z,6,.7,4,M[type]||M.blue,false);road(x,(z+10)/2)}
+function vehicle(x,z,col){box('vehicle',x,1.05,z,2.6,.8,1.5,col,false);box('vehicle',x,1.65,z,1.5,.55,1.25,M.glass,false)}
 
-function box(name,x,y,z,sx,sy,sz,ma,coll=true){let b=BABYLON.MeshBuilder.CreateBox(name,{size:1},scene);b.position.set(x,y,z);b.scaling.set(sx,sy,sz);b.material=ma;b.checkCollisions=coll;b.metadata={kind:name};return b}
-const blocks=new Map();const key=(x,y,z)=>`${x},${y},${z}`;
-function addBlock(x,y,z,type='grass'){if(blocks.has(key(x,y,z)))return;let b=box('block',x,y,z,1,1,1,M[type],true);b.metadata={kind:'block',x,y,z,type};blocks.set(key(x,y,z),b);return b}
-for(let x=-18;x<=18;x++)for(let z=-18;z<=18;z++){addBlock(x,0,z,'grass');addBlock(x,-1,z,'dirt')}
-for(let x=-18;x<=18;x++){addBlock(x,1,-18,'stone');addBlock(x,1,18,'stone')}
-for(let z=-18;z<=18;z++){addBlock(-18,1,z,'stone');addBlock(18,1,z,'stone')}
+function npc(name,x,z,shirt){box('npc',x,1.45,z,.8,1.4,.55,shirt,false).metadata={kind:'npc',name};box('npc',x,2.45,z,.75,.75,.75,mat(name,'#e7b795'),false).metadata={kind:'npc',name}}
+npc('Anna',1,12,M.pink);npc('Talcado',4,12,M.red);npc('Awariz',7,12,M.yellow);npc('Yoananas',10,12,M.blue);
+npc('Lina',13,13,M.pink);npc('Emma',15,11,M.violet);npc('Jade',13,9,M.cyan);
 
-function sofa(x,y,z){box('furn',x,y+.45,z,3.4,.8,1.4,M.cream);box('furn',x,y+1.05,z-.52,3.4,.7,.28,M.pink);box('furn',x-1.55,y+.75,z,.28,1.15,1.3,M.pink);box('furn',x+1.55,y+.75,z,.28,1.15,1.3,M.pink)}
-function bed(x,y,z){box('furn',x,y+.35,z,3.2,.7,4.1,M.walnut);box('furn',x,y+.8,z,3,.45,3.7,M.white);box('furn',x,y+1.05,z+.6,2.9,.16,2.0,M.lav);box('furn',x,y+1.6,z-1.95,3.4,2.2,.25,M.pink)}
-function chair(x,y,z){box('furn',x,y+.45,z,.9,.7,.9,M.cream);box('furn',x,y+1.05,z-.3,.9,1,.18,M.pink)}
-function table(x,y,z){box('furn',x,y+.95,z,2.4,.2,1.35,M.walnut);for(let dx of [-.9,.9])for(let dz of [-.45,.45])box('furn',x+dx,y+.45,z+dz,.14,.9,.14,M.grey)}
-function plant(x,y,z){box('furn',x,y+.35,z,.75,.7,.75,M.pink);box('furn',x,y+1.0,z,.15,1.2,.15,M.green,false);for(let i=0;i<5;i++){let a=i*Math.PI*2/5;let l=box('furn',x+Math.cos(a)*.35,y+1.4,z+Math.sin(a)*.35,.55,.15,.28,M.green,false);l.rotation.y=-a}}
-function vanity(x,y,z){box('furn',x,y+.75,z,2.4,.18,1,M.white);box('furn',x,y+.4,z,2.1,.55,.8,M.pink);box('furn',x,y+1.8,z-.42,1.7,1.7,.08,M.glass,false)}
-function fridge(x,y,z){box('furn',x,y+1.45,z,1.2,2.9,1.2,M.white);box('furn',x-.35,y+1.45,z+.62,.06,1.1,.06,M.grey,false)}
-function pizza(x,y,z){let c=BABYLON.MeshBuilder.CreateCylinder('furn',{height:.12,diameter:1.2,tessellation:24},scene);c.position.set(x,y+.12,z);c.material=mat('pizza','#d8a755');c.metadata={kind:'furn'}}
-function cake(x,y,z){let c=BABYLON.MeshBuilder.CreateCylinder('furn',{height:.5,diameter:1.1,tessellation:24},scene);c.position.set(x,y+.3,z);c.material=M.pink;c.metadata={kind:'furn'}}
-function instantHouse(x,y,z){for(let xx=-3;xx<=3;xx++)for(let zz=-3;zz<=3;zz++)box('furn',x+xx,y+.05,z+zz,1,.1,1,M.cream);for(let xx=-3;xx<=3;xx++){box('furn',x+xx,y+1.5,z-3,.3,3,.3,M.white);box('furn',x+xx,y+1.5,z+3,.3,3,.3,M.white)}for(let zz=-2;zz<=2;zz++){box('furn',x-3,y+1.5,z+zz,.3,3,.3,M.white);box('furn',x+3,y+1.5,z+zz,.3,3,.3,M.white)}box('furn',x,y+3.1,z,7,.2,7,M.pink)}
-function instantSchool(x,y,z){for(let xx=-4;xx<=4;xx++)for(let zz=-3;zz<=3;zz++)box('furn',x+xx,y+.05,z+zz,1,.1,1,M.cream);box('furn',x,y+1.5,z-3.2,9,3,.25,M.white);box('furn',x-4.2,y+1.5,z, .25,3,6.5,M.white);box('furn',x+4.2,y+1.5,z,.25,3,6.5,M.white);box('furn',x,y+3.1,z,9,.2,6.5,M.lav)}
+const cats={Blocs:[['⬜','Blanc','block','white'],['🩷','Rose','block','pink'],['💜','Violet','block','violet'],['🟦','Bleu','block','blue'],['🩵','Cyan','block','cyan'],['🟩','Vert','block','green']],Meubles:[['🛋️','Canapé','furn','sofa'],['🛏️','Lit','furn','bed'],['🪑','Fauteuil','furn','chair'],['🪴','Plante','furn','plant']],Bâtiments:[['🏫','École','building','blue'],['🍽️','Restaurant','building','red'],['🛍️','Magasin','building','pink']],Véhicules:[['🚗','Rouge','vehicle','red'],['🚙','Bleue','vehicle','blue'],['🚕','Jaune','vehicle','yellow']]};
+let cat='Blocs',sel=cats.Blocs[0];const tabs=document.getElementById('tabs'),grid=document.getElementById('grid'),bar=document.getElementById('bar');
+function rt(){tabs.innerHTML='';Object.keys(cats).forEach(k=>{let b=document.createElement('button');b.className='tab'+(k===cat?' on':'');b.textContent=k;b.onclick=()=>{cat=k;rt();rg()};tabs.appendChild(b)})}
+function rg(){grid.innerHTML='';cats[cat].forEach(i=>{let b=document.createElement('button');b.className='item';b.innerHTML='<span>'+i[0]+'</span>'+i[1];b.onclick=()=>{sel=i;document.getElementById('bag').style.display='none';rb()};grid.appendChild(b)})}
+function rb(){bar.innerHTML='';[['⬜','Blanc','block','white'],['🩷','Rose','block','pink'],['🛋️','Canapé','furn','sofa'],['🚗','Rouge','vehicle','red']].forEach(i=>{let b=document.createElement('button');b.className='slot'+(sel[1]===i[1]?' sel':'');b.textContent=i[0];b.onclick=()=>{sel=i;rb()};bar.appendChild(b)})}rt();rg();rb();
 
-const NPCS=[];
-function npc(name,x,z,color){
- let body=BABYLON.MeshBuilder.CreateCylinder('npc',{height:1.2,diameter:.65},scene);body.position.set(x,1.2,z);body.material=mat(name,color);body.metadata={kind:'npc',name};
- let head=BABYLON.MeshBuilder.CreateSphere('npc',{diameter:.7},scene);head.position.set(x,2.15,z);head.material=mat(name+'h','#ffd3b6');head.metadata={kind:'npc',name};
- NPCS.push({name,body,head,tx:x,tz:z});
-}
-const names=['Emma','Lina','Mia','Jade','Lou','Zoé','Nina','Léo','Noah','Tom','Sacha','Eliott','Louna','Max','Anna-Rose','Tali','Awa','Yo'];
-for(let i=0;i<names.length;i++)npc(names[i],-12+(i%6)*4,-10+Math.floor(i/6)*6,['#ff9ec7','#a7c8ff','#c8b0f3','#9fdfb4'][i%4]);
+function sofa(x,z){box('furn',x,1.5,z,3,.8,1.4,M.white);box('furn',x,2.1,z-.5,3,.7,.25,M.pink)}
+function bed(x,z){box('furn',x,1.4,z,3,.7,4,M.white);box('furn',x,1.85,z,2.8,.35,3.6,M.violet)}
+function chair(x,z){box('furn',x,1.45,z,.9,.7,.9,M.white);box('furn',x,2.0,z-.3,.9,.9,.18,M.cyan)}
+function plant(x,z){box('furn',x,1.35,z,.7,.6,.7,M.pink);box('furn',x,2,z,.18,1.3,.18,M.green,false)}
+function pick(){return scene.pickWithRay(cam.getForwardRay(10),m=>m.isPickable!==false)}
+document.getElementById('place').onclick=()=>{let p=pick();if(!p.hit)return;let n=p.getNormal(true)||new BABYLON.Vector3(0,1,0),q=p.pickedPoint.add(n.scale(.65)),x=Math.round(q.x),z=Math.round(q.z),y=Math.max(1,Math.round(q.y));if(sel[2]==='block')addBlock(x,y,z,sel[3]);else if(sel[2]==='furn')({sofa,bed,chair,plant}[sel[3]])(x,z);else if(sel[2]==='building')building(x,z,sel[3]);else if(sel[2]==='vehicle')vehicle(x,z,M[sel[3]])}
+document.getElementById('remove').onclick=()=>{let p=pick();if(!p.hit)return;let m=p.pickedMesh;if(['block','furn','building','vehicle'].includes(m.metadata?.kind)){if(m.metadata.kind==='block')blocks.delete(K(m.metadata.x,m.metadata.y,m.metadata.z));m.dispose()}}
+document.getElementById('jump').onclick=()=>cam.cameraDirection.y+=.22;
 
-setInterval(()=>{NPCS.forEach(n=>{if(Math.random()<.5){n.tx=Math.max(-15,Math.min(15,n.body.position.x+(Math.random()-.5)*6));n.tz=Math.max(-15,Math.min(15,n.body.position.z+(Math.random()-.5)*6))}})},2500);
-scene.onBeforeRenderObservable.add(()=>{NPCS.forEach(n=>{let dx=n.tx-n.body.position.x,dz=n.tz-n.body.position.z,d=Math.hypot(dx,dz);if(d>.1){n.body.position.x+=dx/d*.015;n.body.position.z+=dz/d*.015;n.head.position.x=n.body.position.x;n.head.position.z=n.body.position.z}})});
-
-const categories={
-'Blocs':[['🟩','Herbe','block','grass'],['🧱','Pierre','block','stone'],['🪵','Bois','block','wood'],['⬜','Blanc','block','white'],['🩷','Rose','block','pink'],['💜','Lavande','block','lav']],
-'Salon':[['🛋️','Canapé luxe','furn','sofa'],['🪑','Fauteuil','furn','chair'],['🪵','Table','furn','table'],['🪴','Plante','furn','plant']],
-'Chambre':[['🛏️','Lit luxe','furn','bed'],['💄','Coiffeuse','furn','vanity'],['🪴','Plante','furn','plant']],
-'Cuisine':[['🧊','Frigo','furn','fridge'],['🍕','Pizza','furn','pizza'],['🍰','Gâteau','furn','cake'],['🪵','Table','furn','table']],
-'Nourriture':[['🍕','Pizza','furn','pizza'],['🍰','Gâteau','furn','cake'],['🍓','Fraises','furn','cake'],['🍦','Glace','furn','cake']],
-'Bâtiments':[['🏡','Maison instantanée','furn','house'],['🏫','École instantanée','furn','school']]
-};
-let cat='Blocs',selected=categories.Bloks?.[0]||categories['Blocs'][0];
-const tabs=document.getElementById('tabs'),grid=document.getElementById('grid'),bar=document.getElementById('hotbar');
-function renderTabs(){tabs.innerHTML='';Object.keys(categories).forEach(k=>{let b=document.createElement('button');b.className='tab'+(k===cat?' on':'');b.textContent=k;b.onclick=()=>{cat=k;renderTabs();renderGrid()};tabs.appendChild(b)})}
-function choose(it){selected=it;document.getElementById('selectedLabel').textContent=it[0]+' '+it[1];document.getElementById('bag').style.display='none';toast(it[1]+' sélectionné')}
-function renderGrid(){grid.innerHTML='';categories[cat].forEach(it=>{let b=document.createElement('button');b.className='item';b.innerHTML='<span>'+it[0]+'</span>'+it[1];b.onclick=()=>choose(it);grid.appendChild(b)})}
-function renderBar(){bar.innerHTML='';[['🟩','Herbe','block','grass'],['🛋️','Canapé','furn','sofa'],['🛏️','Lit','furn','bed'],['🪑','Fauteuil','furn','chair'],['🪴','Plante','furn','plant']].forEach(it=>{let b=document.createElement('button');b.className='slot'+(selected[0]===it[0]?' sel':'');b.textContent=it[0];b.onclick=()=>{selected=it;renderBar();document.getElementById('selectedLabel').textContent=it[0]+' '+it[1]};bar.appendChild(b)})}
-renderTabs();renderGrid();renderBar();
-
-function toast(t){let e=document.getElementById('toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,900)}
-function pick(){return scene.pickWithRay(camera.getForwardRay(8),m=>m.isPickable!==false)}
-function place(){
- let p=pick();if(!p?.hit)return;let n=p.getNormal(true)||new BABYLON.Vector3(0,1,0);let pt=p.pickedPoint.add(n.scale(.65));
- let x=Math.round(pt.x),z=Math.round(pt.z),y=Math.max(1.05,Math.round(pt.y));
- if(selected[2]==='block'){addBlock(x,Math.round(y),z,selected[3]);toast(selected[1]+' posé')}
- else{
-  const fn={sofa,bed,chair,table,plant,vanity,fridge,pizza,cake,house:instantHouse,school:instantSchool}[selected[3]];
-  if(fn){fn(x,1.05,z);toast(selected[1]+' ajouté ✨')}
- }
-}
-function remove(){
- let p=pick();if(!p?.hit)return;let m=p.pickedMesh;if(m.metadata?.kind==='block'&&m.metadata.y>0){blocks.delete(key(m.metadata.x,m.metadata.y,m.metadata.z));m.dispose();toast('Bloc cassé')}
- else if(m.metadata?.kind==='furn'){m.dispose();toast('Objet retiré')}
-}
-document.getElementById('place').onclick=place;document.getElementById('remove').onclick=remove;document.getElementById('jump').onclick=()=>camera.cameraDirection.y+=.22;
-
-let joyX=0,joyY=0;const joy=document.getElementById('joy'),nub=document.getElementById('nub');
-function jm(e){let t=e.touches?e.touches[0]:e,r=joy.getBoundingClientRect(),x=t.clientX-r.left-66,y=t.clientY-r.top-66,d=Math.hypot(x,y),m=42;if(d>m){x=x/d*m;y=y/d*m}joyX=x/m;joyY=y/m;nub.style.transform=`translate(${x}px,${y}px)`}
-function je(){joyX=joyY=0;nub.style.transform='translate(0,0)'}
+let jx=0,jy=0,joy=document.getElementById('joy'),nub=document.getElementById('nub');
+function jm(e){let t=e.touches?e.touches[0]:e,r=joy.getBoundingClientRect(),x=t.clientX-r.left-62.5,y=t.clientY-r.top-62.5,d=Math.hypot(x,y),m=40;if(d>m){x=x/d*m;y=y/d*m}jx=x/m;jy=y/m;nub.style.transform=`translate(${x}px,${y}px)`}function je(){jx=jy=0;nub.style.transform='translate(0,0)'}
 joy.addEventListener('touchstart',jm,{passive:false});joy.addEventListener('touchmove',jm,{passive:false});joy.addEventListener('touchend',je);
-let look=null;
-canvas.addEventListener('touchstart',e=>{let t=e.touches[e.touches.length-1];if(t.clientX>innerWidth*.4)look={x:t.clientX,y:t.clientY}},{passive:false});
-canvas.addEventListener('touchmove',e=>{if(!look)return;let t=e.touches[e.touches.length-1],dx=t.clientX-look.x,dy=t.clientY-look.y;camera.rotation.y+=dx*.005;camera.rotation.x+=dy*.005;camera.rotation.x=Math.max(-1.35,Math.min(1.35,camera.rotation.x));look={x:t.clientX,y:t.clientY}},{passive:false});
-canvas.addEventListener('touchend',()=>look=null);
-scene.onBeforeRenderObservable.add(()=>{let f=camera.getDirection(BABYLON.Axis.Z);f.y=0;f.normalize();let r=camera.getDirection(BABYLON.Axis.X);r.y=0;r.normalize();camera.cameraDirection.addInPlace(f.scale(-joyY*.075));camera.cameraDirection.addInPlace(r.scale(joyX*.075))});
-
-const faces=['👧🏻','👧🏼','👧🏽','👧🏾','👩🏻','👩🏼','👩🏽','👩🏾'],outfits=['👗','👚','👘','🎾','🧥','👖','👕','🩱'],accs=['🎀','👑','🕶️','👒','🧢','💎','👜','🎒'];
-let face=faces[0],outfit='👗',acc='🎀';
-function fillRow(id,arr,type){let r=document.getElementById(id);arr.forEach(v=>{let b=document.createElement('button');b.className='opt';b.textContent=v;b.onclick=()=>{if(type==='f')face=v;if(type==='o')outfit=v;if(type==='a')acc=v;document.getElementById('facePrev').textContent=face;document.getElementById('stylePrev').textContent=acc+' '+outfit;[...r.children].forEach(c=>c.classList.remove('on'));b.classList.add('on')};r.appendChild(b)})}
-fillRow('faces',faces,'f');fillRow('outfits',outfits,'o');fillRow('accs',accs,'a');
+let look=null;cv.addEventListener('touchstart',e=>{let t=e.touches[e.touches.length-1];if(t.clientX>innerWidth*.38)look={x:t.clientX,y:t.clientY}},{passive:false});cv.addEventListener('touchmove',e=>{if(!look)return;let t=e.touches[e.touches.length-1],dx=t.clientX-look.x,dy=t.clientY-look.y;cam.rotation.y+=dx*.005;cam.rotation.x+=dy*.005;cam.rotation.x=Math.max(-1.35,Math.min(1.35,cam.rotation.x));look={x:t.clientX,y:t.clientY}},{passive:false});cv.addEventListener('touchend',()=>look=null);
+scene.onBeforeRenderObservable.add(()=>{ensure();let f=cam.getDirection(BABYLON.Axis.Z);f.y=0;f.normalize();let r=cam.getDirection(BABYLON.Axis.X);r.y=0;r.normalize();cam.cameraDirection.addInPlace(f.scale(-jy*.075));cam.cameraDirection.addInPlace(r.scale(jx*.075))});
 
 document.getElementById('bagBtn').onclick=()=>document.getElementById('bag').style.display='block';
 document.getElementById('lookBtn').onclick=()=>document.getElementById('look').style.display='block';
-document.querySelectorAll('.panel .close').forEach(b=>b.onclick=()=>b.closest('.panel').style.display='none');
+document.querySelector('#bag .close').onclick=()=>document.getElementById('bag').style.display='none';
+document.getElementById('lookClose').onclick=()=>document.getElementById('look').style.display='none';
+const chat=document.getElementById('chat'),msgs=document.getElementById('msgs');document.getElementById('chatBtn').onclick=()=>chat.style.display='block';document.getElementById('chatClose').onclick=()=>chat.style.display='none';
+function msg(n,t,me=false){let d=document.createElement('div');d.className='msg'+(me?' me':'');d.innerHTML='<b>'+n+':</b> '+t;msgs.appendChild(d)}
+document.getElementById('form').onsubmit=e=>{e.preventDefault();let i=document.getElementById('input'),t=i.value.trim();if(!t)return;msg('Anna',t,true);i.value='';setTimeout(()=>msg(['Talcado','Awariz','Yoananas'][Math.floor(Math.random()*3)],['Je viens avec toi !','Ta villa est énorme 😎','On construit la ville ?'][Math.floor(Math.random()*3)]),400)}
+const jealousGirls=['Lina','Emma','Jade'];
+const jealousLines=[
+  'Talcado, tu viens avec moi ? 😏',
+  'Talcado, regarde ma nouvelle maison !',
+  'Tu veux venir faire un tour avec moi ? 😉'
+];
+const talcadoReplies=[
+  'Non merci, je reste avec Anna ❤️',
+  'Je suis bien avec Anna 😎',
+  'Désolé, Anna et moi on construit notre ville ❤️'
+];
 
-const chat=document.getElementById('chat'),msgs=document.getElementById('msgs');
-document.getElementById('chatBtn').onclick=()=>chat.style.display='block';document.getElementById('chatClose').onclick=()=>chat.style.display='none';
-function addMsg(who,text,me=false){let d=document.createElement('div');d.className='msg'+(me?' me':'');d.textContent=(me?'Toi':who)+' : '+text;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}
-const answers=['Coucou 💕','Ouiii 😍','Je viens avec toi !','On construit une maison ? 🏡','J’adore ton monde ✨','On va manger quelque chose ? 🍕','On va faire les magasins ? 🛍️','Tu veux être mon amie ? 🌸'];
-document.getElementById('form').onsubmit=e=>{e.preventDefault();let i=document.getElementById('inp'),t=i.value.trim();if(!t)return;addMsg('',t,true);i.value='';setTimeout(()=>{let n=NPCS[Math.floor(Math.random()*NPCS.length)];addMsg(n.name,answers[Math.floor(Math.random()*answers.length)])},450)};
+function jealousyScene(){
+  if(document.getElementById('chat').style.display!=='block') return;
+  const girl=jealousGirls[Math.floor(Math.random()*jealousGirls.length)];
+  const line=jealousLines[Math.floor(Math.random()*jealousLines.length)];
+  msg(girl,line);
+  setTimeout(()=>msg('Talcado',talcadoReplies[Math.floor(Math.random()*talcadoReplies.length)]),700);
+}
 
-document.getElementById('play').onclick=()=>{document.getElementById('start').style.display='none';document.getElementById('hud').style.display='block';addMsg('Emma','Bienvenue ! Viens construire avec nous 🌸')};
+document.getElementById('play').onclick=()=>{
+  document.getElementById('start').style.display='none';
+  document.getElementById('hud').style.display='block';
+  msg('Talcado','Coucou Anna ❤️ Ta villa est prête !');
+  msg('Awariz','Il y a encore des filles qui essaient de draguer Talcado 😂');
+  msg('Talcado','Je m’en fiche, je suis avec Anna ❤️');
+  setInterval(jealousyScene,15000);
+}
 engine.runRenderLoop(()=>scene.render());addEventListener('resize',()=>engine.resize());
-})();
 </script>
-</body>
-</html>
+</body></html>
