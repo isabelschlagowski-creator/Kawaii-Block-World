@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Anna City V1 000 002</title>
+<title>Anna City V1 000 000 000</title>
 <style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#78c9ff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
@@ -50,7 +50,7 @@ linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%
 <canvas id="game"></canvas>
 
 <div class="ui">
-  <div id="profile" class="panel">👧 Anna ♥ Anna City<small>V1 000 002 · PERSONNAGES + · NIVEAU 28 · MODE CRÉATIF · BLOCS ∞</small></div>
+  <div id="profile" class="panel">👧 Anna ♥ Anna City<small>V1 000 000 000 · VITESSE NORMALE · NIVEAU 28 · MODE CRÉATIF · BLOCS ∞</small></div>
   <div id="topbar">
     <button class="topBtn" id="saveBtn">💾</button>
     <button class="topBtn" id="peopleBtn">👥</button>
@@ -76,7 +76,7 @@ linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%
   </div>
 
   <div id="cross">＋</div>
-  <div id="hint">👈 gauche : marcher lentement · 👉 droite : regarder · ✌️ pincer : zoom</div>
+  <div id="hint">👈 gauche : marcher · 👉 droite : regarder · ✌️ pincer : zoom</div>
   <div id="hotbar"></div>
   <div id="status"></div>
 
@@ -226,12 +226,12 @@ function addPlaced(x,y,z,key,save=true){
 }
 function saveWorld(){
   try{
-    localStorage.setItem('annaV1000000',JSON.stringify(
+    localStorage.setItem('annaV1000000000',JSON.stringify(
       placed.filter(b=>!b.isDisposed()).map(b=>({x:b.position.x,y:b.position.y,z:b.position.z,k:b.metadata.key||'white'}))
     ));
   }catch(e){}
 }
-try{JSON.parse(localStorage.getItem('annaV1000000')||'[]').forEach(o=>addPlaced(o.x,o.y,o.z,o.k,false))}catch(e){}
+try{JSON.parse(localStorage.getItem('annaV1000000000')||'[]').forEach(o=>addPlaced(o.x,o.y,o.z,o.k,false))}catch(e){}
 
 function status(t){
   const s=$('status');s.textContent=t;s.style.opacity=1;clearTimeout(status.t);status.t=setTimeout(()=>s.style.opacity=0,1200);
@@ -596,8 +596,8 @@ scene.onBeforeRenderObservable.add(()=>{
  let f=camera.getDirection(BABYLON.Axis.Z);f.y=0;if(f.lengthSquared())f.normalize();
  let r=camera.getDirection(BABYLON.Axis.X);r.y=0;if(r.lengthSquared())r.normalize();
  // VERY SLOW, deliberate speed
- camera.cameraDirection.addInPlace(f.scale(-my*.0115));
- camera.cameraDirection.addInPlace(r.scale(mx*.0105));
+ camera.cameraDirection.addInPlace(f.scale(-my*.021));
+ camera.cameraDirection.addInPlace(r.scale(mx*.019));
 
  people.forEach(p=>{
    if(Math.random()<.003)p.metadata.target.set(-28+Math.random()*56,1,-28+Math.random()*56);
@@ -609,5 +609,6 @@ engine.runRenderLoop(()=>scene.render());
 window.addEventListener('resize',()=>engine.resize());
 })();
 </script>
-<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1400;background:#7b4ce2;color:white;padding:6px 12px;border-radius:999px;font:800 12px system-ui;pointer-events:none">✨ ANNA CITY V1 000 002 · PERSONNAGES +</div>
+<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1400;background:#7b4ce2;color:white;padding:6px 12px;border-radius:999px;font:800 12px system-ui;pointer-events:none">✨ ANNA CITY V1 000 000 000 · VITESSE NORMALE</div>
+<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1600;background:#7b4ce2;color:#fff;padding:7px 13px;border-radius:999px;font:900 12px system-ui;pointer-events:none">🚀 ANNA CITY V1 000 000 000</div>
 </body></html>
