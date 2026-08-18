@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Anna City V1 000 001</title>
+<title>Anna City V1 000 002</title>
 <style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#78c9ff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
@@ -50,7 +50,7 @@ linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%
 <canvas id="game"></canvas>
 
 <div class="ui">
-  <div id="profile" class="panel">👧 Anna ♥ Anna City<small>V1 000 001 · HUMAINS + MEUBLES · NIVEAU 28 · MODE CRÉATIF · BLOCS ∞</small></div>
+  <div id="profile" class="panel">👧 Anna ♥ Anna City<small>V1 000 002 · PERSONNAGES + · NIVEAU 28 · MODE CRÉATIF · BLOCS ∞</small></div>
   <div id="topbar">
     <button class="topBtn" id="saveBtn">💾</button>
     <button class="topBtn" id="peopleBtn">👥</button>
@@ -386,40 +386,112 @@ renderFurniture();
 const names=['Talcado','Awariz','Yoananas','Johanna','Inès','Léo','Camille','Noah','Mila','Lou','Hugo','Zoé','Adam','Nina','Tom','Sarah','Lucas','Chloé','Ethan','Manon','Jade','Emma','Lina','Maël','Lola','Arthur','Rose','Louis','Eva','Nora','Liam','Sofia','Gabriel','Alice','Enzo','Louna','Sacha','Clara','Nolan','Maya'];
 const people=[];
 function human(name,x,z,i){
-  const root=new BABYLON.TransformNode(name,scene);root.position.set(x,1,z);
-  const shirts=[mats.pink,mats.purple,mats.blue,mats.cyan,mats.green,mats.yellow,mats.red];
-  const shirt=shirts[i%shirts.length];
+  const root=new BABYLON.TransformNode(name,scene);
+  root.position.set(x,1,z);
 
-  function capsule(n,px,py,pz,h,r,ma){
-    const m=BABYLON.MeshBuilder.CreateCapsule(n,{height:h,radius:r,tessellation:12},scene);
+  const shirts=[mats.pink,mats.purple,mats.blue,mats.cyan,mats.green,mats.yellow,mats.red,mats.white];
+  const pants=[mats.dark,mats.blue,mats.black,mats.purple];
+  const shirt=shirts[i%shirts.length], pant=pants[i%pants.length];
+  const hairColors=[mats.hair,mats.black,mats.yellow,mats.red,mats.dark];
+  const hairMat=hairColors[i%hairColors.length];
+
+  // Slightly varied human proportions
+  const scale=0.92 + (i%5)*0.03;
+  root.scaling.set(scale,scale,scale);
+
+  function cyl(n,px,py,pz,h,diam,ma){
+    const m=BABYLON.MeshBuilder.CreateCylinder(n,{height:h,diameter:diam,tessellation:16},scene);
     m.position.set(px,py,pz);m.material=ma;m.parent=root;m.checkCollisions=false;m.isPickable=true;m.metadata={kind:'npc'};return m;
   }
-  // torso, limbs and head with rounded human proportions
-  capsule('torso',0,1.45,0,1.25,.38,shirt);
-  capsule('legL',-.2,.55,0,1.05,.15,mats.dark);
-  capsule('legR', .2,.55,0,1.05,.15,mats.dark);
-  const armL=capsule('armL',-.48,1.42,0,.95,.12,mats.skin);armL.rotation.z=-.08;
-  const armR=capsule('armR', .48,1.42,0,.95,.12,mats.skin);armR.rotation.z=.08;
+  function sphere(n,px,py,pz,d,ma){
+    const m=BABYLON.MeshBuilder.CreateSphere(n,{diameter:d,segments:16},scene);
+    m.position.set(px,py,pz);m.material=ma;m.parent=root;m.checkCollisions=false;m.isPickable=true;m.metadata={kind:'npc'};return m;
+  }
+  function boxp(n,px,py,pz,sx,sy,sz,ma){
+    const m=box(n,px,py,pz,sx,sy,sz,ma,'npc',false);m.parent=root;return m;
+  }
 
-  const head=BABYLON.MeshBuilder.CreateSphere('head',{diameter:.72,segments:16},scene);
-  head.position.set(0,2.35,0);head.material=mats.skin;head.parent=root;head.isPickable=true;head.metadata={kind:'npc'};
+  // shoes
+  boxp('shoeL',-.18,.12,.08,.30,.18,.48,mats.black);
+  boxp('shoeR', .18,.12,.08,.30,.18,.48,mats.black);
 
-  // hair cap + variable hairstyle
-  const hair=BABYLON.MeshBuilder.CreateSphere('hair',{diameter:.76,segments:16,slice:.62},scene);
-  hair.position.set(0,2.49,-.02);hair.material=[mats.hair,mats.black,mats.yellow,mats.red][i%4];hair.parent=root;
+  // lower legs
+  const legL=cyl('legL',-.18,.55,0,.78,.22,pant);
+  const legR=cyl('legR', .18,.55,0,.78,.22,pant);
+
+  // hips / waist
+  boxp('hips',0,.98,0,.62,.34,.36,pant);
+
+  // torso shaped with shoulder/chest blocks
+  boxp('torso',0,1.46,0,.72,.86,.38,shirt);
+  boxp('shoulders',0,1.78,0,.88,.20,.40,shirt);
+
+  // neck
+  cyl('neck',0,1.96,0,.18,.18,mats.skin);
+
+  // arms: upper + forearm + hands
+  const upperL=cyl('upperL',-.53,1.55,0,.58,.18,shirt); upperL.rotation.z=-.05;
+  const upperR=cyl('upperR', .53,1.55,0,.58,.18,shirt); upperR.rotation.z=.05;
+  const foreL=cyl('foreL',-.56,1.15,0,.52,.15,mats.skin);
+  const foreR=cyl('foreR', .56,1.15,0,.52,.15,mats.skin);
+  sphere('handL',-.56,.88,0,.18,mats.skin);
+  sphere('handR', .56,.88,0,.18,mats.skin);
+
+  // head
+  const head=sphere('head',0,2.30,0,.62,mats.skin);
+
+  // ears
+  sphere('earL',-.31,2.30,0,.10,mats.skin);
+  sphere('earR', .31,2.30,0,.10,mats.skin);
+
+  // face: eyes, pupils, nose, mouth
+  const whiteEye=new BABYLON.StandardMaterial('eyeWhite'+i,scene);whiteEye.diffuseColor=new BABYLON.Color3(1,1,1);
+  const lipMat=new BABYLON.StandardMaterial('lip'+i,scene);lipMat.diffuseColor=BABYLON.Color3.FromHexString('#8b3a3a');
+  for(const ex of [-.12,.12]){
+    const ew=sphere('eyeWhite',ex,2.35,.285,.095,whiteEye);
+    sphere('pupil',ex,2.35,.335,.045,mats.black);
+  }
+  sphere('nose',0,2.25,.315,.07,mats.skin);
+  const mouth=boxp('mouth',0,2.14,.322,.14,.025,.025,lipMat);
+
+  // hair with multiple style parts
+  const cap=BABYLON.MeshBuilder.CreateSphere('hairCap',{diameter:.66,segments:16,slice:.55},scene);
+  cap.position.set(0,2.48,-.02);cap.material=hairMat;cap.parent=root;
+
+  if(i%4===0){
+    // long hair
+    boxp('hairBack',0,2.20,-.23,.58,.72,.16,hairMat);
+    boxp('hairL',-.27,2.20,-.02,.12,.68,.18,hairMat);
+    boxp('hairR', .27,2.20,-.02,.12,.68,.18,hairMat);
+  }else if(i%4===1){
+    // ponytail
+    sphere('pony',0,2.31,-.39,.30,hairMat);
+  }else if(i%4===2){
+    // side locks
+    boxp('lockL',-.29,2.27,.02,.10,.48,.12,hairMat);
+    boxp('lockR', .29,2.27,.02,.10,.48,.12,hairMat);
+  }else{
+    // short hair volume
+    boxp('hairTop',0,2.57,-.02,.52,.15,.48,hairMat);
+  }
+
+  // outfit details
   if(i%3===0){
-    const pony=BABYLON.MeshBuilder.CreateSphere('pony',{diameter:.38,segments:10},scene);
-    pony.position.set(0,2.42,-.38);pony.material=hair.material;pony.parent=root;
+    boxp('jacketL',-.34,1.48,.20,.08,.65,.05,mats.white);
+    boxp('jacketR', .34,1.48,.20,.08,.65,.05,mats.white);
+  }
+  if(i%5===0){
+    // skirt overlay
+    boxp('skirt',0,.93,0,.68,.42,.45,shirt);
   }
 
-  // eyes
-  const eyeMat=mats.black;
-  for(const ex of [-.13,.13]){
-    const eye=BABYLON.MeshBuilder.CreateSphere('eye',{diameter:.07,segments:8},scene);
-    eye.position.set(ex,2.38,.34);eye.material=eyeMat;eye.parent=root;
-  }
-
-  root.metadata={name,target:new BABYLON.Vector3(x,1,z),speed:.004+Math.random()*.002,armL,armR,phase:Math.random()*6};
+  root.metadata={
+    name,
+    target:new BABYLON.Vector3(x,1,z),
+    speed:.0035+Math.random()*.0015,
+    upperL,upperR,foreL,foreR,legL,legR,
+    phase:Math.random()*6
+  };
   people.push(root);
 }
 names.forEach((n,i)=>human(n,-22+Math.random()*44,-22+Math.random()*44,i));
@@ -524,18 +596,18 @@ scene.onBeforeRenderObservable.add(()=>{
  let f=camera.getDirection(BABYLON.Axis.Z);f.y=0;if(f.lengthSquared())f.normalize();
  let r=camera.getDirection(BABYLON.Axis.X);r.y=0;if(r.lengthSquared())r.normalize();
  // VERY SLOW, deliberate speed
- camera.cameraDirection.addInPlace(f.scale(-my*.0065));
- camera.cameraDirection.addInPlace(r.scale(mx*.0060));
+ camera.cameraDirection.addInPlace(f.scale(-my*.0115));
+ camera.cameraDirection.addInPlace(r.scale(mx*.0105));
 
  people.forEach(p=>{
    if(Math.random()<.003)p.metadata.target.set(-28+Math.random()*56,1,-28+Math.random()*56);
    const dx=p.metadata.target.x-p.position.x,dz=p.metadata.target.z-p.position.z,d=Math.hypot(dx,dz);
-   if(d>.6){p.position.x+=dx/d*p.metadata.speed;p.position.z+=dz/d*p.metadata.speed;p.rotation.y=Math.atan2(dx,dz);p.metadata.phase+=.06;const a=Math.sin(p.metadata.phase)*.35;if(p.metadata.armL){p.metadata.armL.rotation.x=a;p.metadata.armR.rotation.x=-a}}
+   if(d>.6){p.position.x+=dx/d*p.metadata.speed;p.position.z+=dz/d*p.metadata.speed;p.rotation.y=Math.atan2(dx,dz);p.metadata.phase+=.075;const a=Math.sin(p.metadata.phase)*.45;if(p.metadata.upperL){p.metadata.upperL.rotation.x=a;p.metadata.upperR.rotation.x=-a;p.metadata.foreL.rotation.x=a*.55;p.metadata.foreR.rotation.x=-a*.55;p.metadata.legL.rotation.x=-a*.45;p.metadata.legR.rotation.x=a*.45}}
  });
 });
 engine.runRenderLoop(()=>scene.render());
 window.addEventListener('resize',()=>engine.resize());
 })();
 </script>
-<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1400;background:#7b4ce2;color:white;padding:6px 12px;border-radius:999px;font:800 12px system-ui;pointer-events:none">✨ ANNA CITY V1 000 001 · HUMAINS + MEUBLES</div>
+<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1400;background:#7b4ce2;color:white;padding:6px 12px;border-radius:999px;font:800 12px system-ui;pointer-events:none">✨ ANNA CITY V1 000 002 · PERSONNAGES +</div>
 </body></html>
