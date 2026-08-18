@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Anna City V1 000 000</title>
+<title>Anna City V1 000 001</title>
 <style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#78c9ff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
@@ -50,7 +50,7 @@ linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%
 <canvas id="game"></canvas>
 
 <div class="ui">
-  <div id="profile" class="panel">👧 Anna ♥ Anna City<small>V1 000 000 LENTE · NIVEAU 28 · MODE CRÉATIF · BLOCS ∞</small></div>
+  <div id="profile" class="panel">👧 Anna ♥ Anna City<small>V1 000 001 · HUMAINS + MEUBLES · NIVEAU 28 · MODE CRÉATIF · BLOCS ∞</small></div>
   <div id="topbar">
     <button class="topBtn" id="saveBtn">💾</button>
     <button class="topBtn" id="peopleBtn">👥</button>
@@ -100,7 +100,15 @@ linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%
     <div class="grid" id="avatarGrid"></div>
   </div>
 
-  <div class="modal panel" id="peopleModal">
+  
+<div class="modal panel" id="furnitureModal">
+  <button class="close" id="furnitureClose">✕</button>
+  <h2>🛋️ Meubles incroyables</h2>
+  <div class="tabs" id="furnitureTabs"></div>
+  <div class="grid" id="furnitureGrid"></div>
+</div>
+
+<div class="modal panel" id="peopleModal">
     <button class="close" id="peopleClose">✕</button>
     <h2>👥 Habitants dans le monde</h2>
     <div class="grid" id="peopleGrid"></div>
@@ -327,16 +335,91 @@ function buildTemplate(cat,m,index){
 }
 renderCatalogTabs();renderCatalogCards();
 
+
+// REAL FURNITURE CATALOG
+const furnitureCatalog={
+ '🛋️ Salon':[['🛋️','Canapé luxe','sofa'],['📺','TV géante','tv'],['☕','Table basse','coffee'],['🪴','Grande plante','plant']],
+ '🛏️ Chambre':[['🛏️','Lit moderne','bed'],['🗄️','Armoire','wardrobe'],['💡','Lampe design','lamp'],['🪞','Miroir','mirror']],
+ '🍳 Cuisine':[['🍳','Cuisine équipée','kitchen'],['🧊','Réfrigérateur','fridge'],['🍽️','Table à manger','dining'],['🪑','Chaise','chair']],
+ '🎮 Gaming':[['🖥️','Setup gaming','gaming'],['🪑','Fauteuil gamer','gamerchair'],['🎧','Coin musique','music'],['📚','Bibliothèque','books']]
+};
+let furnitureCat=Object.keys(furnitureCatalog)[0];
+function renderFurniture(){
+ const tabs=$('furnitureTabs'),grid=$('furnitureGrid');tabs.innerHTML='';grid.innerHTML='';
+ Object.keys(furnitureCatalog).forEach(k=>{
+  const b=document.createElement('button');b.className='tab'+(k===furnitureCat?' active':'');b.textContent=k;
+  b.onclick=()=>{furnitureCat=k;renderFurniture()};tabs.appendChild(b);
+ });
+ furnitureCatalog[furnitureCat].forEach(f=>{
+  const b=document.createElement('button');b.className='card';b.innerHTML='<b>'+f[0]+'</b>'+f[1];
+  b.onclick=()=>{placeFurniture(f[2]);$('furnitureModal').style.display='none';status(f[1]+' placé ✨')};grid.appendChild(b);
+ });
+}
+function furnitureRoot(type,x,z){
+ const root=new BABYLON.TransformNode('furniture',scene);root.position.set(x,1.05,z);root.metadata={kind:'furniture',type};
+ function part(px,py,pz,sx,sy,sz,ma){const o=box('furniture',px,py,pz,sx,sy,sz,ma,'furniture',true);o.parent=root;return o}
+ if(type==='sofa'){part(0,.45,0,3,.55,1,mats.purple);part(0,1,.4,3,.75,.35,mats.purple);part(-1.35,.75,0,.3,.8,1,mats.purple);part(1.35,.75,0,.3,.8,1,mats.purple)}
+ else if(type==='tv'){part(0,1.25,0,3,1.7,.15,mats.black);part(0,.3,0,2.2,.4,.65,mats.dark)}
+ else if(type==='coffee'){part(0,.45,0,2.2,.15,1.2,mats.glass);part(-.8,.2,0,.12,.5,.12,mats.dark);part(.8,.2,0,.12,.5,.12,mats.dark)}
+ else if(type==='plant'){part(0,.45,0,.75,.8,.75,mats.white);for(let i=0;i<5;i++){let s=BABYLON.MeshBuilder.CreateSphere('leaf',{diameter:1.1,segments:8},scene);s.position.set((Math.random()-.5)*.7,1.2+Math.random()*.8,(Math.random()-.5)*.7);s.material=mats.leaf;s.parent=root}}
+ else if(type==='bed'){part(0,.35,0,2.6,.5,4,mats.white);part(0,.65,-1.55,2.6,.7,.3,mats.pink);part(-.65,.7,-1.2,1,.25,.8,mats.white);part(.65,.7,-1.2,1,.25,.8,mats.white)}
+ else if(type==='wardrobe'){part(0,1.3,0,2.4,2.6,.7,mats.wood);part(0,1.3,.37,.05,2.4,.05,mats.dark)}
+ else if(type==='lamp'){part(0,.7,0,.15,1.4,.15,mats.dark);let s=BABYLON.MeshBuilder.CreateSphere('lamp',{diameter:.75,segments:12},scene);s.position.set(0,1.55,0);s.material=mats.yellow;s.parent=root}
+ else if(type==='mirror'){part(0,1.3,0,1.5,2.4,.12,mats.glass)}
+ else if(type==='kitchen'){part(0,.55,0,3.8,1.1,.8,mats.white);part(0,1.2,.3,3.8,.12,.8,mats.dark)}
+ else if(type==='fridge'){part(0,1.25,0,1.3,2.5,1.2,mats.white);part(.35,1.25,.62,.06,2,.05,mats.dark)}
+ else if(type==='dining'){part(0,.8,0,3,.15,1.7,mats.wood);for(let x of [-1.1,1.1])for(let z2 of [-.6,.6])part(x,.4,z2,.12,.8,.12,mats.dark)}
+ else if(type==='chair'||type==='gamerchair'){part(0,.55,0,.9,.15,.9,type==='gamerchair'?mats.purple:mats.wood);part(0,1,.35,.9,1,.18,type==='gamerchair'?mats.purple:mats.wood)}
+ else if(type==='gaming'){part(0,.75,0,2.8,.15,1,mats.dark);part(0,1.55,.35,2.2,1.2,.12,mats.black);part(0,.9,-.15,.65,.12,.3,mats.purple)}
+ else if(type==='music'){part(-.55,.8,0,.8,1.6,.65,mats.black);part(.55,.8,0,.8,1.6,.65,mats.black)}
+ else if(type==='books'){part(0,1.25,0,2.5,2.5,.45,mats.wood);for(let y=.35;y<2.3;y+=.55)part(0,y,.25,2.3,.08,.45,mats.dark)}
+ return root;
+}
+function placeFurniture(type){
+ let f=camera.getDirection(BABYLON.Axis.Z);f.y=0;if(f.lengthSquared())f.normalize();
+ furnitureRoot(type,Math.round(camera.position.x+f.x*4),Math.round(camera.position.z+f.z*4));
+}
+renderFurniture();
+
+
 // NPCs: MANY PEOPLE
 const names=['Talcado','Awariz','Yoananas','Johanna','Inès','Léo','Camille','Noah','Mila','Lou','Hugo','Zoé','Adam','Nina','Tom','Sarah','Lucas','Chloé','Ethan','Manon','Jade','Emma','Lina','Maël','Lola','Arthur','Rose','Louis','Eva','Nora','Liam','Sofia','Gabriel','Alice','Enzo','Louna','Sacha','Clara','Nolan','Maya'];
 const people=[];
 function human(name,x,z,i){
   const root=new BABYLON.TransformNode(name,scene);root.position.set(x,1,z);
-  const shirt=[mats.pink,mats.purple,mats.blue,mats.cyan,mats.green,mats.yellow,mats.red][i%7];
-  const body=box('npc',0,1.2,0,.8,1.2,.5,shirt,'npc',false);body.parent=root;
-  const head=box('npc',0,2.15,0,.75,.75,.75,mats.skin,'npc',false);head.parent=root;
-  const hair=box('npc',0,2.48,0,.78,.22,.78,mats.hair,'npc',false);hair.parent=root;
-  root.metadata={name,target:new BABYLON.Vector3(x,1,z),speed:.007+Math.random()*.004};
+  const shirts=[mats.pink,mats.purple,mats.blue,mats.cyan,mats.green,mats.yellow,mats.red];
+  const shirt=shirts[i%shirts.length];
+
+  function capsule(n,px,py,pz,h,r,ma){
+    const m=BABYLON.MeshBuilder.CreateCapsule(n,{height:h,radius:r,tessellation:12},scene);
+    m.position.set(px,py,pz);m.material=ma;m.parent=root;m.checkCollisions=false;m.isPickable=true;m.metadata={kind:'npc'};return m;
+  }
+  // torso, limbs and head with rounded human proportions
+  capsule('torso',0,1.45,0,1.25,.38,shirt);
+  capsule('legL',-.2,.55,0,1.05,.15,mats.dark);
+  capsule('legR', .2,.55,0,1.05,.15,mats.dark);
+  const armL=capsule('armL',-.48,1.42,0,.95,.12,mats.skin);armL.rotation.z=-.08;
+  const armR=capsule('armR', .48,1.42,0,.95,.12,mats.skin);armR.rotation.z=.08;
+
+  const head=BABYLON.MeshBuilder.CreateSphere('head',{diameter:.72,segments:16},scene);
+  head.position.set(0,2.35,0);head.material=mats.skin;head.parent=root;head.isPickable=true;head.metadata={kind:'npc'};
+
+  // hair cap + variable hairstyle
+  const hair=BABYLON.MeshBuilder.CreateSphere('hair',{diameter:.76,segments:16,slice:.62},scene);
+  hair.position.set(0,2.49,-.02);hair.material=[mats.hair,mats.black,mats.yellow,mats.red][i%4];hair.parent=root;
+  if(i%3===0){
+    const pony=BABYLON.MeshBuilder.CreateSphere('pony',{diameter:.38,segments:10},scene);
+    pony.position.set(0,2.42,-.38);pony.material=hair.material;pony.parent=root;
+  }
+
+  // eyes
+  const eyeMat=mats.black;
+  for(const ex of [-.13,.13]){
+    const eye=BABYLON.MeshBuilder.CreateSphere('eye',{diameter:.07,segments:8},scene);
+    eye.position.set(ex,2.38,.34);eye.material=eyeMat;eye.parent=root;
+  }
+
+  root.metadata={name,target:new BABYLON.Vector3(x,1,z),speed:.004+Math.random()*.002,armL,armR,phase:Math.random()*6};
   people.push(root);
 }
 names.forEach((n,i)=>human(n,-22+Math.random()*44,-22+Math.random()*44,i));
@@ -374,6 +457,7 @@ tap('inventoryClose',()=>{$('inventoryModal').style.display='none';status('Inven
 tap('catalogClose',()=>{$('catalogModal').style.display='none';status('Catalogue fermé')});
 tap('avatarClose',()=>{$('avatarModal').style.display='none';status('Avatar fermé')});
 tap('peopleClose',()=>{$('peopleModal').style.display='none';status('Habitants fermé')});
+tap('furnitureClose',()=>{$('furnitureModal').style.display='none';status('Meubles fermés')});
 
 tap('bagBtn',()=>{$('inventoryModal').style.display='block';status('Inventaire ouvert 🎒')});
 tap('catalogBtn',()=>{$('catalogModal').style.display='block';status('Catalogue ouvert 🏗️')});
@@ -385,7 +469,7 @@ tap('breakBtn',()=>breakBlock());
 tap('jumpBtn',()=>{camera.cameraDirection.y+=.16;status('Saut ⬆️')});
 tap('saveBtn',()=>{saveWorld();status('Sauvegardé 💾')});
 
-tap('furnitureBtn',()=>status('Bouton Meubles OK ✅'));
+tap('furnitureBtn',()=>{$('furnitureModal').style.display='block';status('Meubles ouverts 🛋️')});
 tap('vehicleBtn',()=>status('Bouton Véhicules OK ✅'));
 tap('questsBtn',()=>status('Bouton Quêtes OK ✅'));
 tap('mapBtn',()=>status('Bouton Carte OK ✅'));
@@ -446,12 +530,12 @@ scene.onBeforeRenderObservable.add(()=>{
  people.forEach(p=>{
    if(Math.random()<.003)p.metadata.target.set(-28+Math.random()*56,1,-28+Math.random()*56);
    const dx=p.metadata.target.x-p.position.x,dz=p.metadata.target.z-p.position.z,d=Math.hypot(dx,dz);
-   if(d>.6){p.position.x+=dx/d*p.metadata.speed;p.position.z+=dz/d*p.metadata.speed;p.rotation.y=Math.atan2(dx,dz)}
+   if(d>.6){p.position.x+=dx/d*p.metadata.speed;p.position.z+=dz/d*p.metadata.speed;p.rotation.y=Math.atan2(dx,dz);p.metadata.phase+=.06;const a=Math.sin(p.metadata.phase)*.35;if(p.metadata.armL){p.metadata.armL.rotation.x=a;p.metadata.armR.rotation.x=-a}}
  });
 });
 engine.runRenderLoop(()=>scene.render());
 window.addEventListener('resize',()=>engine.resize());
 })();
 </script>
-<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1400;background:#7b4ce2;color:white;padding:6px 12px;border-radius:999px;font:800 12px system-ui;pointer-events:none">🐢 ANNA CITY V1 000 000 · VITESSE LENTE</div>
+<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1400;background:#7b4ce2;color:white;padding:6px 12px;border-radius:999px;font:800 12px system-ui;pointer-events:none">✨ ANNA CITY V1 000 001 · HUMAINS + MEUBLES</div>
 </body></html>
