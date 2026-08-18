@@ -3,89 +3,194 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#f7b6d8">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icon.svg">
-<title>Kawaii Block World</title>
+<meta name="theme-color" content="#ffb8d8">
+<title>Kawaii Block World 3D</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:system-ui,-apple-system,sans-serif;background:#9bdcff;touch-action:none}
-button,input{font:inherit}
-#game{position:fixed;inset:0;background:linear-gradient(#9bdcff 0 42%,#8dcc72 42%);overflow:hidden}
-.cloud{position:absolute;background:#fff;border-radius:50px;opacity:.8}
-#world{position:absolute;inset:0;transition:.12s}
-.tile{position:absolute;width:62px;height:62px;border:1px solid #0001;display:flex;align-items:center;justify-content:center;font-size:35px}
-.grass{background:#7fbd5d}.path{background:#d9c58e}.floor{background:#d7aa78}
-.wall{background:#f4e9dd;border:4px solid #d7c3b2}.water{background:#77cce8}
-#player{position:absolute;width:48px;height:48px;border-radius:16px;background:#ffd6e9;border:3px solid #fff;box-shadow:0 4px 10px #0003;display:grid;place-items:center;font-size:28px;z-index:8}
-.npc{position:absolute;width:48px;height:48px;border-radius:16px;border:3px solid white;box-shadow:0 4px 10px #0003;display:grid;place-items:center;font-size:26px;z-index:7}
-.bubble{position:absolute;bottom:53px;left:50%;transform:translateX(-50%);background:white;padding:5px 8px;border-radius:10px;font-size:11px;white-space:nowrap;box-shadow:0 2px 7px #0002}
-#top{position:fixed;left:10px;right:10px;top:max(10px,env(safe-area-inset-top));display:flex;justify-content:space-between;z-index:20;pointer-events:none}
-.pill{background:#fffde;border:2px solid #fff;border-radius:18px;padding:8px 12px;font-weight:800;box-shadow:0 4px 12px #0002}
-#hotbar{position:fixed;left:50%;transform:translateX(-50%);bottom:max(12px,env(safe-area-inset-bottom));display:flex;gap:5px;background:#fffcc;padding:6px;border-radius:16px;z-index:25;max-width:94vw;overflow:auto}
-.slot{min-width:58px;height:58px;border:3px solid #e6c5d5;background:white;border-radius:12px;display:grid;place-items:center;font-size:26px}
-.slot.sel{border-color:#ff72b5;transform:translateY(-4px)}
-#dpad{position:fixed;left:15px;bottom:95px;width:150px;height:150px;z-index:25}
-.move{position:absolute;width:50px;height:50px;border:0;border-radius:15px;background:#fffde;box-shadow:0 4px 12px #0002;font-size:25px}
-#up{left:50px}#down{left:50px;bottom:0}#left{left:0;top:50px}#right{right:0;top:50px}
-#actions{position:fixed;right:15px;bottom:95px;z-index:25;display:grid;gap:8px}
-.act{width:76px;height:55px;border:0;border-radius:15px;background:#fffde;box-shadow:0 4px 12px #0002;font-weight:900}
-#chatBtn{position:fixed;right:15px;top:75px;z-index:26;border:0;border-radius:18px;background:#ff8fc6;color:#fff;padding:11px 16px;font-weight:900;box-shadow:0 5px 15px #0002}
-#chat{display:none;position:fixed;right:12px;top:125px;width:min(360px,88vw);height:390px;background:#fffef8;border-radius:22px;z-index:40;box-shadow:0 12px 35px #0004;overflow:hidden}
-#chatHead{padding:12px;background:#ffd6e9;font-weight:900;display:flex;justify-content:space-between}
-#messages{height:285px;overflow:auto;padding:10px}
-.msg{margin:6px 0;padding:8px 10px;border-radius:12px;background:#f3eafa;font-size:13px}.me{background:#dff6ea;margin-left:30px}
-#chatForm{display:flex;padding:8px;gap:6px;border-top:1px solid #eee}
-#chatInput{min-width:0;flex:1;border:2px solid #f2c9dd;border-radius:12px;padding:9px}
-#send{border:0;border-radius:12px;background:#ff8fc6;color:white;font-weight:900;padding:0 12px}
-#start{position:fixed;inset:0;z-index:100;background:linear-gradient(#9bdcff,#ffe1f0);display:grid;place-items:center;padding:18px}
-.card{background:#fffef5;border:4px solid #fff;border-radius:28px;padding:25px;text-align:center;width:min(550px,94vw);box-shadow:0 20px 50px #0003}
-.card h1{font-size:clamp(32px,8vw,52px);margin:0 0 8px;color:#644c6c}
-.card p{color:#65586a;line-height:1.45}
-#play{border:0;background:#65b64f;color:#fff;border-radius:15px;padding:15px 32px;font-size:22px;font-weight:1000;box-shadow:inset 0 -5px #367d2b}
-#notice{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:50;background:#fff;padding:12px 18px;border-radius:16px;font-weight:900;opacity:0;pointer-events:none;transition:.2s}
+html,body{margin:0;height:100%;overflow:hidden;background:#8fd4ff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
+#c{width:100%;height:100%;display:block}
+#start{position:fixed;inset:0;z-index:100;background:linear-gradient(#8fd4ff,#ffe0ee);display:grid;place-items:center;padding:20px}
+.card{width:min(600px,94vw);background:#fffdf7;border-radius:28px;padding:26px;text-align:center;box-shadow:0 20px 60px #0003;border:4px solid #fff}
+.card h1{margin:0 0 10px;color:#634e6d;font-size:clamp(36px,8vw,54px)}
+.card p{color:#6f5d75;line-height:1.45}
+#play{border:0;border-radius:16px;background:#62b34f;color:white;padding:15px 32px;font-size:22px;font-weight:1000;box-shadow:inset 0 -5px #367d2c}
+#hud{display:none;position:fixed;inset:0;pointer-events:none}
+.top{position:absolute;top:max(10px,env(safe-area-inset-top));left:10px;display:flex;gap:7px}
+.pill{background:#fffde;border:2px solid #fff;padding:8px 11px;border-radius:15px;font-weight:900;color:#604d69;box-shadow:0 4px 12px #0002}
+#cross{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:30px;color:white;text-shadow:0 2px 5px #000}
+#joy{position:absolute;left:18px;bottom:112px;width:132px;height:132px;border-radius:50%;background:#ffffff40;border:2px solid #fff8;pointer-events:auto}
+#nub{position:absolute;left:42px;top:42px;width:48px;height:48px;border-radius:50%;background:#fff9}
+#actions{position:absolute;right:14px;bottom:112px;display:grid;gap:8px;pointer-events:auto}
+.act{width:80px;height:58px;border:0;border-radius:15px;background:#fffde;color:#604d69;font-weight:900;box-shadow:0 4px 12px #0002}
+#menuBtns{position:absolute;right:10px;top:max(10px,env(safe-area-inset-top));display:flex;gap:6px;pointer-events:auto}
+.ui{border:0;border-radius:14px;background:#fffde;color:#604d69;padding:9px 11px;font-weight:900;box-shadow:0 4px 12px #0002}
+#hotbar{position:absolute;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:5px;background:#fffbd;padding:6px;border-radius:15px;max-width:94vw;overflow:auto;pointer-events:auto}
+.slot{flex:0 0 56px;height:56px;border:3px solid #e6bfd2;background:white;border-radius:11px;font-size:25px}
+.slot.sel{border-color:#ff6caf;transform:translateY(-4px)}
+.panel{display:none;position:fixed;inset:4%;z-index:120;background:#fffdf8;border-radius:28px;box-shadow:0 20px 60px #0005;padding:16px;overflow:auto}
+.head{position:sticky;top:0;background:#fffdf8;display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;z-index:2}
+.close{border:0;border-radius:12px;background:#ffd6e8;padding:9px 12px;font-weight:900}
+.tabs{display:flex;gap:7px;overflow:auto;margin-bottom:10px}
+.tab{border:0;border-radius:14px;padding:9px 12px;background:#eee5f0;font-weight:800;white-space:nowrap}
+.tab.on{background:#ff91c5;color:white}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.item{border:0;border-radius:16px;background:white;box-shadow:0 3px 12px #0002;padding:10px 5px;min-height:85px;font-size:11px;font-weight:800;color:#604d69}
+.item span{display:block;font-size:30px;margin-bottom:4px}
+#skinPreview{width:210px;height:255px;margin:12px auto;border-radius:25px;background:linear-gradient(#dff6ff,#ffe3f0);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;font-size:80px}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.opt{border:3px solid transparent;border-radius:15px;background:white;padding:8px;font-size:27px}
+.opt.on{border-color:#ff71b4}
+#chat{display:none;position:fixed;right:12px;top:65px;width:min(360px,88vw);height:390px;background:#fffdf8;border-radius:22px;z-index:130;box-shadow:0 15px 40px #0004;overflow:hidden}
+.chatHead{padding:11px;background:#ffd7e8;display:flex;justify-content:space-between;font-weight:900}
+#msgs{height:295px;overflow:auto;padding:8px}
+.msg{background:#f1e9f5;margin:6px 0;padding:8px 10px;border-radius:11px;font-size:13px}
+.me{background:#dcf4e6;margin-left:28px}
+#form{display:flex;gap:6px;padding:8px;border-top:1px solid #eee}
+#inp{min-width:0;flex:1;border:2px solid #ffd1e4;border-radius:11px;padding:9px}
+#send{border:0;border-radius:11px;background:#ff8fc5;color:white;font-weight:900;padding:0 12px}
+#toast{position:absolute;top:18%;left:50%;transform:translateX(-50%);background:white;padding:10px 15px;border-radius:14px;font-weight:900;color:#604d69;opacity:0;transition:.2s}
+@media(max-width:700px){.grid{grid-template-columns:repeat(3,1fr)}.panel{inset:2%}}
 </style>
 </head>
 <body>
-<div id="game"><div id="world"></div></div>
-<div id="top"><div class="pill">🎀 Kawaii Block World</div><div class="pill">💗 <span id="hearts">5</span></div></div>
-<button id="chatBtn">💬 Chat</button>
-<div id="chat"><div id="chatHead"><span>💬 Les habitants</span><button id="closeChat">✕</button></div><div id="messages"></div><form id="chatForm"><input id="chatInput" maxlength="80" placeholder="Écris un message…"><button id="send">➤</button></form></div>
-<div id="hotbar"></div>
-<div id="dpad"><button class="move" id="up">▲</button><button class="move" id="down">▼</button><button class="move" id="left">◀</button><button class="move" id="right">▶</button></div>
-<div id="actions"><button class="act" id="place">🪑 Poser</button><button class="act" id="remove">🧹 Enlever</button></div>
-<div id="notice"></div>
-<div id="start"><div class="card"><h1>🌸 Kawaii Block World</h1><p>Construis ta maison, décore-la avec de jolis meubles et rencontre les habitants robots. Ils se promènent et discutent avec toi 💕</p><p><b>Cette première version est spécialement faite pour fonctionner au toucher sur iPad.</b></p><button id="play">▶ JOUER</button></div></div>
+<canvas id="c"></canvas>
+
+<div id="start"><div class="card">
+<h1>🎀 Kawaii Block World 3D</h1>
+<p>Construis ton monde, place des meubles incroyables, crée ton look et rencontre des habitants robots.</p>
+<p><b>iPad :</b> joystick à gauche pour marcher · glisse sur l'écran pour regarder.</p>
+<button id="play">▶ JOUER</button>
+</div></div>
+
+<div id="hud">
+<div class="top"><div class="pill">🏡 Créatif</div><div class="pill" id="selectedLabel">🟩 Herbe</div></div>
+<div id="menuBtns"><button class="ui" id="bagBtn">🎒 Sac</button><button class="ui" id="lookBtn">👗 Look</button><button class="ui" id="chatBtn">💬</button></div>
+<div id="cross">＋</div>
+<div id="joy"><div id="nub"></div></div>
+<div id="actions"><button class="act" id="place">✨ Poser</button><button class="act" id="remove">⛏️ Casser</button><button class="act" id="jump">⬆️ Sauter</button></div>
+<div id="hotbar"></div><div id="toast"></div>
+</div>
+
+<div class="panel" id="bag"><div class="head"><h2>🎒 Inventaire</h2><button class="close">✕ Fermer</button></div><div class="tabs" id="tabs"></div><div class="grid" id="grid"></div></div>
+
+<div class="panel" id="look"><div class="head"><h2>👗 Studio Look</h2><button class="close">✕ Fermer</button></div>
+<div id="skinPreview"><div id="facePrev">👧🏻</div><div style="font-size:38px" id="stylePrev">🎀 👗</div></div>
+<h3>Visage</h3><div class="row" id="faces"></div><h3>Tenue</h3><div class="row" id="outfits"></div><h3>Accessoire</h3><div class="row" id="accs"></div></div>
+
+<div id="chat"><div class="chatHead"><span>💬 Mes amis robots</span><button class="close" id="chatClose">✕</button></div><div id="msgs"></div><form id="form"><input id="inp" maxlength="80" placeholder="Écris un message…"><button id="send">➤</button></form></div>
+
+<script src="https://cdn.babylonjs.com/babylon.js"></script>
 <script>
-const TILE=62,W=26,H=20,world=document.getElementById('world');
-const map=Array.from({length:H},()=>Array.from({length:W},()=>({g:'grass',o:''})));
-for(let y=0;y<H;y++)for(let x=0;x<W;x++){if(x===12||x===13||y===15)map[y][x].g='path'}
-for(let y=3;y<=12;y++)for(let x=3;x<=10;x++)map[y][x].g='floor';
-for(let x=3;x<=10;x++){map[3][x].o='🧱';map[12][x].o='🧱'}for(let y=3;y<=12;y++){map[y][3].o='🧱';map[y][10].o='🧱'}
-map[12][6].o='';map[12][7].o='';
-[['🛋️',5,6],['🛋️',6,6],['🛏️',8,5],['🪴',9,10],['🪑',5,9],['🪵',6,9],['💡',8,10],['🍳',9,8]].forEach(a=>map[a[2]][a[1]].o=a[0]);
-const ITEMS=[['🛋️','Canapé'],['🛏️','Lit'],['🪑','Chaise'],['🪵','Table'],['💡','Lampe'],['🪴','Plante'],['🧸','Peluche'],['🌸','Fleur'],['🧱','Bloc']];
-let sel=0,px=13,py=16,dir=0;
-function renderMap(){world.innerHTML='';for(let y=0;y<H;y++)for(let x=0;x<W;x++){let d=document.createElement('div');d.className='tile '+map[y][x].g;d.style.left=x*TILE+'px';d.style.top=y*TILE+'px';d.textContent=map[y][x].o;world.appendChild(d)}world.appendChild(player);npcs.forEach(n=>world.appendChild(n.el));positionAll()}
-const player=document.createElement('div');player.id='player';player.textContent='👧';
-const npcData=[['Emma','👩','Salut ! 💕',15,9],['Léo','👦','Je construis une maison !',18,13],['Mia','👧','Tu veux jouer ?',21,6],['Noah','🧑','J’adore décorer !',6,16],['Lina','👩','Coucou 🌸',16,4],['Tom','👦','On explore ?',22,16]];
-const npcs=npcData.map(a=>{let e=document.createElement('div');e.className='npc';e.textContent=a[1];e.style.background=['#ffd4e7','#d9e8ff','#e8ddff','#d8f4e3'][Math.floor(Math.random()*4)];let b=document.createElement('div');b.className='bubble';b.textContent=a[2];e.appendChild(b);return{name:a[0],x:a[3],y:a[4],el:e}});
-function positionAll(){player.style.left=px*TILE+7+'px';player.style.top=py*TILE+7+'px';npcs.forEach(n=>{n.el.style.left=n.x*TILE+7+'px';n.el.style.top=n.y*TILE+7+'px'});let ox=innerWidth/2-(px*TILE+TILE/2),oy=innerHeight/2-(py*TILE+TILE/2);world.style.transform=`translate(${ox}px,${oy}px)`}
-function blocked(x,y){return x<0||y<0||x>=W||y>=H||map[y][x].o==='🧱'||npcs.some(n=>n.x===x&&n.y===y)}
-function move(dx,dy,d){dir=d;let nx=px+dx,ny=py+dy;if(!blocked(nx,ny)){px=nx;py=ny;positionAll()}}
-function front(){let a=[[0,-1],[1,0],[0,1],[-1,0]][dir];return{x:px+a[0],y:py+a[1]}}
-function note(t){let n=document.getElementById('notice');n.textContent=t;n.style.opacity=1;clearTimeout(note.t);note.t=setTimeout(()=>n.style.opacity=0,900)}
-function place(){let p=front();if(p.x<0||p.y<0||p.x>=W||p.y>=H)return;if(map[p.y][p.x].o){note('Cette case est occupée 😊');return}map[p.y][p.x].o=ITEMS[sel][0];renderMap();note(ITEMS[sel][1]+' posé ✨')}
-function remove(){let p=front();if(p.x<0||p.y<0||p.x>=W||p.y>=H)return;if(map[p.y][p.x].o&&map[p.y][p.x].o!=='🧱'){map[p.y][p.x].o='';renderMap();note('Objet enlevé 🧹')}}
-const hb=document.getElementById('hotbar');function hot(){hb.innerHTML='';ITEMS.forEach((it,i)=>{let b=document.createElement('button');b.className='slot'+(i===sel?' sel':'');b.innerHTML=`<span>${it[0]}</span>`;b.title=it[1];b.onclick=()=>{sel=i;hot();note(it[1])};hb.appendChild(b)})}hot();
-function bind(id,fn){let e=document.getElementById(id);e.addEventListener('pointerdown',ev=>{ev.preventDefault();fn()})}
-bind('up',()=>move(0,-1,0));bind('right',()=>move(1,0,1));bind('down',()=>move(0,1,2));bind('left',()=>move(-1,0,3));bind('place',place);bind('remove',remove);
-document.getElementById('play').onclick=()=>{document.getElementById('start').style.display='none';renderMap();addMsg('Emma','Bienvenue dans Kawaii Block World ! 🌸')};
-document.getElementById('chatBtn').onclick=()=>document.getElementById('chat').style.display='block';
-document.getElementById('closeChat').onclick=()=>document.getElementById('chat').style.display='none';
-function addMsg(who,text,me=false){let m=document.createElement('div');m.className='msg'+(me?' me':'');m.textContent=(me?'Toi':who)+' : '+text;document.getElementById('messages').appendChild(m);m.scrollIntoView()}
-const answers=['Ouiii 😍','Bonne idée !','Je viens avec toi 🌸','On construit quelque chose ? 🏡','J’adore ta maison !','Tu veux qu’on décore ? ✨','Coucou 💕','On va explorer !'];
-document.getElementById('chatForm').onsubmit=e=>{e.preventDefault();let i=document.getElementById('chatInput'),t=i.value.trim();if(!t)return;addMsg('',t,true);i.value='';setTimeout(()=>{let n=npcs[Math.floor(Math.random()*npcs.length)];addMsg(n.name,answers[Math.floor(Math.random()*answers.length)])},450)};
-setInterval(()=>{npcs.forEach(n=>{if(Math.random()<.35){let a=[[0,-1],[1,0],[0,1],[-1,0]][Math.floor(Math.random()*4)],nx=n.x+a[0],ny=n.y+a[1];if(nx>0&&ny>0&&nx<W-1&&ny<H-1&&map[ny][nx].o!=='🧱'&&!(nx===px&&ny===py)){n.x=nx;n.y=ny}}});positionAll()},1500);
+(()=>{
+const canvas=document.getElementById('c');
+const engine=new BABYLON.Engine(canvas,true,{adaptToDeviceRatio:true});
+const scene=new BABYLON.Scene(engine);
+scene.clearColor=new BABYLON.Color4(.55,.82,1,1);
+scene.gravity=new BABYLON.Vector3(0,-.55,0);
+scene.collisionsEnabled=true;
+scene.fogMode=BABYLON.Scene.FOGMODE_LINEAR;scene.fogStart=30;scene.fogEnd=75;scene.fogColor=new BABYLON.Color3(.55,.82,1);
+
+const camera=new BABYLON.UniversalCamera("cam",new BABYLON.Vector3(0,4,10),scene);
+camera.minZ=.1;camera.checkCollisions=true;camera.applyGravity=true;camera.ellipsoid=new BABYLON.Vector3(.45,.9,.45);
+
+const light=new BABYLON.HemisphericLight("h",new BABYLON.Vector3(0,1,0),scene);light.intensity=.95;
+const sun=new BABYLON.DirectionalLight("s",new BABYLON.Vector3(-.4,-1,.25),scene);sun.position=new BABYLON.Vector3(20,35,-20);sun.intensity=.7;
+
+function mat(name,hex){let m=new BABYLON.StandardMaterial(name,scene);m.diffuseColor=BABYLON.Color3.FromHexString(hex);m.specularColor=new BABYLON.Color3(.08,.08,.08);return m}
+const M={grass:mat('grass','#72b958'),dirt:mat('dirt','#8b5b38'),stone:mat('stone','#8f9296'),wood:mat('wood','#9b704b'),white:mat('white','#f4eee8'),pink:mat('pink','#ebb7cf'),lav:mat('lav','#cbb9ee'),cream:mat('cream','#f5e7d2'),walnut:mat('walnut','#6c4d3a'),green:mat('green','#5e9957'),gold:mat('gold','#d4b66f'),grey:mat('grey','#9d9d9d'),glass:mat('glass','#8ad8ef')};M.glass.alpha=.5;
+
+function box(name,x,y,z,sx,sy,sz,ma,coll=true){let b=BABYLON.MeshBuilder.CreateBox(name,{size:1},scene);b.position.set(x,y,z);b.scaling.set(sx,sy,sz);b.material=ma;b.checkCollisions=coll;b.metadata={kind:name};return b}
+const blocks=new Map();const key=(x,y,z)=>`${x},${y},${z}`;
+function addBlock(x,y,z,type='grass'){if(blocks.has(key(x,y,z)))return;let b=box('block',x,y,z,1,1,1,M[type],true);b.metadata={kind:'block',x,y,z,type};blocks.set(key(x,y,z),b);return b}
+for(let x=-18;x<=18;x++)for(let z=-18;z<=18;z++){addBlock(x,0,z,'grass');addBlock(x,-1,z,'dirt')}
+for(let x=-18;x<=18;x++){addBlock(x,1,-18,'stone');addBlock(x,1,18,'stone')}
+for(let z=-18;z<=18;z++){addBlock(-18,1,z,'stone');addBlock(18,1,z,'stone')}
+
+function sofa(x,y,z){box('furn',x,y+.45,z,3.4,.8,1.4,M.cream);box('furn',x,y+1.05,z-.52,3.4,.7,.28,M.pink);box('furn',x-1.55,y+.75,z,.28,1.15,1.3,M.pink);box('furn',x+1.55,y+.75,z,.28,1.15,1.3,M.pink)}
+function bed(x,y,z){box('furn',x,y+.35,z,3.2,.7,4.1,M.walnut);box('furn',x,y+.8,z,3,.45,3.7,M.white);box('furn',x,y+1.05,z+.6,2.9,.16,2.0,M.lav);box('furn',x,y+1.6,z-1.95,3.4,2.2,.25,M.pink)}
+function chair(x,y,z){box('furn',x,y+.45,z,.9,.7,.9,M.cream);box('furn',x,y+1.05,z-.3,.9,1,.18,M.pink)}
+function table(x,y,z){box('furn',x,y+.95,z,2.4,.2,1.35,M.walnut);for(let dx of [-.9,.9])for(let dz of [-.45,.45])box('furn',x+dx,y+.45,z+dz,.14,.9,.14,M.grey)}
+function plant(x,y,z){box('furn',x,y+.35,z,.75,.7,.75,M.pink);box('furn',x,y+1.0,z,.15,1.2,.15,M.green,false);for(let i=0;i<5;i++){let a=i*Math.PI*2/5;let l=box('furn',x+Math.cos(a)*.35,y+1.4,z+Math.sin(a)*.35,.55,.15,.28,M.green,false);l.rotation.y=-a}}
+function vanity(x,y,z){box('furn',x,y+.75,z,2.4,.18,1,M.white);box('furn',x,y+.4,z,2.1,.55,.8,M.pink);box('furn',x,y+1.8,z-.42,1.7,1.7,.08,M.glass,false)}
+function fridge(x,y,z){box('furn',x,y+1.45,z,1.2,2.9,1.2,M.white);box('furn',x-.35,y+1.45,z+.62,.06,1.1,.06,M.grey,false)}
+function pizza(x,y,z){let c=BABYLON.MeshBuilder.CreateCylinder('furn',{height:.12,diameter:1.2,tessellation:24},scene);c.position.set(x,y+.12,z);c.material=mat('pizza','#d8a755');c.metadata={kind:'furn'}}
+function cake(x,y,z){let c=BABYLON.MeshBuilder.CreateCylinder('furn',{height:.5,diameter:1.1,tessellation:24},scene);c.position.set(x,y+.3,z);c.material=M.pink;c.metadata={kind:'furn'}}
+function instantHouse(x,y,z){for(let xx=-3;xx<=3;xx++)for(let zz=-3;zz<=3;zz++)box('furn',x+xx,y+.05,z+zz,1,.1,1,M.cream);for(let xx=-3;xx<=3;xx++){box('furn',x+xx,y+1.5,z-3,.3,3,.3,M.white);box('furn',x+xx,y+1.5,z+3,.3,3,.3,M.white)}for(let zz=-2;zz<=2;zz++){box('furn',x-3,y+1.5,z+zz,.3,3,.3,M.white);box('furn',x+3,y+1.5,z+zz,.3,3,.3,M.white)}box('furn',x,y+3.1,z,7,.2,7,M.pink)}
+function instantSchool(x,y,z){for(let xx=-4;xx<=4;xx++)for(let zz=-3;zz<=3;zz++)box('furn',x+xx,y+.05,z+zz,1,.1,1,M.cream);box('furn',x,y+1.5,z-3.2,9,3,.25,M.white);box('furn',x-4.2,y+1.5,z, .25,3,6.5,M.white);box('furn',x+4.2,y+1.5,z,.25,3,6.5,M.white);box('furn',x,y+3.1,z,9,.2,6.5,M.lav)}
+
+const NPCS=[];
+function npc(name,x,z,color){
+ let body=BABYLON.MeshBuilder.CreateCylinder('npc',{height:1.2,diameter:.65},scene);body.position.set(x,1.2,z);body.material=mat(name,color);body.metadata={kind:'npc',name};
+ let head=BABYLON.MeshBuilder.CreateSphere('npc',{diameter:.7},scene);head.position.set(x,2.15,z);head.material=mat(name+'h','#ffd3b6');head.metadata={kind:'npc',name};
+ NPCS.push({name,body,head,tx:x,tz:z});
+}
+const names=['Emma','Lina','Mia','Jade','Lou','Zoé','Nina','Léo','Noah','Tom','Sacha','Eliott','Louna','Max','Anna-Rose','Tali','Awa','Yo'];
+for(let i=0;i<names.length;i++)npc(names[i],-12+(i%6)*4,-10+Math.floor(i/6)*6,['#ff9ec7','#a7c8ff','#c8b0f3','#9fdfb4'][i%4]);
+
+setInterval(()=>{NPCS.forEach(n=>{if(Math.random()<.5){n.tx=Math.max(-15,Math.min(15,n.body.position.x+(Math.random()-.5)*6));n.tz=Math.max(-15,Math.min(15,n.body.position.z+(Math.random()-.5)*6))}})},2500);
+scene.onBeforeRenderObservable.add(()=>{NPCS.forEach(n=>{let dx=n.tx-n.body.position.x,dz=n.tz-n.body.position.z,d=Math.hypot(dx,dz);if(d>.1){n.body.position.x+=dx/d*.015;n.body.position.z+=dz/d*.015;n.head.position.x=n.body.position.x;n.head.position.z=n.body.position.z}})});
+
+const categories={
+'Blocs':[['🟩','Herbe','block','grass'],['🧱','Pierre','block','stone'],['🪵','Bois','block','wood'],['⬜','Blanc','block','white'],['🩷','Rose','block','pink'],['💜','Lavande','block','lav']],
+'Salon':[['🛋️','Canapé luxe','furn','sofa'],['🪑','Fauteuil','furn','chair'],['🪵','Table','furn','table'],['🪴','Plante','furn','plant']],
+'Chambre':[['🛏️','Lit luxe','furn','bed'],['💄','Coiffeuse','furn','vanity'],['🪴','Plante','furn','plant']],
+'Cuisine':[['🧊','Frigo','furn','fridge'],['🍕','Pizza','furn','pizza'],['🍰','Gâteau','furn','cake'],['🪵','Table','furn','table']],
+'Nourriture':[['🍕','Pizza','furn','pizza'],['🍰','Gâteau','furn','cake'],['🍓','Fraises','furn','cake'],['🍦','Glace','furn','cake']],
+'Bâtiments':[['🏡','Maison instantanée','furn','house'],['🏫','École instantanée','furn','school']]
+};
+let cat='Blocs',selected=categories.Bloks?.[0]||categories['Blocs'][0];
+const tabs=document.getElementById('tabs'),grid=document.getElementById('grid'),bar=document.getElementById('hotbar');
+function renderTabs(){tabs.innerHTML='';Object.keys(categories).forEach(k=>{let b=document.createElement('button');b.className='tab'+(k===cat?' on':'');b.textContent=k;b.onclick=()=>{cat=k;renderTabs();renderGrid()};tabs.appendChild(b)})}
+function choose(it){selected=it;document.getElementById('selectedLabel').textContent=it[0]+' '+it[1];document.getElementById('bag').style.display='none';toast(it[1]+' sélectionné')}
+function renderGrid(){grid.innerHTML='';categories[cat].forEach(it=>{let b=document.createElement('button');b.className='item';b.innerHTML='<span>'+it[0]+'</span>'+it[1];b.onclick=()=>choose(it);grid.appendChild(b)})}
+function renderBar(){bar.innerHTML='';[['🟩','Herbe','block','grass'],['🛋️','Canapé','furn','sofa'],['🛏️','Lit','furn','bed'],['🪑','Fauteuil','furn','chair'],['🪴','Plante','furn','plant']].forEach(it=>{let b=document.createElement('button');b.className='slot'+(selected[0]===it[0]?' sel':'');b.textContent=it[0];b.onclick=()=>{selected=it;renderBar();document.getElementById('selectedLabel').textContent=it[0]+' '+it[1]};bar.appendChild(b)})}
+renderTabs();renderGrid();renderBar();
+
+function toast(t){let e=document.getElementById('toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,900)}
+function pick(){return scene.pickWithRay(camera.getForwardRay(8),m=>m.isPickable!==false)}
+function place(){
+ let p=pick();if(!p?.hit)return;let n=p.getNormal(true)||new BABYLON.Vector3(0,1,0);let pt=p.pickedPoint.add(n.scale(.65));
+ let x=Math.round(pt.x),z=Math.round(pt.z),y=Math.max(1.05,Math.round(pt.y));
+ if(selected[2]==='block'){addBlock(x,Math.round(y),z,selected[3]);toast(selected[1]+' posé')}
+ else{
+  const fn={sofa,bed,chair,table,plant,vanity,fridge,pizza,cake,house:instantHouse,school:instantSchool}[selected[3]];
+  if(fn){fn(x,1.05,z);toast(selected[1]+' ajouté ✨')}
+ }
+}
+function remove(){
+ let p=pick();if(!p?.hit)return;let m=p.pickedMesh;if(m.metadata?.kind==='block'&&m.metadata.y>0){blocks.delete(key(m.metadata.x,m.metadata.y,m.metadata.z));m.dispose();toast('Bloc cassé')}
+ else if(m.metadata?.kind==='furn'){m.dispose();toast('Objet retiré')}
+}
+document.getElementById('place').onclick=place;document.getElementById('remove').onclick=remove;document.getElementById('jump').onclick=()=>camera.cameraDirection.y+=.22;
+
+let joyX=0,joyY=0;const joy=document.getElementById('joy'),nub=document.getElementById('nub');
+function jm(e){let t=e.touches?e.touches[0]:e,r=joy.getBoundingClientRect(),x=t.clientX-r.left-66,y=t.clientY-r.top-66,d=Math.hypot(x,y),m=42;if(d>m){x=x/d*m;y=y/d*m}joyX=x/m;joyY=y/m;nub.style.transform=`translate(${x}px,${y}px)`}
+function je(){joyX=joyY=0;nub.style.transform='translate(0,0)'}
+joy.addEventListener('touchstart',jm,{passive:false});joy.addEventListener('touchmove',jm,{passive:false});joy.addEventListener('touchend',je);
+let look=null;
+canvas.addEventListener('touchstart',e=>{let t=e.touches[e.touches.length-1];if(t.clientX>innerWidth*.4)look={x:t.clientX,y:t.clientY}},{passive:false});
+canvas.addEventListener('touchmove',e=>{if(!look)return;let t=e.touches[e.touches.length-1],dx=t.clientX-look.x,dy=t.clientY-look.y;camera.rotation.y+=dx*.005;camera.rotation.x+=dy*.005;camera.rotation.x=Math.max(-1.35,Math.min(1.35,camera.rotation.x));look={x:t.clientX,y:t.clientY}},{passive:false});
+canvas.addEventListener('touchend',()=>look=null);
+scene.onBeforeRenderObservable.add(()=>{let f=camera.getDirection(BABYLON.Axis.Z);f.y=0;f.normalize();let r=camera.getDirection(BABYLON.Axis.X);r.y=0;r.normalize();camera.cameraDirection.addInPlace(f.scale(-joyY*.075));camera.cameraDirection.addInPlace(r.scale(joyX*.075))});
+
+const faces=['👧🏻','👧🏼','👧🏽','👧🏾','👩🏻','👩🏼','👩🏽','👩🏾'],outfits=['👗','👚','👘','🎾','🧥','👖','👕','🩱'],accs=['🎀','👑','🕶️','👒','🧢','💎','👜','🎒'];
+let face=faces[0],outfit='👗',acc='🎀';
+function fillRow(id,arr,type){let r=document.getElementById(id);arr.forEach(v=>{let b=document.createElement('button');b.className='opt';b.textContent=v;b.onclick=()=>{if(type==='f')face=v;if(type==='o')outfit=v;if(type==='a')acc=v;document.getElementById('facePrev').textContent=face;document.getElementById('stylePrev').textContent=acc+' '+outfit;[...r.children].forEach(c=>c.classList.remove('on'));b.classList.add('on')};r.appendChild(b)})}
+fillRow('faces',faces,'f');fillRow('outfits',outfits,'o');fillRow('accs',accs,'a');
+
+document.getElementById('bagBtn').onclick=()=>document.getElementById('bag').style.display='block';
+document.getElementById('lookBtn').onclick=()=>document.getElementById('look').style.display='block';
+document.querySelectorAll('.panel .close').forEach(b=>b.onclick=()=>b.closest('.panel').style.display='none');
+
+const chat=document.getElementById('chat'),msgs=document.getElementById('msgs');
+document.getElementById('chatBtn').onclick=()=>chat.style.display='block';document.getElementById('chatClose').onclick=()=>chat.style.display='none';
+function addMsg(who,text,me=false){let d=document.createElement('div');d.className='msg'+(me?' me':'');d.textContent=(me?'Toi':who)+' : '+text;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}
+const answers=['Coucou 💕','Ouiii 😍','Je viens avec toi !','On construit une maison ? 🏡','J’adore ton monde ✨','On va manger quelque chose ? 🍕','On va faire les magasins ? 🛍️','Tu veux être mon amie ? 🌸'];
+document.getElementById('form').onsubmit=e=>{e.preventDefault();let i=document.getElementById('inp'),t=i.value.trim();if(!t)return;addMsg('',t,true);i.value='';setTimeout(()=>{let n=NPCS[Math.floor(Math.random()*NPCS.length)];addMsg(n.name,answers[Math.floor(Math.random()*answers.length)])},450)};
+
+document.getElementById('play').onclick=()=>{document.getElementById('start').style.display='none';document.getElementById('hud').style.display='block';addMsg('Emma','Bienvenue ! Viens construire avec nous 🌸')};
+engine.runRenderLoop(()=>scene.render());addEventListener('resize',()=>engine.resize());
+})();
 </script>
-</body></html>
+</body>
+</html>
