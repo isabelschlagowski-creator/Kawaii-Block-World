@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
-<title>Anna City V100</title>
+<title>Anna City V1000</title>
 <style>
   :root{--ink:#152235;--glass:rgba(21,34,53,.82);--pink:#ff68b4;--cyan:#56d9ff;--violet:#8f74ff;--cream:#fff8ef}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -40,7 +40,7 @@
 <body>
 <canvas id="game"></canvas>
 <div class="ui">
-  <div class="hud">👧 Anna ♥ Talcado<small>🌈 Anna City V100 · ville kawaii vivante</small></div>
+  <div class="hud">👧 Anna ♥ Talcado<small>🌈 Anna City V1000 · ville kawaii vivante</small></div>
   <div class="icons">
     <button class="icon" id="bagBtn" aria-label="Inventaire">🎒</button>
     <button class="icon" id="mapBtn" aria-label="Carte">🗺️</button>
@@ -62,7 +62,71 @@
   <div class="compose"><input id="chatInput" autocomplete="off" placeholder="Pose une question à Talcado…"/><button class="send" id="sendBtn">➤</button></div>
 </div>
 <div class="toast" id="toast"></div>
-<script src="https://cdn.babylonjs.com/babylon.js"></script>
+<script src="https://cdn.babylonjs.com/babylon.js">
+/* === V1000 iPad full-screen controls ===
+   One finger on the play area: drag up/down to move, left/right to turn.
+   Two fingers: pinch to zoom + drag to look around.
+*/
+let v1000Touch = {one:null, two:null, move:0, turn:0};
+function uiTarget(el){
+  return el && (el.closest && el.closest("button,input,.panel,.chat,.joy,.actions,.btns"));
+}
+C.addEventListener("touchstart", e=>{
+  if(uiTarget(e.target)) return;
+  if(e.touches.length===1){
+    const t=e.touches[0];
+    v1000Touch.one={x:t.clientX,y:t.clientY};
+    v1000Touch.move=0; v1000Touch.turn=0;
+  } else if(e.touches.length>=2){
+    const a=e.touches[0],b=e.touches[1];
+    v1000Touch.two={
+      d:Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY),
+      x:(a.clientX+b.clientX)/2,y:(a.clientY+b.clientY)/2
+    };
+    v1000Touch.one=null;
+  }
+},{passive:false});
+C.addEventListener("touchmove", e=>{
+  if(uiTarget(e.target)) return;
+  e.preventDefault();
+  if(e.touches.length===1 && v1000Touch.one){
+    const t=e.touches[0], dx=t.clientX-v1000Touch.one.x, dy=t.clientY-v1000Touch.one.y;
+    v1000Touch.turn=Math.max(-1,Math.min(1,dx/70));
+    v1000Touch.move=Math.max(-1,Math.min(1,-dy/70));
+  } else if(e.touches.length>=2){
+    const a=e.touches[0],b=e.touches[1];
+    const d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
+    const x=(a.clientX+b.clientX)/2,y=(a.clientY+b.clientY)/2;
+    if(v1000Touch.two){
+      const ratio=d/(v1000Touch.two.d||d);
+      cam.fov=Math.max(.45,Math.min(1.35,cam.fov/ratio));
+      cam.rotation.y+=(x-v1000Touch.two.x)*.004;
+      cam.rotation.x+=(y-v1000Touch.two.y)*.003;
+      cam.rotation.x=Math.max(-1.25,Math.min(1.25,cam.rotation.x));
+    }
+    v1000Touch.two={d,x,y};
+  }
+},{passive:false});
+C.addEventListener("touchend", e=>{
+  if(e.touches.length===0){
+    v1000Touch.one=null; v1000Touch.two=null;
+    v1000Touch.move=0; v1000Touch.turn=0;
+  } else if(e.touches.length===1){
+    const t=e.touches[0];
+    v1000Touch.one={x:t.clientX,y:t.clientY};
+    v1000Touch.two=null;
+  }
+},{passive:false});
+
+S.onBeforeRenderObservable.add(()=>{
+  if(v1000Touch.turn) cam.rotation.y += v1000Touch.turn*.045;
+  if(v1000Touch.move){
+    let ff=cam.getDirection(BABYLON.Axis.Z); ff.y=0;
+    if(ff.lengthSquared()>0){ff.normalize(); cam.cameraDirection.addInPlace(ff.scale(v1000Touch.move*.09));}
+  }
+});
+
+</script>
 <script>
 (() => {
 'use strict';
@@ -124,10 +188,75 @@ if(/qui est|qu['’]?est ce que|c['’]?est quoi|capitale|combien de|pourquoi|co
 async function wikiAnswer(q){try{const s=await fetch('https://fr.wikipedia.org/w/api.php?action=query&list=search&srsearch='+encodeURIComponent(q)+'&utf8=1&format=json&origin=*',{cache:'no-store'});if(!s.ok)throw 0;const js=await s.json(),hit=js?.query?.search?.[0];if(!hit)return null;const r=await fetch('https://fr.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(hit.title),{cache:'no-store'});if(!r.ok)throw 0;const j=await r.json();if(!j.extract)return null;let text=j.extract.replace(/\s+/g,' ').trim();if(text.length>520)text=text.slice(0,517).replace(/\s+\S*$/,'')+'…';return text+'\n\n📚 Source : Wikipédia';}catch(e){return null}}
 async function askTalcado(q){const local=localAnswer(q);if(local!==null)return local;const wiki=await wikiAnswer(q);if(wiki)return wiki;return 'Je n’ai pas réussi à trouver une réponse fiable à cette question. Essaie de la poser avec des mots un peu plus précis 😊';}
 async function send(){const input=$('chatInput'),q=input.value.trim();if(!q)return;addMsg('Anna',q,'me');input.value='';const typing=addMsg('Talcado','Je cherche…','tal typing');const ans=await askTalcado(q);typing.remove();addMsg('Talcado',ans,'tal')}
-$('sendBtn').onclick=send;$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')send()});addMsg('Talcado','Coucou Anna ❤️ Bienvenue dans Anna City V100 ! Maintenant je peux répondre à beaucoup de questions, et pour les questions de culture générale j’essaie de chercher une réponse sur Wikipédia.','tal');
+$('sendBtn').onclick=send;$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')send()});addMsg('Talcado','Coucou Anna ❤️ Bienvenue dans Anna City V1000 ! Maintenant je peux répondre à beaucoup de questions, et pour les questions de culture générale j’essaie de chercher une réponse sur Wikipédia.','tal');
 // Render loop
 let last=performance.now();scene.onBeforeRenderObservable.add(()=>{const now=performance.now(),dt=Math.min(40,now-last);last=now;streamGround();for(const p of people){const t=p.metadata.t,dx=t.x-p.position.x,dz=t.z-p.position.z,d=Math.hypot(dx,dz);if(d<1){newTarget(p);continue}const s=p.metadata.speed*dt;p.position.x+=dx/d*s;p.position.z+=dz/d*s;p.rotation.y=Math.atan2(dx,dz);p.metadata.phase+=dt*.012;const a=Math.sin(p.metadata.phase)*.55;p.metadata.la.rotation.x=a;p.metadata.ra.rotation.x=-a;p.metadata.ll.rotation.x=-a;p.metadata.rl.rotation.x=a}const f=camera.getDirection(BABYLON.Axis.Z);f.y=0;f.normalize();const r=camera.getDirection(BABYLON.Axis.X);r.y=0;r.normalize();camera.cameraDirection.addInPlace(f.scale(-jy*.075));camera.cameraDirection.addInPlace(r.scale(jx*.075));});
 engine.runRenderLoop(()=>scene.render());window.addEventListener('resize',()=>engine.resize());
 })();
+
+/* === V1000 iPad full-screen controls ===
+   One finger on the play area: drag up/down to move, left/right to turn.
+   Two fingers: pinch to zoom + drag to look around.
+*/
+let v1000Touch = {one:null, two:null, move:0, turn:0};
+function uiTarget(el){
+  return el && (el.closest && el.closest("button,input,.panel,.chat,.joy,.actions,.btns"));
+}
+C.addEventListener("touchstart", e=>{
+  if(uiTarget(e.target)) return;
+  if(e.touches.length===1){
+    const t=e.touches[0];
+    v1000Touch.one={x:t.clientX,y:t.clientY};
+    v1000Touch.move=0; v1000Touch.turn=0;
+  } else if(e.touches.length>=2){
+    const a=e.touches[0],b=e.touches[1];
+    v1000Touch.two={
+      d:Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY),
+      x:(a.clientX+b.clientX)/2,y:(a.clientY+b.clientY)/2
+    };
+    v1000Touch.one=null;
+  }
+},{passive:false});
+C.addEventListener("touchmove", e=>{
+  if(uiTarget(e.target)) return;
+  e.preventDefault();
+  if(e.touches.length===1 && v1000Touch.one){
+    const t=e.touches[0], dx=t.clientX-v1000Touch.one.x, dy=t.clientY-v1000Touch.one.y;
+    v1000Touch.turn=Math.max(-1,Math.min(1,dx/70));
+    v1000Touch.move=Math.max(-1,Math.min(1,-dy/70));
+  } else if(e.touches.length>=2){
+    const a=e.touches[0],b=e.touches[1];
+    const d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
+    const x=(a.clientX+b.clientX)/2,y=(a.clientY+b.clientY)/2;
+    if(v1000Touch.two){
+      const ratio=d/(v1000Touch.two.d||d);
+      cam.fov=Math.max(.45,Math.min(1.35,cam.fov/ratio));
+      cam.rotation.y+=(x-v1000Touch.two.x)*.004;
+      cam.rotation.x+=(y-v1000Touch.two.y)*.003;
+      cam.rotation.x=Math.max(-1.25,Math.min(1.25,cam.rotation.x));
+    }
+    v1000Touch.two={d,x,y};
+  }
+},{passive:false});
+C.addEventListener("touchend", e=>{
+  if(e.touches.length===0){
+    v1000Touch.one=null; v1000Touch.two=null;
+    v1000Touch.move=0; v1000Touch.turn=0;
+  } else if(e.touches.length===1){
+    const t=e.touches[0];
+    v1000Touch.one={x:t.clientX,y:t.clientY};
+    v1000Touch.two=null;
+  }
+},{passive:false});
+
+S.onBeforeRenderObservable.add(()=>{
+  if(v1000Touch.turn) cam.rotation.y += v1000Touch.turn*.045;
+  if(v1000Touch.move){
+    let ff=cam.getDirection(BABYLON.Axis.Z); ff.y=0;
+    if(ff.lengthSquared()>0){ff.normalize(); cam.cameraDirection.addInPlace(ff.scale(v1000Touch.move*.09));}
+  }
+});
+
 </script>
+<div id="v1000help" style="position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:8;background:#172433dd;color:white;padding:8px 12px;border-radius:12px;font:700 13px system-ui;pointer-events:none">👆 Glisse partout : avancer/tourner · ✌️ 2 doigts : regarder + zoom</div>
 </body></html>
