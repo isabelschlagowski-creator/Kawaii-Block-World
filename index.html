@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Anna City V3000</title>
+<title>Anna City V1 000 000</title>
 <style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#78c9ff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
 #game{width:100%;height:100%;display:block;touch-action:none}
-.ui{position:fixed;inset:0;pointer-events:none;color:#fff}
+.ui{position:fixed;inset:0;pointer-events:none;color:#fff;z-index:1000}
 .panel{background:#10243be8;border:1px solid #ffffff28;border-radius:13px;box-shadow:0 8px 20px #0005}
 #profile{position:absolute;left:12px;top:12px;padding:9px 12px;width:225px;font-weight:900}
 #profile small{display:block;color:#c8ddff;font-size:11px;margin-top:2px}
 #topbar{position:absolute;left:50%;top:12px;transform:translateX(-50%);display:flex;gap:7px;pointer-events:auto}
-.topBtn{width:49px;height:49px;border:0;border-radius:11px;background:#173653e8;color:#fff;font-size:22px;box-shadow:0 5px 14px #0004}
+.topBtn{touch-action:manipulation;-webkit-tap-highlight-color:transparent;width:49px;height:49px;border:0;border-radius:11px;background:#173653e8;color:#fff;font-size:22px;box-shadow:0 5px 14px #0004}
 #money{position:absolute;right:12px;top:12px;padding:8px 12px;text-align:right;font-weight:900}
 #mini{position:absolute;right:12px;top:78px;width:125px;height:88px;border:2px solid #fff7;background:#4e7d45;border-radius:11px}
 #mini:before{content:"";position:absolute;inset:0;background:
@@ -21,24 +21,24 @@ linear-gradient(90deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52
 linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%)}
 #mini:after{content:"▲";position:absolute;left:53px;top:32px;font-size:20px}
 #leftMenu{position:absolute;left:12px;top:105px;display:grid;gap:6px;pointer-events:auto}
-.menuBtn{width:128px;height:40px;border:0;border-radius:9px;background:#142b43ed;color:white;text-align:left;padding:0 11px;font-weight:850}
+.menuBtn{touch-action:manipulation;-webkit-tap-highlight-color:transparent;width:128px;height:40px;border:0;border-radius:9px;background:#142b43ed;color:white;text-align:left;padding:0 11px;font-weight:850}
 #rightTools{position:absolute;right:12px;top:180px;display:grid;gap:7px;pointer-events:auto}
-.toolBtn{width:58px;height:58px;border:0;border-radius:11px;background:#142b43ed;color:white;font-size:22px}
+.toolBtn{touch-action:manipulation;-webkit-tap-highlight-color:transparent;width:58px;height:58px;border:0;border-radius:11px;background:#142b43ed;color:white;font-size:22px}
 #cross{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:30px;text-shadow:0 2px 4px #000}
 #hint{position:absolute;left:50%;bottom:93px;transform:translateX(-50%);background:#11263ddd;border-radius:9px;padding:7px 11px;font-size:11px;font-weight:850;white-space:nowrap}
 #hotbar{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:5px;padding:7px;background:#0e1d2de8;border-radius:13px;pointer-events:auto}
-.slot{width:54px;height:54px;border:2px solid #ffffff4a;border-radius:9px;background:#263d58;color:#fff;font-size:25px}
+.slot{touch-action:manipulation;-webkit-tap-highlight-color:transparent;width:54px;height:54px;border:2px solid #ffffff4a;border-radius:9px;background:#263d58;color:#fff;font-size:25px}
 .slot.sel{border-color:#ffd84a;box-shadow:0 0 0 2px #ffd84a35;transform:translateY(-4px)}
-.modal{display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(860px,94vw);max-height:82vh;overflow:auto;padding:16px;pointer-events:auto}
+.modal{display:none;position:absolute;z-index:1200;left:50%;top:50%;transform:translate(-50%,-50%);width:min(860px,94vw);max-height:82vh;overflow:auto;padding:16px;pointer-events:auto}
 .modal h2{margin:0 0 10px}.close{float:right;border:0;border-radius:8px;padding:7px 10px}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
-.card{min-height:88px;border:0;border-radius:11px;background:#f6f8fb;color:#142438;font-weight:850;padding:8px}
+.card{touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:88px;border:0;border-radius:11px;background:#f6f8fb;color:#142438;font-weight:850;padding:8px}
 .card b{display:block;font-size:28px;margin-bottom:4px}
 .tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
-.tab{border:0;border-radius:9px;padding:9px 11px;background:#314a66;color:#fff;font-weight:850}
+.tab{touch-action:manipulation;-webkit-tap-highlight-color:transparent;border:0;border-radius:9px;padding:9px 11px;background:#314a66;color:#fff;font-weight:850}
 .tab.active{background:#875ed3}
 #catalogInfo{background:#ffffff12;padding:9px;border-radius:9px;margin-bottom:10px;font-size:13px}
-#chat{display:none;position:absolute;right:14px;bottom:86px;width:min(390px,88vw);height:430px;padding:12px;pointer-events:auto}
+#chat{display:none;position:absolute;z-index:1200;right:14px;bottom:86px;width:min(390px,88vw);height:430px;padding:12px;pointer-events:auto}
 #msgs{height:310px;overflow:auto;margin:8px 0}
 .msg{max-width:88%;padding:8px 10px;border-radius:12px;margin:6px 0;font-size:13px}
 .me{margin-left:auto;background:#587df2}.npc{background:#35485f}
@@ -50,7 +50,7 @@ linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%
 <canvas id="game"></canvas>
 
 <div class="ui">
-  <div id="profile" class="panel">👧 Anna ♥ Anna City<small>NIVEAU 28 · MODE CRÉATIF · BLOCS ∞</small></div>
+  <div id="profile" class="panel">👧 Anna ♥ Anna City<small>V1 000 000 LENTE · NIVEAU 28 · MODE CRÉATIF · BLOCS ∞</small></div>
   <div id="topbar">
     <button class="topBtn" id="saveBtn">💾</button>
     <button class="topBtn" id="peopleBtn">👥</button>
@@ -218,12 +218,12 @@ function addPlaced(x,y,z,key,save=true){
 }
 function saveWorld(){
   try{
-    localStorage.setItem('annaV3000',JSON.stringify(
+    localStorage.setItem('annaV1000000',JSON.stringify(
       placed.filter(b=>!b.isDisposed()).map(b=>({x:b.position.x,y:b.position.y,z:b.position.z,k:b.metadata.key||'white'}))
     ));
   }catch(e){}
 }
-try{JSON.parse(localStorage.getItem('annaV3000')||'[]').forEach(o=>addPlaced(o.x,o.y,o.z,o.k,false))}catch(e){}
+try{JSON.parse(localStorage.getItem('annaV1000000')||'[]').forEach(o=>addPlaced(o.x,o.y,o.z,o.k,false))}catch(e){}
 
 function status(t){
   const s=$('status');s.textContent=t;s.style.opacity=1;clearTimeout(status.t);status.t=setTimeout(()=>s.style.opacity=0,1200);
@@ -350,30 +350,52 @@ people.forEach(p=>{const b=document.createElement('button');b.className='card';b
  b.onclick=()=>{$('avatarModal').style.display='none';status('Avatar changé')};$('avatarGrid').appendChild(b);
 });
 
+
+// iPad-safe button binding: pointerup + click fallback, with duplicate guard.
+function tap(id, fn){
+  const el=$(id);
+  if(!el) return;
+  let last=0;
+  const run=(e)=>{
+    if(e){ e.preventDefault(); e.stopPropagation(); }
+    const now=Date.now();
+    if(now-last<250) return;
+    last=now;
+    el.animate([{transform:'scale(.96)'},{transform:'scale(1)'}],{duration:120});
+    fn();
+  };
+  el.addEventListener('pointerup',run,{passive:false});
+  el.addEventListener('touchend',run,{passive:false});
+  el.addEventListener('click',run,{passive:false});
+}
+
 // BUTTONS: EXPLICIT, NO GLOBAL-ID DEPENDENCY
-$('inventoryClose').onclick=()=>$('inventoryModal').style.display='none';
-$('catalogClose').onclick=()=>$('catalogModal').style.display='none';
-$('avatarClose').onclick=()=>$('avatarModal').style.display='none';
-$('peopleClose').onclick=()=>$('peopleModal').style.display='none';
-$('bagBtn').onclick=()=>$('inventoryModal').style.display='block';
-$('catalogBtn').onclick=()=>$('catalogModal').style.display='block';
-$('avatarBtn').onclick=()=>$('avatarModal').style.display='block';
-$('peopleBtn').onclick=()=>$('peopleModal').style.display='block';
-$('placeBtn').onclick=placeBlock;
-$('breakBtn').onclick=breakBlock;
-$('jumpBtn').onclick=()=>camera.cameraDirection.y+=.16;
-$('saveBtn').onclick=()=>{saveWorld();status('Sauvegardé 💾')};
-$('furnitureBtn').onclick=()=>status('Meubles : prochaine étape');
-$('vehicleBtn').onclick=()=>status('Véhicules : prochaine étape');
-$('questsBtn').onclick=()=>status('Quêtes : prochaine étape');
-$('mapBtn').onclick=()=>status('Carte : utilise la mini-carte');
+tap('inventoryClose',()=>{$('inventoryModal').style.display='none';status('Inventaire fermé')});
+tap('catalogClose',()=>{$('catalogModal').style.display='none';status('Catalogue fermé')});
+tap('avatarClose',()=>{$('avatarModal').style.display='none';status('Avatar fermé')});
+tap('peopleClose',()=>{$('peopleModal').style.display='none';status('Habitants fermé')});
+
+tap('bagBtn',()=>{$('inventoryModal').style.display='block';status('Inventaire ouvert 🎒')});
+tap('catalogBtn',()=>{$('catalogModal').style.display='block';status('Catalogue ouvert 🏗️')});
+tap('avatarBtn',()=>{$('avatarModal').style.display='block';status('Avatar ouvert 👤')});
+tap('peopleBtn',()=>{$('peopleModal').style.display='block';status('Habitants ouverts 👥')});
+
+tap('placeBtn',()=>placeBlock());
+tap('breakBtn',()=>breakBlock());
+tap('jumpBtn',()=>{camera.cameraDirection.y+=.16;status('Saut ⬆️')});
+tap('saveBtn',()=>{saveWorld();status('Sauvegardé 💾')});
+
+tap('furnitureBtn',()=>status('Bouton Meubles OK ✅'));
+tap('vehicleBtn',()=>status('Bouton Véhicules OK ✅'));
+tap('questsBtn',()=>status('Bouton Quêtes OK ✅'));
+tap('mapBtn',()=>status('Bouton Carte OK ✅'));
 
 // CHAT
 function addMsg(name,text){
  const d=document.createElement('div');d.className='msg '+(name==='Anna'?'me':'npc');d.innerHTML='<b>'+name+'</b><br>'+text;$('msgs').appendChild(d);$('msgs').scrollTop=$('msgs').scrollHeight;
 }
-$('chatBtn').onclick=()=>$('chat').style.display='block';
-$('chatClose').onclick=()=>$('chat').style.display='none';
+tap('chatBtn',()=>{$('chat').style.display='block';status('Chat ouvert 💬')});
+tap('chatClose',()=>{$('chat').style.display='none';status('Chat fermé')});
 async function sendChat(){
  const q=$('chatInput').value.trim();if(!q)return;$('chatInput').value='';addMsg('Anna',q);
  const nearest=[...people].sort((a,b)=>BABYLON.Vector3.Distance(a.position,camera.position)-BABYLON.Vector3.Distance(b.position,camera.position))[0];
@@ -385,12 +407,12 @@ async function sendChat(){
  else ans=['Je suis là 😊','Bonne idée !','On peut construire ça ensemble 😄','Je me promène dans ton monde !'][Math.floor(Math.random()*4)];
  addMsg(n,ans);
 }
-$('sendBtn').onclick=sendChat;$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')sendChat()});
+tap('sendBtn',()=>sendChat());$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')sendChat()});
 addMsg('Talcado','Coucou Anna ❤️ Cette fois le catalogue est à gauche et tu peux vraiment poser les blocs.');
 
 // TOUCH CONTROLS — SLOW
 let moveT=null,lookT=null,pinch=null,mx=0,my=0;
-function isUI(t){return t&&t.closest&&t.closest('button,input,.modal,#chat,#hotbar,#leftMenu,#rightTools,#topbar')}
+function isUI(t){return t&&t.closest&&t.closest('button,input,.modal,#chat,#hotbar,#leftMenu,#rightTools,#topbar,#profile,#money,#mini')}
 canvas.addEventListener('touchstart',e=>{
  if(isUI(e.target))return;e.preventDefault();
  if(e.touches.length>=2){const a=e.touches[0],b=e.touches[1];pinch=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)}
@@ -418,8 +440,8 @@ scene.onBeforeRenderObservable.add(()=>{
  let f=camera.getDirection(BABYLON.Axis.Z);f.y=0;if(f.lengthSquared())f.normalize();
  let r=camera.getDirection(BABYLON.Axis.X);r.y=0;if(r.lengthSquared())r.normalize();
  // VERY SLOW, deliberate speed
- camera.cameraDirection.addInPlace(f.scale(-my*.026));
- camera.cameraDirection.addInPlace(r.scale(mx*.023));
+ camera.cameraDirection.addInPlace(f.scale(-my*.0065));
+ camera.cameraDirection.addInPlace(r.scale(mx*.0060));
 
  people.forEach(p=>{
    if(Math.random()<.003)p.metadata.target.set(-28+Math.random()*56,1,-28+Math.random()*56);
@@ -431,4 +453,5 @@ engine.runRenderLoop(()=>scene.render());
 window.addEventListener('resize',()=>engine.resize());
 })();
 </script>
+<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1400;background:#7b4ce2;color:white;padding:6px 12px;border-radius:999px;font:800 12px system-ui;pointer-events:none">🐢 ANNA CITY V1 000 000 · VITESSE LENTE</div>
 </body></html>
