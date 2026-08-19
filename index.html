@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Anna City — FIX CAMÉRA</title>
+<title>Anna City — VILLA + CHAT + BARRE + VITESSE</title>
 <style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#7ecbff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
@@ -48,7 +48,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#7ecbff;fon
 <div id="loading3d" style="position:fixed;inset:0;display:grid;place-items:center;background:#78c9ff;color:#102238;font:900 22px system-ui;z-index:999">🌱 Chargement du monde plat…</div>
 
 <div class="ui">
- <div id="profile" class="panel">👧 Anna ♥ Anna City<small>FIX CAMÉRA · MODE CRÉATIF · MONDE PLAT</small></div>
+ <div id="profile" class="panel">👧 Anna ♥ Anna City<small>VILLA XXL · CHAT BULLES · VITESSE +</small></div>
  <div id="topbar">
    <button class="topBtn" id="saveBtn">💾</button>
    <button class="topBtn" id="chatBtn">💬</button>
@@ -198,7 +198,7 @@ if(mats.dirt.diffuseTexture){
 function stream(){}
 
 // ---------- Player: Minecraft-like but clean ----------
-const player=new BABYLON.TransformNode('Anna',scene);player.position.set(0,1.05,0);
+const player=new BABYLON.TransformNode('Anna',scene);player.position.set(0,0,0);
 let playerParts={};
 function playerPart(name,mesh,mat,x,y,z){mesh.name=name;mesh.material=mat;mesh.position.set(x,y,z);mesh.parent=player;mesh.isPickable=false;playerParts[name]=mesh;return mesh}
 function makePlayer(){
@@ -206,8 +206,8 @@ function makePlayer(){
  playerPart('head',BABYLON.MeshBuilder.CreateBox('ph',{size:.68},scene),mats.skin,0,2.28,0);
  playerPart('hair',BABYLON.MeshBuilder.CreateBox('phr',{width:.72,height:.22,depth:.72},scene),mats.hair,0,2.56,-.01);
  playerPart('hairBack',BABYLON.MeshBuilder.CreateBox('phb',{width:.62,height:.7,depth:.14},scene),mats.hair,0,2.15,-.33);
- playerPart('legL',BABYLON.MeshBuilder.CreateBox('pll',{width:.24,height:.9,depth:.28},scene),mats.blue,-.18,.52,0);
- playerPart('legR',BABYLON.MeshBuilder.CreateBox('plr',{width:.24,height:.9,depth:.28},scene),mats.blue,.18,.52,0);
+ playerPart('legL',BABYLON.MeshBuilder.CreateBox('pll',{width:.24,height:.9,depth:.28},scene),mats.blue,-.18,.63,0);
+ playerPart('legR',BABYLON.MeshBuilder.CreateBox('plr',{width:.24,height:.9,depth:.28},scene),mats.blue,.18,.63,0);
  playerPart('armL',BABYLON.MeshBuilder.CreateBox('pal',{width:.20,height:.82,depth:.24},scene),mats.skin,-.48,1.45,0);
  playerPart('armR',BABYLON.MeshBuilder.CreateBox('par',{width:.20,height:.82,depth:.24},scene),mats.skin,.48,1.45,0);
  // eyes + mouth
@@ -255,7 +255,11 @@ function selectBlock(i,btn){
 palette.forEach((p,i)=>{
  const s=document.createElement('button');s.className='slot'+(i===3?' sel':'');s.textContent=p[1];
  const choose=e=>{if(e){e.preventDefault();e.stopPropagation()}selectBlock(i,s)};
- s.addEventListener('pointerdown',choose,{passive:false});s.addEventListener('touchstart',choose,{passive:false});hotbar.appendChild(s);
+ s.addEventListener('pointerdown',choose,{passive:false});
+ s.addEventListener('pointerup',choose,{passive:false});
+ s.addEventListener('touchend',choose,{passive:false});
+ s.addEventListener('click',choose,{passive:false});
+ hotbar.appendChild(s);
  const c=document.createElement('button');c.className='card';c.innerHTML='<b>'+p[1]+'</b>'+p[2];
  const choose2=e=>{if(e){e.preventDefault();e.stopPropagation()}selected=p[0];$('selectedLabel').textContent=p[1]+' '+p[2];$('inventory').style.display='none';toast(p[2])};
  c.addEventListener('pointerup',choose2,{passive:false});invGrid.appendChild(c);
@@ -310,7 +314,7 @@ function buildModel(type){
  const f=new BABYLON.Vector3(Math.sin(yaw),0,Math.cos(yaw)),c=player.position.add(f.scale(10));
  const cx=Math.round(c.x),cz=Math.round(c.z);
  let w=7,d=6,h=4;
- if(type==='villa'||type==='poolvilla'){w=13;d=9;h=6}
+ if(type==='villa'||type==='poolvilla'){w=27;d=19;h=8}
  if(type==='market'){w=12;d=9;h=5}
  // shell with door and windows
  const hw=Math.floor(w/2),hd=Math.floor(d/2);
@@ -331,7 +335,11 @@ function buildModel(type){
    }
  }
  if(type==='poolvilla'){
-   for(let x=-5;x<=5;x++)for(let z=hd+3;z<=hd+7;z++)addWall(cx,cz,x,1,z,'water');
+   for(let x=-10;x<=10;x++)for(let z=hd+3;z<=hd+10;z++)addWall(cx,cz,x,1,z,'water');
+   // enormous terrace and entrance
+   for(let x=-12;x<=12;x++)for(let z=hd+1;z<=hd+2;z++)addWall(cx,cz,x,1,z,'white');
+   // glass balcony across the front
+   for(let x=-10;x<=10;x++)addWall(cx,cz,x,h-1,hd+1,'glass');
  }
  saveWorld();toast('Modèle construit ✅');
 }
@@ -378,6 +386,9 @@ furn.forEach(f=>{const b=document.createElement('button');b.className='card';b.i
 
 // ---------- Vehicles ----------
 const cars=[];let driving=null;
+
+let lastCarPrompt=false;
+
 const veh=[['🚗','Rose','pink'],['🏎️','Rouge','red'],['🚙','Bleu','blue'],['🚕','Jaune','yellow'],['🚘','Violet','purple']];
 function spawnCar(key,label){
  const f=new BABYLON.Vector3(Math.sin(yaw),0,Math.cos(yaw)),p=player.position.add(f.scale(5));
@@ -389,9 +400,40 @@ function spawnCar(key,label){
 }
 veh.forEach(v=>{const b=document.createElement('button');b.className='card';b.innerHTML='<b>'+v[0]+'</b>'+v[1];b.addEventListener('pointerup',e=>{e.preventDefault();spawnCar(v[2],v[1]);$('vehicles').style.display='none'},{passive:false});$('vehicleGrid').appendChild(b)});
 function toggleDrive(){
- if(driving){player.setEnabled(true);player.position.copyFrom(driving.position);player.position.y=1;driving=null;toast('Tu descends');return}
- let best=null,dmin=99;for(const c of cars){const d=BABYLON.Vector3.Distance(c.position,player.position);if(d<dmin){dmin=d;best=c}}
- if(best&&dmin<4){driving=best;player.setEnabled(false);toast('Tu conduis 🚘')}else toast('Approche-toi d’une voiture');
+ 
+ if(!driving){
+   let nearCar=false;
+   for(const c of cars){
+     if(BABYLON.Vector3.Distance(c.position,player.position)<8){nearCar=true;break;}
+   }
+   if(nearCar && !lastCarPrompt){toast('🚘 Voiture proche : appuie sur le bouton 🚘');lastCarPrompt=true;}
+   if(!nearCar)lastCarPrompt=false;
+ }
+
+if(driving){
+   // Exit next to the car.
+   const exitSide=new BABYLON.Vector3(Math.cos(yaw),0,-Math.sin(yaw)).scale(2.2);
+   player.setEnabled(true);
+   player.position.copyFrom(driving.position.add(exitSide));
+   player.position.y=0;
+   driving=null;
+   toast('Tu descends de la voiture 🚶');
+   return;
+ }
+
+ let best=null,dmin=999;
+ for(const c of cars){
+   const d=BABYLON.Vector3.Distance(c.position,player.position);
+   if(d<dmin){dmin=d;best=c}
+ }
+
+ if(best && dmin<8){
+   driving=best;
+   player.setEnabled(false);
+   toast('Tu es dans la voiture 🚘');
+ }else{
+   toast('Approche-toi d’une voiture puis appuie sur 🚘');
+ }
 }
 
 // ---------- NPCs ----------
@@ -413,6 +455,25 @@ function makeNpc(name,x,z,i){
 }
 npcNames.forEach((n,i)=>makeNpc(n,-18+Math.random()*36,-18+Math.random()*36,i));
 
+
+function speechBubble(target,text){
+ if(!target)return;
+ const old=target.metadata&&target.metadata.bubble;
+ if(old){try{old.dispose()}catch(e){}}
+ const plane=BABYLON.MeshBuilder.CreatePlane('bubble',{width:3.8,height:1.05},scene);
+ plane.billboardMode=BABYLON.Mesh.BILLBOARDMODE_ALL;
+ plane.parent=target;plane.position.set(0,3.35,0);plane.isPickable=false;
+ const dt=new BABYLON.DynamicTexture('bubbleTex',{width:512,height:140},scene,true);
+ const ctx=dt.getContext();ctx.fillStyle='rgba(255,255,255,.96)';ctx.fillRect(0,0,512,140);
+ ctx.strokeStyle='#202b38';ctx.lineWidth=8;ctx.strokeRect(4,4,504,132);
+ ctx.fillStyle='#172231';ctx.font='bold 34px Arial';ctx.textAlign='center';ctx.textBaseline='middle';
+ let t=String(text);if(t.length>28)t=t.slice(0,27)+'…';ctx.fillText(t,256,70);dt.update();
+ const mat=new BABYLON.StandardMaterial('bubbleMat',scene);mat.diffuseTexture=dt;mat.emissiveColor=new BABYLON.Color3(1,1,1);mat.backFaceCulling=false;
+ plane.material=mat;
+ target.metadata=target.metadata||{};target.metadata.bubble=plane;
+ setTimeout(()=>{try{plane.dispose();dt.dispose();mat.dispose()}catch(e){}},4200);
+}
+
 // ---------- Chat ----------
 function addMsg(n,t){const d=document.createElement('div');d.className='msg '+(n==='Anna'?'me':'them');d.innerHTML='<b>'+n+'</b><br>'+t;$('msgs').appendChild(d);$('msgs').scrollTop=$('msgs').scrollHeight}
 function answer(q,n){
@@ -426,9 +487,11 @@ function answer(q,n){
  return ['Oui 😄','Bonne idée !','Je viens voir 👀','On construit ça ensemble !','Trop bien 💜'][Math.floor(Math.random()*5)];
 }
 function sendChat(){
- const q=$('chatInput').value.trim();if(!q)return;$('chatInput').value='';addMsg('Anna',q);
+ const q=$('chatInput').value.trim();if(!q)return;$('chatInput').value='';addMsg('Anna',q);speechBubble(player,q);
  let nearest=npcs[0],d=999;for(const n of npcs){const nd=BABYLON.Vector3.Distance(n.position,player.position);if(nd<d){d=nd;nearest=n}}
- addMsg(nearest?.metadata?.name||'Talcado',answer(q,nearest?.metadata?.name||'Talcado'));
+ const reply=answer(q,nearest?.metadata?.name||'Talcado');
+ addMsg(nearest?.metadata?.name||'Talcado',reply);
+ speechBubble(nearest,reply);
 }
 addMsg('Talcado','Coucou Anna ❤️ Nouvelle base : construis tout toi-même !');
 
@@ -471,7 +534,7 @@ canvas.addEventListener('touchend',e=>{
 scene.onBeforeRenderObservable.add(()=>{
  stream();
  const forward=new BABYLON.Vector3(Math.sin(yaw),0,Math.cos(yaw));
- const right=new BABYLON.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
+ const right=new BABYLON.Vector3(-Math.cos(yaw),0,Math.sin(yaw));
 
  if(driving){
    driving.rotation.y=yaw;
@@ -480,8 +543,8 @@ scene.onBeforeRenderObservable.add(()=>{
    player.position.copyFrom(driving.position);
  }else{
    // EXACT validated walking speed preserved
-   player.position.addInPlace(forward.scale(-my*.021));
-   player.position.addInPlace(right.scale(mx*.019));
+   player.position.addInPlace(forward.scale(-my*.034));
+   player.position.addInPlace(right.scale(mx*.031));
    if(Math.abs(mx)+Math.abs(my)>.02)player.rotation.y=yaw+Math.PI;
  }
  updateCamera();
