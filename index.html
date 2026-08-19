@@ -3,104 +3,147 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Anna City 2 — Étape 1</title>
+<title>Anna City 2 — Étape 2 Stylisée</title>
 <style>
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#7bcaff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#78caff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none}
 #game{width:100%;height:100%;display:block;touch-action:none}
-#badge{position:fixed;left:14px;top:14px;padding:10px 14px;border-radius:14px;background:#142a42e8;color:#fff;font-weight:900;z-index:10;box-shadow:0 7px 20px #0004}
-#badge small{display:block;color:#cfe1ff;margin-top:3px}
-#hint{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);padding:8px 13px;border-radius:12px;background:#142a42e8;color:#fff;font-size:12px;font-weight:850;z-index:10;white-space:nowrap}
-#speed{position:fixed;right:14px;top:14px;padding:10px 13px;border-radius:14px;background:#142a42e8;color:#fff;font-weight:900;z-index:10}
+.hud{position:fixed;z-index:10;color:white;background:#142a42e8;border-radius:14px;box-shadow:0 8px 20px #0004}
+#badge{left:14px;top:14px;padding:10px 14px;font-weight:900}
+#badge small{display:block;color:#d3e4ff;margin-top:3px}
+#speed{right:14px;top:14px;padding:10px 13px;font-weight:900}
+#hint{left:50%;bottom:18px;transform:translateX(-50%);padding:8px 13px;font-size:12px;font-weight:850;white-space:nowrap}
+#mode{right:14px;bottom:18px;padding:8px 11px;font-size:12px;font-weight:850}
 </style>
 </head>
 <body>
 <canvas id="game"></canvas>
-<div id="badge">🌸 ANNA CITY 2<small>ÉTAPE 1 · MONDE + ANNA + DÉPLACEMENTS</small></div>
-<div id="speed">🏃 Vitesse normale</div>
-<div id="hint">👈 moitié gauche : marcher · 👉 moitié droite : regarder · ✌️ pincer : zoom</div>
+<div id="badge" class="hud">🌸 ANNA CITY 2<small>ÉTAPE 2 · AVATAR STYLISÉ + MARCHE FLUIDE</small></div>
+<div id="speed" class="hud">🏃 Vitesse normale</div>
+<div id="hint" class="hud">👈 marcher · 👉 regarder · ✌️ pincer = zoom</div>
+<div id="mode" class="hud">🎮 3e personne</div>
 
 <script src="https://cdn.babylonjs.com/babylon.js"></script>
 <script>
 (()=>{
 const canvas=document.getElementById('game');
-const engine=new BABYLON.Engine(canvas,true,{preserveDrawingBuffer:true,stencil:true});
+const engine=new BABYLON.Engine(canvas,true,{preserveDrawingBuffer:true,stencil:true,antialias:true});
 const scene=new BABYLON.Scene(engine);
 scene.clearColor=new BABYLON.Color4(.48,.79,1,1);
 scene.ambientColor=new BABYLON.Color3(.45,.45,.45);
 
-const light=new BABYLON.HemisphericLight('sun',new BABYLON.Vector3(.2,1,.1),scene);
-light.intensity=1.15;
+const hemi=new BABYLON.HemisphericLight('hemi',new BABYLON.Vector3(.2,1,.1),scene);
+hemi.intensity=1.0;
+const sun=new BABYLON.DirectionalLight('sun',new BABYLON.Vector3(-.35,-1,.25),scene);
+sun.position=new BABYLON.Vector3(20,30,-20);
+sun.intensity=.55;
 
 function mat(name,hex){
  const m=new BABYLON.StandardMaterial(name,scene);
  m.diffuseColor=BABYLON.Color3.FromHexString(hex);
+ m.specularColor=new BABYLON.Color3(.08,.08,.08);
  return m;
 }
 const M={
- grass:mat('grass','#55b846'), dirt:mat('dirt','#80502d'),
- skin:mat('skin','#e2aa84'), hair:mat('hair','#5a3828'),
- pink:mat('pink','#d94f93'), pink2:mat('pink2','#f17ab2'),
- denim:mat('denim','#315da8'), white:mat('white','#f5f2ee'),
- black:mat('black','#22252b'), shoe:mat('shoe','#f1f1f1')
+ grass:mat('grass','#59b94c'),dirt:mat('dirt','#84532f'),
+ skin:mat('skin','#e0aa84'),skin2:mat('skin2','#d49a74'),
+ hair:mat('hair','#5a3725'),hair2:mat('hair2','#77452d'),
+ pink:mat('pink','#dd5e9f'),pink2:mat('pink2','#f184b8'),
+ denim:mat('denim','#3e6fb2'),denim2:mat('denim2','#2f548a'),
+ white:mat('white','#f4f2ed'),black:mat('black','#22262c'),
+ blush:mat('blush','#d56d74')
 };
 
-// Pixel grass texture
+// Pixelated grass texture
 const tex=new BABYLON.DynamicTexture('grassPixels',{width:128,height:128},scene,false);
 const ctx=tex.getContext();
-ctx.fillStyle='#58b947';ctx.fillRect(0,0,128,128);
-const spots=['#449c39','#69c755','#388c32','#77d361'];
-for(let i=0;i<520;i++){ctx.fillStyle=spots[i%spots.length];ctx.fillRect((i*17)%128,(i*43)%128,2+(i%4),2+(i%3))}
-tex.update(false);tex.updateSamplingMode(BABYLON.Texture.NEAREST_NEAREST);
-tex.uScale=80;tex.vScale=80;M.grass.diffuseTexture=tex;
+ctx.fillStyle='#59b94c';ctx.fillRect(0,0,128,128);
+const spots=['#479d3e','#6ecb59','#398b34','#76d15f'];
+for(let i=0;i<650;i++){
+  ctx.fillStyle=spots[i%spots.length];
+  const s=2+(i%3);
+  ctx.fillRect((i*17)%128,(i*43)%128,s,s);
+}
+tex.update(false);
+tex.updateSamplingMode(BABYLON.Texture.NEAREST_NEAREST);
+tex.uScale=90;tex.vScale=90;M.grass.diffuseTexture=tex;
 
-// Flat empty world, deliberately lightweight
-const dirt=BABYLON.MeshBuilder.CreateBox('earth',{width:180,height:2,depth:180},scene);
+// Flat world
+const dirt=BABYLON.MeshBuilder.CreateBox('earth',{width:220,height:2,depth:220},scene);
 dirt.position.y=-1;dirt.material=M.dirt;
-const grass=BABYLON.MeshBuilder.CreateBox('grass',{width:180,height:.18,depth:180},scene);
+const grass=BABYLON.MeshBuilder.CreateBox('grass',{width:220,height:.18,depth:220},scene);
 grass.position.y=.09;grass.material=M.grass;
 
-// Avatar root. Feet sit exactly on grass top (y=.18)
+// Avatar root
 const anna=new BABYLON.TransformNode('Anna',scene);
 anna.position.set(0,.18,0);
-const parts={};
 
-function box(name,w,h,d,x,y,z,material,parent=anna){
- const b=BABYLON.MeshBuilder.CreateBox(name,{width:w,height:h,depth:d},scene);
- b.position.set(x,y,z);b.material=material;b.parent=parent;b.isPickable=false;parts[name]=b;return b;
+function partBox(name,w,h,d,x,y,z,material,parent=anna){
+ const m=BABYLON.MeshBuilder.CreateBox(name,{width:w,height:h,depth:d},scene);
+ m.position.set(x,y,z);m.material=material;m.parent=parent;m.isPickable=false;return m;
 }
-function sphere(name,diam,x,y,z,material,parent=anna,scale=null){
- const s=BABYLON.MeshBuilder.CreateSphere(name,{diameter:diam,segments:16},scene);
- s.position.set(x,y,z);s.material=material;s.parent=parent;s.isPickable=false;
- if(scale)s.scaling.set(scale[0],scale[1],scale[2]);parts[name]=s;return s;
+function partSphere(name,diam,x,y,z,material,parent=anna,scale=[1,1,1],segments=12){
+ const m=BABYLON.MeshBuilder.CreateSphere(name,{diameter:diam,segments},scene);
+ m.position.set(x,y,z);m.material=material;m.parent=parent;m.scaling.set(...scale);m.isPickable=false;return m;
+}
+function partCylinder(name,height,diam,x,y,z,material,parent=anna,tess=12){
+ const m=BABYLON.MeshBuilder.CreateCylinder(name,{height,diameter:diam,tessellation:tess},scene);
+ m.position.set(x,y,z);m.material=material;m.parent=parent;m.isPickable=false;return m;
 }
 
-// More character-like proportions than the old block person
-box('torso',.76,.86,.36,0,1.43,0,M.pink);
-box('skirt',.84,.38,.43,0,.93,0,M.pink2);
-box('legL',.22,.72,.25,-.20,.52,0,M.skin);
-box('legR',.22,.72,.25,.20,.52,0,M.skin);
-box('shoeL',.28,.16,.48,-.20,.10,.08,M.white);
-box('shoeR',.28,.16,.48,.20,.10,.08,M.white);
+// Human-stylized proportions, still game-like / blocky
+const pelvis=partBox('pelvis',.62,.30,.34,0,.92,0,M.denim);
+const torso=partBox('torso',.72,.74,.34,0,1.42,0,M.pink);
+torso.scaling.y=.95;
 
-box('armL',.19,.78,.22,-.48,1.40,0,M.skin);
-box('armR',.19,.78,.22,.48,1.40,0,M.skin);
+// Neck
+partCylinder('neck',.16,.17,0,1.89,0,M.skin);
 
-sphere('head',.72,0,2.22,0,M.skin,null,[.92,1.05,.90]);
-box('hairTop',.69,.20,.68,0,2.52,-.02,M.hair);
-box('hairBack',.66,.72,.18,0,2.18,-.31,M.hair);
-box('hairL',.15,.64,.20,-.32,2.14,-.10,M.hair);
-box('hairR',.15,.64,.20,.32,2.14,-.10,M.hair);
+// Head: slightly rounded but not realistic
+const head=partSphere('head',.68,0,2.24,0,M.skin,null,[.92,1.02,.90],12);
 
-// face
-sphere('eyeL',.075,-.13,2.27,.34,M.black);
-sphere('eyeR',.075,.13,2.27,.34,M.black);
-box('mouth',.14,.035,.025,0,2.08,.355,M.pink);
+// Legs
+const legL=partCylinder('legL',.72,.20,-.18,.50,0,M.skin,null,10);
+const legR=partCylinder('legR',.72,.20,.18,.50,0,M.skin,null,10);
 
-// small ponytail
-sphere('pony',.34,.38,2.27,-.28,M.hair,null,[.8,1.25,.8]);
+// Shorts as blocky overlays
+partBox('shortL',.28,.30,.34,-.18,.86,0,M.denim);
+partBox('shortR',.28,.30,.34,.18,.86,0,M.denim);
 
-// Camera — always behind and above, never under ground
+// Shoes
+const shoeL=partBox('shoeL',.29,.18,.48,-.18,.10,.08,M.white);
+const shoeR=partBox('shoeR',.29,.18,.48,.18,.10,.08,M.white);
+partBox('soleL',.30,.06,.50,-.18,.02,.08,M.pink2);
+partBox('soleR',.30,.06,.50,.18,.02,.08,M.pink2);
+
+// Arms with shoulder + forearm feel
+const armL=partCylinder('armL',.78,.17,-.47,1.42,0,M.skin,null,10);
+const armR=partCylinder('armR',.78,.17,.47,1.42,0,M.skin,null,10);
+partSphere('handL',.19,-.47,1.00,0,M.skin,null,[.85,1.0,.85],10);
+partSphere('handR',.19,.47,1.00,0,M.skin,null,[.85,1.0,.85],10);
+
+// Sleeves
+partBox('sleeveL',.20,.25,.24,-.47,1.67,0,M.pink2);
+partBox('sleeveR',.20,.25,.24,.47,1.67,0,M.pink2);
+
+// Hair cap and layered hair
+const hairCap=partSphere('hairCap',.72,0,2.39,-.02,M.hair,null,[.96,.72,.96],12);
+partBox('hairBack',.66,.74,.16,0,2.11,-.32,M.hair);
+partBox('hairL',.16,.68,.20,-.31,2.10,-.11,M.hair2);
+partBox('hairR',.16,.68,.20,.31,2.10,-.11,M.hair2);
+partSphere('pony',.30,.36,2.21,-.29,M.hair2,null,[.8,1.25,.8],10);
+
+// Face
+const eyeL=partSphere('eyeL',.075,-.13,2.28,.31,M.black,null,[.9,1,.65],8);
+const eyeR=partSphere('eyeR',.075,.13,2.28,.31,M.black,null,[.9,1,.65],8);
+partSphere('blushL',.055,-.22,2.18,.30,M.blush,null,[1.2,.55,.35],8);
+partSphere('blushR',.055,.22,2.18,.30,M.blush,null,[1.2,.55,.35],8);
+partBox('mouth',.13,.035,.025,0,2.12,.32,M.blush);
+
+// Small outfit detail
+partBox('belt',.64,.06,.36,0,.97,.01,M.pink2);
+
+// Camera
 const camera=new BABYLON.FreeCamera('camera',new BABYLON.Vector3(0,3,-6),scene);
 camera.minZ=.05;camera.fov=.80;
 let yaw=0,pitch=.14,distance=6.0;
@@ -111,11 +154,11 @@ function updateCamera(){
    anna.position.y+1.7+sp*distance,
    anna.position.z-Math.cos(yaw)*cp*distance
  );
- camera.setTarget(anna.position.add(new BABYLON.Vector3(0,1.25,0)));
+ camera.setTarget(anna.position.add(new BABYLON.Vector3(0,1.28,0)));
 }
 updateCamera();
 
-// Touch controls
+// Controls
 let move=null,look=null,pinch=null,mx=0,my=0;
 canvas.addEventListener('touchstart',e=>{
  e.preventDefault();
@@ -128,11 +171,12 @@ canvas.addEventListener('touchstart',e=>{
    else if(!look)look={id:t.identifier,x:t.clientX,y:t.clientY};
  }
 },{passive:false});
+
 canvas.addEventListener('touchmove',e=>{
  e.preventDefault();
  if(e.touches.length>=2){
    const a=e.touches[0],b=e.touches[1],d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
-   if(pinch)distance=Math.max(2.6,Math.min(9,distance*(pinch/d)));
+   if(pinch)distance=Math.max(2.5,Math.min(9,distance*(pinch/d)));
    pinch=d;
  }
  for(const t of e.changedTouches){
@@ -147,6 +191,7 @@ canvas.addEventListener('touchmove',e=>{
    }
  }
 },{passive:false});
+
 canvas.addEventListener('touchend',e=>{
  for(const t of e.changedTouches){
    if(move&&t.identifier===move.id){move=null;mx=0;my=0}
@@ -155,36 +200,52 @@ canvas.addEventListener('touchend',e=>{
  if(e.touches.length<2)pinch=null;
 },{passive:false});
 
-// Desktop fallback for testing
+// Desktop fallback
 const keys={};
 addEventListener('keydown',e=>keys[e.key.toLowerCase()]=true);
 addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
 
-let walkPhase=0;
+// Fluid walking animation
+let phase=0;
 scene.onBeforeRenderObservable.add(()=>{
  let sx=mx,sy=my;
  if(keys['a'])sx=-1;if(keys['d'])sx=1;if(keys['w'])sy=-1;if(keys['s'])sy=1;
 
  const forward=new BABYLON.Vector3(Math.sin(yaw),0,Math.cos(yaw));
  const right=new BABYLON.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
- const moving=Math.abs(sx)+Math.abs(sy)>.02;
+ const intensity=Math.min(1,Math.hypot(sx,sy));
+ const moving=intensity>.02;
 
- // Comfortable speed: faster than the slow version, but controllable
- anna.position.addInPlace(forward.scale(-sy*.042));
- anna.position.addInPlace(right.scale(sx*.038));
+ anna.position.addInPlace(forward.scale(-sy*.040));
+ anna.position.addInPlace(right.scale(sx*.036));
  anna.position.y=.18;
 
  if(moving){
    anna.rotation.y=yaw+Math.PI;
-   walkPhase+=.12;
-   parts.armL.rotation.x=Math.sin(walkPhase)*.45;
-   parts.armR.rotation.x=-Math.sin(walkPhase)*.45;
-   parts.legL.rotation.x=-Math.sin(walkPhase)*.32;
-   parts.legR.rotation.x=Math.sin(walkPhase)*.32;
+   phase+=.11*intensity;
+   const swing=Math.sin(phase)*.52*intensity;
+   const bounce=Math.abs(Math.sin(phase*2))*.025*intensity;
+
+   armL.rotation.x=swing;
+   armR.rotation.x=-swing;
+   legL.rotation.x=-swing*.62;
+   legR.rotation.x=swing*.62;
+
+   shoeL.rotation.x=-swing*.18;
+   shoeR.rotation.x=swing*.18;
+
+   torso.rotation.z=Math.sin(phase)*.025*intensity;
+   pelvis.rotation.z=-Math.sin(phase)*.02*intensity;
+   head.rotation.z=Math.sin(phase*.5)*.012*intensity;
+
+   anna.position.y=.18+bounce;
  }else{
-   parts.armL.rotation.x*=.7;parts.armR.rotation.x*=.7;
-   parts.legL.rotation.x*=.7;parts.legR.rotation.x*=.7;
+   armL.rotation.x*=.78;armR.rotation.x*=.78;
+   legL.rotation.x*=.78;legR.rotation.x*=.78;
+   shoeL.rotation.x*=.78;shoeR.rotation.x*=.78;
+   torso.rotation.z*=.78;pelvis.rotation.z*=.78;head.rotation.z*=.78;
  }
+
  updateCamera();
 });
 
