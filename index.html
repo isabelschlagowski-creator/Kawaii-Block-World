@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Anna City V1 000 000 001 PHOTO</title>
+<title>Anna City V1 000 000 003 — GROSSE VERSION</title>
 <style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#78c9ff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
 #game{width:100%;height:100%;display:block;touch-action:none}
-.ui{position:fixed;inset:0;pointer-events:none;color:#fff;z-index:1000}
+.ui{position:fixed;inset:0;pointer-events:none;color:#fff;z-index:1000;z-index:1000}
 .panel{background:#10243be8;border:1px solid #ffffff28;border-radius:13px;box-shadow:0 8px 20px #0005}
 #profile{position:absolute;left:12px;top:12px;padding:9px 12px;width:225px;font-weight:900}
 #profile small{display:block;color:#c8ddff;font-size:11px;margin-top:2px}
@@ -29,7 +29,7 @@ linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%
 #hotbar{z-index:1750;position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:5px;padding:7px;background:#0e1d2de8;border-radius:13px;pointer-events:auto}
 .slot{touch-action:manipulation;-webkit-tap-highlight-color:transparent;z-index:1800;touch-action:manipulation;-webkit-tap-highlight-color:transparent;width:54px;height:54px;border:2px solid #ffffff4a;border-radius:9px;background:#263d58;color:#fff;font-size:25px}
 .slot.sel{border-color:#ffd84a;box-shadow:0 0 0 2px #ffd84a35;transform:translateY(-4px)}
-.modal{display:none;position:absolute;z-index:1200;left:50%;top:50%;transform:translate(-50%,-50%);width:min(860px,94vw);max-height:82vh;overflow:auto;padding:16px;pointer-events:auto}
+.modal{display:none;position:absolute;z-index:2500;z-index:1200;left:50%;top:50%;transform:translate(-50%,-50%);width:min(860px,94vw);max-height:82vh;overflow:auto;padding:16px;pointer-events:auto}
 .modal h2{margin:0 0 10px}.close{float:right;border:0;border-radius:8px;padding:7px 10px}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
 .card{touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:88px;border:0;border-radius:11px;background:#f6f8fb;color:#142438;font-weight:850;padding:8px}
@@ -38,7 +38,7 @@ linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%
 .tab{touch-action:manipulation;-webkit-tap-highlight-color:transparent;border:0;border-radius:9px;padding:9px 11px;background:#314a66;color:#fff;font-weight:850}
 .tab.active{background:#875ed3}
 #catalogInfo{background:#ffffff12;padding:9px;border-radius:9px;margin-bottom:10px;font-size:13px}
-#chat{display:none;position:absolute;z-index:1200;right:14px;bottom:86px;width:min(390px,88vw);height:430px;padding:12px;pointer-events:auto}
+#chat{display:none;position:absolute;z-index:2500;z-index:1200;right:14px;bottom:86px;width:min(390px,88vw);height:430px;padding:12px;pointer-events:auto}
 #msgs{height:310px;overflow:auto;margin:8px 0}
 .msg{max-width:88%;padding:8px 10px;border-radius:12px;margin:6px 0;font-size:13px}
 .me{margin-left:auto;background:#587df2}.npc{background:#35485f}
@@ -50,7 +50,7 @@ linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%
 <canvas id="game"></canvas>
 
 <div class="ui">
-  <div id="profile" class="panel">👧 Anna ♥ Anna City<small>V1 000 000 001 · OBJECTIF PHOTO · NIVEAU 28 · MODE CRÉATIF · BLOCS ∞</small></div>
+  <div id="profile" class="panel">👧 Anna ♥ Anna City<small>V1 000 000 003 · MONDE PLAT · NIVEAU 28 · MODE CRÉATIF · BLOCS ∞</small></div>
   <div id="topbar">
     <button class="topBtn" id="saveBtn">💾</button>
     <button class="topBtn" id="peopleBtn">👥</button>
@@ -73,11 +73,11 @@ linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%
   <div id="rightTools">
     <button class="toolBtn" id="breakBtn">⛏️</button>
     <button class="toolBtn" id="placeBtn">🧱</button>
-    <button class="toolBtn" id="jumpBtn">⬆️</button>
+    <button class="toolBtn" id="jumpBtn">⬆️</button><button class="toolBtn" id="driveBtn">🚘</button>
   </div>
 
   <div id="cross">＋</div>
-  <div id="hint">👈 gauche : marcher · 👉 droite : regarder · ✌️ pincer : zoom</div>
+  <div id="buildState" style="position:absolute;bottom:88px;left:50%;transform:translateX(-50%);background:#162638e8;padding:7px 12px;border-radius:12px;font-weight:900">🧱 Bloc sélectionné : béton blanc</div><div id="hint">👈 gauche : marcher · 👉 droite : regarder · ✌️ pincer : zoom</div>
   <div id="hotbar"></div>
   <div id="status"></div>
 
@@ -109,18 +109,51 @@ linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%
   <div class="grid" id="furnitureGrid"></div>
 </div>
 
+
+<div class="modal panel" id="vehicleModal">
+ <button class="close" id="vehicleClose">✕</button>
+ <h2>🚗 Véhicules</h2>
+ <p>Choisis une voiture : elle apparaît devant toi. Approche-toi puis utilise <b>🚘 Monter</b>.</p>
+ <div class="grid" id="vehicleGrid"></div>
+</div>
+
 <div class="modal panel" id="peopleModal">
     <button class="close" id="peopleClose">✕</button>
     <h2>👥 Habitants dans le monde</h2>
     <div class="grid" id="peopleGrid"></div>
   </div>
 
-  <div class="modal panel" id="skinModal"><button class="close" id="skinClose">✕</button>
-<h2>🎨 Mon skin</h2><p>Choisis ton look :</p><div class="grid">
-<button class="card">👩🏻<br>Brune</button><button class="card">👩🏼<br>Blonde</button>
-<button class="card">💜<br>Tenue violette</button><button class="card">🩷<br>Tenue rose</button>
-<button class="card">🎾<br>Sport</button><button class="card">👟<br>Sneakers</button>
-</div><p>En dézoomant, ton personnage devient visible en troisième personne.</p></div>
+  <div class="modal panel" id="skinModal">
+ <button class="close" id="skinClose">✕</button>
+ <h2>🎨 Mon skin</h2>
+ <div style="display:grid;grid-template-columns:220px 1fr;gap:14px;align-items:start">
+   <div style="height:280px;border-radius:14px;background:linear-gradient(#78cfff 0 64%,#66bb52 64%);position:relative;overflow:hidden">
+     <div id="skinPreview3D" style="position:absolute;inset:0;display:grid;place-items:center;font-size:100px">👧</div>
+   </div>
+   <div>
+     <h3>Cheveux</h3>
+     <div class="tabs">
+      <button class="tab skinChoice" data-skin-type="hair" data-skin-value="brown">🤎 Bruns</button>
+      <button class="tab skinChoice" data-skin-type="hair" data-skin-value="blonde">💛 Blonds</button>
+      <button class="tab skinChoice" data-skin-type="hair" data-skin-value="black">🖤 Noirs</button>
+     </div>
+     <h3>Haut</h3>
+     <div class="tabs">
+      <button class="tab skinChoice" data-skin-type="shirt" data-skin-value="pink">🩷 Rose</button>
+      <button class="tab skinChoice" data-skin-type="shirt" data-skin-value="purple">💜 Violet</button>
+      <button class="tab skinChoice" data-skin-type="shirt" data-skin-value="blue">🩵 Bleu</button>
+     </div>
+     <h3>Pantalon</h3>
+     <div class="tabs">
+      <button class="tab skinChoice" data-skin-type="pants" data-skin-value="jeans">👖 Jean</button>
+      <button class="tab skinChoice" data-skin-type="pants" data-skin-value="black">⬛ Noir</button>
+      <button class="tab skinChoice" data-skin-type="pants" data-skin-value="purple">💜 Violet</button>
+     </div>
+     <button class="tab" id="skinApply" style="background:#42a85a;margin-top:12px">✅ Utiliser ce skin</button>
+   </div>
+ </div>
+ <p style="font-size:12px">Quand tu dézoomes, Anna apparaît en troisième personne avec ce skin.</p>
+</div>
 <div id="chat" class="panel">
     <button class="close" id="chatClose">✕</button>
     <h3>💬 Chat du monde</h3>
@@ -233,12 +266,12 @@ function addPlaced(x,y,z,key,save=true){
 }
 function saveWorld(){
   try{
-    localStorage.setItem('annaV1000000000',JSON.stringify(
+    localStorage.setItem('annaV1000000003',JSON.stringify(
       placed.filter(b=>!b.isDisposed()).map(b=>({x:b.position.x,y:b.position.y,z:b.position.z,k:b.metadata.key||'white'}))
     ));
   }catch(e){}
 }
-try{JSON.parse(localStorage.getItem('annaV1000000000')||'[]').forEach(o=>addPlaced(o.x,o.y,o.z,o.k,false))}catch(e){}
+try{JSON.parse(localStorage.getItem('annaV1000000003')||'[]').forEach(o=>addPlaced(o.x,o.y,o.z,o.k,false))}catch(e){}
 
 function status(t){
   const s=$('status');s.textContent=t;s.style.opacity=1;clearTimeout(status.t);status.t=setTimeout(()=>s.style.opacity=0,1200);
@@ -275,6 +308,24 @@ palette.forEach(it=>{
 
 setTimeout(()=>{document.querySelectorAll('#hotbar .slot').forEach((el,i)=>{el.addEventListener('touchend',e=>{e.preventDefault();e.stopPropagation();const p=palette[i];if(!p)return;selected=p[0];document.querySelectorAll('#hotbar .slot').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');status(p[2]+' sélectionné ✅')},{passive:false})})},0);
 
+
+setTimeout(()=>{
+ document.querySelectorAll('#hotbar .slot').forEach((el,i)=>{
+   const chooseBlock=(e)=>{
+     if(e){e.preventDefault();e.stopPropagation();}
+     const p=palette[i]; if(!p)return;
+     selected=p[0];
+     document.querySelectorAll('#hotbar .slot').forEach(x=>x.classList.remove('sel'));
+     el.classList.add('sel');
+     const bs=document.getElementById('buildState');
+     if(bs)bs.textContent='🧱 Bloc sélectionné : '+p[2];
+     status(p[2]+' sélectionné ✅');
+   };
+   el.addEventListener('pointerdown',chooseBlock,{passive:false});
+   el.addEventListener('touchstart',chooseBlock,{passive:false});
+ });
+},50);
+
 // CATALOG
 const catalogs={
  '🏠 Maisons':[
@@ -300,14 +351,14 @@ function renderCatalogTabs(){
   const t=$('catalogTabs');t.innerHTML='';
   Object.keys(catalogs).forEach(k=>{
     const b=document.createElement('button');b.className='tab'+(k===currentCat?' active':'');b.textContent=k;
-    b.onclick=()=>{currentCat=k;renderCatalogTabs();renderCatalogCards()};t.appendChild(b);
+    const go=(e)=>{if(e){e.preventDefault();e.stopPropagation()}currentCat=k;renderCatalogTabs();renderCatalogCards()};b.addEventListener('pointerup',go,{passive:false});b.addEventListener('touchend',go,{passive:false});t.appendChild(b);
   });
 }
 function renderCatalogCards(){
   const g=$('catalogGrid');g.innerHTML='';
   catalogs[currentCat].forEach((m,i)=>{
     const b=document.createElement('button');b.className='card';b.innerHTML='<b>'+m[0]+'</b>'+m[1];
-    b.onclick=()=>{buildTemplate(currentCat,m,i);$('catalogModal').style.display='none'};
+    const go=(e)=>{if(e){e.preventDefault();e.stopPropagation()}buildTemplate(currentCat,m,i);$('catalogModal').style.display='none'};b.addEventListener('pointerup',go,{passive:false});b.addEventListener('touchend',go,{passive:false});
     g.appendChild(b);
   });
 }
@@ -315,16 +366,7 @@ function buildTemplate(cat,m,index){
   let f=camera.getDirection(BABYLON.Axis.Z);f.y=0;if(f.lengthSquared())f.normalize();
   const cx=Math.round(camera.position.x+f.x*11),cz=Math.round(camera.position.z+f.z*11);
   const [emoji,name,w,d,h]=m;
-  if(name==='ÉNORME villa de luxe'){
-    for(let y=0;y<7;y++)for(let x=-10;x<=10;x++)for(let z=-7;z<=7;z++){
-      const edge=Math.abs(x)===10||Math.abs(z)===7;if(!edge)continue;
-      if(z===7&&Math.abs(x)<=1&&y<3)continue;
-      let k=((z===7||z===-7)&&y>=1&&y<=4&&Math.abs(x)<8)?'glass':'white';
-      addPlaced(cx+x,1.5+y,cz+z,k,false);
-    }
-    for(let x=-6;x<=6;x++)for(let z=9;z<=13;z++)addPlaced(cx+x,1.5,cz+z,'water',false);
-    saveWorld();status('Énorme villa de luxe construite 💎');return;
-  }
+  if(name==='ÉNORME villa de luxe'){buildLuxuryVilla(cx,cz);return;}
   if(cat.includes('Parcs')){
     for(let x=-Math.floor(w/2);x<=Math.floor(w/2);x++)for(let z=-Math.floor(d/2);z<=Math.floor(d/2);z++){
       if(Math.random()<.10)addPlaced(cx+x,1.5,cz+z,'leaf',false);
@@ -367,11 +409,11 @@ function renderFurniture(){
  const tabs=$('furnitureTabs'),grid=$('furnitureGrid');tabs.innerHTML='';grid.innerHTML='';
  Object.keys(furnitureCatalog).forEach(k=>{
   const b=document.createElement('button');b.className='tab'+(k===furnitureCat?' active':'');b.textContent=k;
-  b.onclick=()=>{furnitureCat=k;renderFurniture()};tabs.appendChild(b);
+  const go=(e)=>{if(e){e.preventDefault();e.stopPropagation()}furnitureCat=k;renderFurniture()};b.addEventListener('pointerup',go,{passive:false});b.addEventListener('touchend',go,{passive:false});tabs.appendChild(b);
  });
  furnitureCatalog[furnitureCat].forEach(f=>{
   const b=document.createElement('button');b.className='card';b.innerHTML='<b>'+f[0]+'</b>'+f[1];
-  b.onclick=()=>{placeFurniture(f[2]);$('furnitureModal').style.display='none';status(f[1]+' placé ✨')};grid.appendChild(b);
+  const go=(e)=>{if(e){e.preventDefault();e.stopPropagation()}placeFurniture(f[2]);$('furnitureModal').style.display='none';status(f[1]+' placé ✨')};b.addEventListener('pointerup',go,{passive:false});b.addEventListener('touchend',go,{passive:false});grid.appendChild(b);
  });
 }
 function furnitureRoot(type,x,z){
@@ -400,6 +442,159 @@ function placeFurniture(type){
 }
 renderFurniture();
 
+
+
+
+function placeSelectedInFront(){
+ const f=camera.getDirection(BABYLON.Axis.Z); f.y=0;
+ if(f.lengthSquared())f.normalize();
+ const x=Math.round(camera.position.x+f.x*3);
+ const z=Math.round(camera.position.z+f.z*3);
+ const y=Math.max(1.5,Math.round(camera.position.y-.5)+.5);
+ addPlaced(x,y,z,selected,true);
+ saveWorld();
+ status('Bloc posé 🧱');
+}
+
+// ===== PLAYER SKIN / THIRD PERSON =====
+const skinState={hair:'brown',shirt:'pink',pants:'jeans'};
+const skinMats={
+ hairBrown:mats.hair,
+ hairBlonde:mats.yellow,
+ hairBlack:mats.black,
+ shirtPink:mats.pink,
+ shirtPurple:mats.purple,
+ shirtBlue:mats.blue,
+ pantsJeans:mats.blue,
+ pantsBlack:mats.black,
+ pantsPurple:mats.purple
+};
+
+const playerRoot=new BABYLON.TransformNode('AnnaSkin',scene);
+playerRoot.setEnabled(false);
+
+function mkPlayerPart(name,mesh,mat,pos,parent=playerRoot){
+  mesh.name=name;mesh.material=mat;mesh.position.copyFrom(pos);mesh.parent=parent;mesh.isPickable=false;return mesh;
+}
+const pTorso=mkPlayerPart('pTorso',BABYLON.MeshBuilder.CreateCapsule('pt',{height:1.15,radius:.34,tessellation:14},scene),mats.pink,new BABYLON.Vector3(0,1.35,0));
+const pHead=mkPlayerPart('pHead',BABYLON.MeshBuilder.CreateSphere('ph',{diameter:.66,segments:16},scene),mats.skin,new BABYLON.Vector3(0,2.22,0));
+const pHair=mkPlayerPart('pHair',BABYLON.MeshBuilder.CreateSphere('phr',{diameter:.69,segments:16,slice:.58},scene),mats.hair,new BABYLON.Vector3(0,2.39,-.02));
+const pLegL=mkPlayerPart('pLegL',BABYLON.MeshBuilder.CreateCapsule('pll',{height:.95,radius:.14,tessellation:12},scene),mats.blue,new BABYLON.Vector3(-.17,.52,0));
+const pLegR=mkPlayerPart('pLegR',BABYLON.MeshBuilder.CreateCapsule('plr',{height:.95,radius:.14,tessellation:12},scene),mats.blue,new BABYLON.Vector3(.17,.52,0));
+const pArmL=mkPlayerPart('pArmL',BABYLON.MeshBuilder.CreateCapsule('pal',{height:.88,radius:.11,tessellation:12},scene),mats.skin,new BABYLON.Vector3(-.48,1.35,0));
+const pArmR=mkPlayerPart('pArmR',BABYLON.MeshBuilder.CreateCapsule('par',{height:.88,radius:.11,tessellation:12},scene),mats.skin,new BABYLON.Vector3(.48,1.35,0));
+
+function applySkin(){
+ pHair.material=skinState.hair==='blonde'?skinMats.hairBlonde:skinState.hair==='black'?skinMats.hairBlack:skinMats.hairBrown;
+ pTorso.material=skinState.shirt==='purple'?skinMats.shirtPurple:skinState.shirt==='blue'?skinMats.shirtBlue:skinMats.shirtPink;
+ const pm=skinState.pants==='black'?skinMats.pantsBlack:skinState.pants==='purple'?skinMats.pantsPurple:skinMats.pantsJeans;
+ pLegL.material=pm;pLegR.material=pm;
+ try{localStorage.setItem('annaSkin',JSON.stringify(skinState))}catch(e){}
+ status('Skin appliqué ✅');
+}
+try{Object.assign(skinState,JSON.parse(localStorage.getItem('annaSkin')||'{}'));applySkin()}catch(e){}
+
+
+function resetFlatWorld(){
+ [...placed].forEach(m=>{try{m.dispose()}catch(e){}});
+ placed.length=0;
+ try{localStorage.removeItem('annaV1000000003')}catch(e){}
+ camera.position.set(0,2.6,-8);
+ status('Nouveau monde plat vide 🌱');
+}
+if(document.getElementById('flatResetBtn')) tap('flatResetBtn',()=>{resetFlatWorld();const m=document.getElementById('mapModal');if(m)m.style.display='none'});
+
+// ===== VEHICLES =====
+const vehicleModels=[
+ ['🚗','Citadine rose','pink'],['🏎️','Sportive rouge','red'],['🚙','SUV bleu','blue'],
+ ['🚕','Taxi jaune','yellow'],['🚘','Berline violette','purple'],['🛻','Pick-up noir','black']
+];
+const cars=[];
+function createCar(x,z,key,label){
+ const root=new BABYLON.TransformNode('vehicle',scene);root.position.set(x,1.05,z);
+ root.metadata={kind:'vehicle',label};
+ const body=box('carBody',0,.45,0,3.3,.65,1.55,mats[key]||mats.red,'vehicle',false);body.parent=root;
+ const cabin=box('carCabin',-.2,1.02,0,1.8,.72,1.35,mats.glass,'vehicle',false);cabin.parent=root;
+ const bumper=box('carBumper',1.7,.34,0,.18,.22,1.35,mats.dark,'vehicle',false);bumper.parent=root;
+ [[-1.1,-.72],[-1.1,.72],[1.05,-.72],[1.05,.72]].forEach(([wx,wz])=>{
+   const wh=BABYLON.MeshBuilder.CreateCylinder('wheel',{height:.22,diameter:.58,tessellation:16},scene);
+   wh.rotation.x=Math.PI/2;wh.position.set(wx,.22,wz);wh.material=mats.black;wh.parent=root;
+ });
+ cars.push(root);return root;
+}
+function spawnCar(key,label){
+ let f=camera.getDirection(BABYLON.Axis.Z);f.y=0;if(f.lengthSquared())f.normalize();
+ const c=createCar(Math.round(camera.position.x+f.x*6),Math.round(camera.position.z+f.z*6),key,label);
+ status(label+' placée 🚗');
+ return c;
+}
+let drivingCar=null;
+function toggleDrive(){
+ if(drivingCar){
+   camera.parent=null;
+   const wp=drivingCar.getAbsolutePosition();
+   camera.position.set(wp.x,2.5,wp.z+2.5);
+   drivingCar=null;status('Tu descends de la voiture');
+   return;
+ }
+ let best=null,dist=999;
+ for(const c of cars){const d=BABYLON.Vector3.Distance(c.getAbsolutePosition(),camera.getAbsolutePosition());if(d<dist){dist=d;best=c}}
+ if(best&&dist<5){
+   drivingCar=best;camera.parent=best;camera.position.set(0,2.2,-.1);status('Tu conduis 🚘');
+ }else status('Approche-toi d’une voiture');
+}
+
+// ===== DETAILED ARCHITECTURE HELPERS =====
+function villaBlock(cx,cz,x,y,z,key){addPlaced(cx+x,1.5+y,cz+z,key,false)}
+function buildLuxuryVilla(cx,cz){
+ // Ground floor + wings, leaving real rooms and corridors.
+ for(let x=-11;x<=11;x++)for(let z=-7;z<=7;z++){
+   if(z===7 && Math.abs(x)<=1) continue; // entrance
+   const perimeter=Math.abs(x)===11||Math.abs(z)===7;
+   if(perimeter){
+     let k='white';
+     if((z===7||z===-7)&&Math.abs(x)<=8) k='glass';
+     villaBlock(cx,cz,x,0,z,k);villaBlock(cx,cz,x,1,z,k);villaBlock(cx,cz,x,2,z,k);
+   }
+   villaBlock(cx,cz,x,0,z,'wood'); // warm floor
+ }
+ // Second floor, narrower, creating huge terraces.
+ for(let x=-8;x<=8;x++)for(let z=-5;z<=5;z++){
+   const perimeter=Math.abs(x)===8||Math.abs(z)===5;
+   if(perimeter){
+     let k=((z===5||z===-5)&&Math.abs(x)<7)?'glass':'white';
+     villaBlock(cx,cz,x,3,z,k);villaBlock(cx,cz,x,4,z,k);villaBlock(cx,cz,x,5,z,k);
+   }
+   if(Math.abs(x)<=8&&Math.abs(z)<=5)villaBlock(cx,cz,x,3,z,'wood');
+ }
+ // Roof slab with opening / pergola feel.
+ for(let x=-8;x<=8;x++)for(let z=-5;z<=5;z++)if(Math.abs(x)>2||Math.abs(z)>2)villaBlock(cx,cz,x,6,z,'white');
+ // Garage wing
+ for(let x=-15;x<=-11;x++)for(let z=-5;z<=4;z++){
+   villaBlock(cx,cz,x,0,z,'dark');
+   if(Math.abs(x)===15||z===-5||z===4){villaBlock(cx,cz,x,1,z,'white');villaBlock(cx,cz,x,2,z,'white')}
+ }
+ // Pool + white border
+ for(let x=-7;x<=7;x++)for(let z=10;z<=15;z++)villaBlock(cx,cz,x,0,z,'water');
+ for(let x=-8;x<=8;x++){villaBlock(cx,cz,x,0,9,'white');villaBlock(cx,cz,x,0,16,'white')}
+ for(let z=9;z<=16;z++){villaBlock(cx,cz,-8,0,z,'white');villaBlock(cx,cz,8,0,z,'white')}
+ // Entrance steps
+ for(let x=-3;x<=3;x++){villaBlock(cx,cz,x,0,8,'white'); if(Math.abs(x)<=2)villaBlock(cx,cz,x,0,9,'white')}
+ // Glass balcony rails
+ for(let x=-8;x<=8;x++){villaBlock(cx,cz,x,4,6,'glass');villaBlock(cx,cz,x,4,-6,'glass')}
+ for(let z=-5;z<=5;z++){villaBlock(cx,cz,-9,4,z,'glass');villaBlock(cx,cz,9,4,z,'glass')}
+ 
+ // Interior starter furniture in blocks
+ for(let x=-5;x<=-2;x++)villaBlock(cx,cz,x,1,-2,'white'); // sofa
+ villaBlock(cx,cz,-5,2,-2,'pink'); villaBlock(cx,cz,-2,2,-2,'pink');
+ for(let x=2;x<=5;x++)for(let z=-2;z<=0;z++)villaBlock(cx,cz,x,1,z,'wood'); // kitchen island
+ villaBlock(cx,cz,0,1,-4,'glass'); // decorative table
+ // Palm/green accents around pool
+ for(const [x,z] of [[-10,10],[10,10],[-10,15],[10,15]]){villaBlock(cx,cz,x,1,z,'leaf');villaBlock(cx,cz,x,2,z,'leaf')}
+
+ saveWorld();
+ status('ÉNORME villa de luxe construite 💎🏡');
+}
 
 // NPCs: MANY PEOPLE
 const names=['Talcado','Awariz','Yoananas','Johanna','Inès','Léo','Camille','Noah','Mila','Lou','Hugo','Zoé','Adam','Nina','Tom','Sarah','Lucas','Chloé','Ethan','Manon','Jade','Emma','Lina','Maël','Lola','Arthur','Rose','Louis','Eva','Nora','Liam','Sofia','Gabriel','Alice','Enzo','Louna','Sacha','Clara','Nolan','Maya'];
@@ -516,7 +711,26 @@ function human(name,x,z,i){
 names.forEach((n,i)=>human(n,-22+Math.random()*44,-22+Math.random()*44,i));
 
 const pg=$('peopleGrid');
+
+ const thirdPerson=camera.fov>1.02;
+ playerRoot.setEnabled(thirdPerson&&!drivingCar);
+ if(thirdPerson&&!drivingCar){
+   const f2=camera.getDirection(BABYLON.Axis.Z);f2.y=0;if(f2.lengthSquared())f2.normalize();
+   const pp=camera.position.add(f2.scale(1.55));
+   playerRoot.position.set(pp.x,Math.max(1,pp.y-1.7),pp.z);
+   playerRoot.rotation.y=camera.rotation.y+Math.PI;
+ }
+
 people.forEach(p=>{const b=document.createElement('button');b.className='card';b.innerHTML='<b>🧍</b>'+p.metadata.name;b.onclick=()=>{$('peopleModal').style.display='none';status(p.metadata.name+' est dans le monde')};pg.appendChild(b)});
+
+
+const vg=$('vehicleGrid');
+vehicleModels.forEach(v=>{
+ const b=document.createElement('button');b.className='card';b.innerHTML='<b>'+v[0]+'</b>'+v[1];
+ const go=(e)=>{if(e){e.preventDefault();e.stopPropagation()}spawnCar(v[2],v[1]);$('vehicleModal').style.display='none'};
+ b.addEventListener('pointerup',go,{passive:false});b.addEventListener('touchend',go,{passive:false});
+ vg.appendChild(b);
+});
 
 // AVATAR MENU
 ['👧 Classique','👩🏻 Brune','👩🏼 Blonde','🧑🏽 Sport','👸 Princesse','🥷 Ninja','🧢 Street','🎾 Tennis'].forEach(a=>{
@@ -543,12 +757,25 @@ function tap(id, fn){
   el.addEventListener('click',run,{passive:false});
 }
 
+
+document.addEventListener('pointerup',e=>{
+ const b=e.target.closest('.skinChoice');
+ if(!b)return;
+ e.preventDefault();e.stopPropagation();
+ skinState[b.dataset.skinType]=b.dataset.skinValue;
+ $('skinPreview3D').textContent =
+   skinState.hair==='blonde'?'👱‍♀️':skinState.hair==='black'?'👩🏻':'👩🏽';
+ status('Choix du skin modifié');
+},{capture:true,passive:false});
+tap('skinApply',()=>{applySkin();$('skinModal').style.display='none'});
+
 // BUTTONS: EXPLICIT, NO GLOBAL-ID DEPENDENCY
 tap('inventoryClose',()=>{$('inventoryModal').style.display='none';status('Inventaire fermé')});
 tap('catalogClose',()=>{$('catalogModal').style.display='none';status('Catalogue fermé')});
 tap('avatarClose',()=>{$('avatarModal').style.display='none';status('Avatar fermé')});
 tap('peopleClose',()=>{$('peopleModal').style.display='none';status('Habitants fermé')});
 tap('furnitureClose',()=>{$('furnitureModal').style.display='none';status('Meubles fermés')});
+tap('vehicleClose',()=>{$('vehicleModal').style.display='none';status('Véhicules fermés')});
 
 tap('bagBtn',()=>{$('inventoryModal').style.display='block';status('Inventaire ouvert 🎒')});
 tap('catalogBtn',()=>{$('catalogModal').style.display='block';status('Catalogue ouvert 🏗️')});
@@ -560,10 +787,11 @@ tap('peopleBtn',()=>{$('peopleModal').style.display='block';status('Habitants ou
 tap('placeBtn',()=>placeBlock());
 tap('breakBtn',()=>breakBlock());
 tap('jumpBtn',()=>{camera.cameraDirection.y+=.16;status('Saut ⬆️')});
+tap('driveBtn',()=>toggleDrive());
 tap('saveBtn',()=>{saveWorld();status('Sauvegardé 💾')});
 
 tap('furnitureBtn',()=>{$('furnitureModal').style.display='block';status('Meubles ouverts 🛋️')});
-tap('vehicleBtn',()=>status('Bouton Véhicules OK ✅'));
+tap('vehicleBtn',()=>{$('vehicleModal').style.display='block';status('Véhicules ouverts 🚗')});
 tap('questsBtn',()=>status('Bouton Quêtes OK ✅'));
 tap('mapBtn',()=>status('Bouton Carte OK ✅'));
 
@@ -576,12 +804,18 @@ tap('chatClose',()=>{$('chat').style.display='none';status('Chat fermé')});
 async function sendChat(){
  const q=$('chatInput').value.trim();if(!q)return;$('chatInput').value='';addMsg('Anna',q);
  const nearest=[...people].sort((a,b)=>BABYLON.Vector3.Distance(a.position,camera.position)-BABYLON.Vector3.Distance(b.position,camera.position))[0];
- const n=nearest?.metadata?.name||'Talcado';
- let ans='Coucou Anna 😊';
- if(/constru|bloc|poser/i.test(q))ans='Choisis ton bloc en bas, vise le sol avec le + puis touche 🧱. Pour un bâtiment entier, ouvre 🏗️ Catalogue.';
- else if(/catalogue|immeuble|magasin/i.test(q))ans='Ouvre 🏗️ Catalogue à gauche : il y a Maisons, Magasins, Restaurants, Parcs et Immeubles.';
- else if(/vite|lent/i.test(q))ans='Je t’ai mise en vitesse lente maintenant 🙂';
- else ans=['Je suis là 😊','Bonne idée !','On peut construire ça ensemble 😄','Je me promène dans ton monde !'][Math.floor(Math.random()*4)];
+ const n=nearest?.metadata?.name||'Talcado',t=q.toLowerCase();
+ let ans='';
+ if(/salut|bonjour|coucou/.test(t)) ans='Coucou Anna 😄 Tu construis quoi aujourd’hui ?';
+ else if(/où|ou est|tu es ou|t.es ou/.test(t)) ans='Je suis juste à côté de toi dans le monde 🌱';
+ else if(/villa|maison/.test(t)) ans='Ouvre Catalogue → Maisons. La grande villa de luxe est prête à placer 💎';
+ else if(/voiture|véhicule|vehicule/.test(t)) ans='Ouvre Véhicules, choisis un modèle, puis approche-toi et appuie sur 🚘 pour monter.';
+ else if(/skin|avatar|habit|cheveux/.test(t)) ans='Va dans 🎨 Mon skin : tu peux changer cheveux, haut et pantalon.';
+ else if(/constru|bloc|poser/.test(t)) ans='Choisis un bloc dans la barre du bas puis appuie sur 🧱 Poser. Je peux construire avec toi 😄';
+ else if(/talcado/.test(t)) ans=n==='Talcado'?'Oui, c’est moi 😎':'Talcado est dans le monde avec nous.';
+ else if(/awariz/.test(t)) ans=n==='Awariz'?'Oui Anna ? 😄':'Awariz est quelque part sur le terrain.';
+ else if(/yoananas/.test(t)) ans=n==='Yoananas'?'Présent 🍌😄':'Yoananas se balade dans Anna City.';
+ else ans=['Oui 😄','Bonne idée !','Je viens voir 👀','On peut faire ça ensemble !','Trop bien, continue 💜'][Math.floor(Math.random()*5)];
  addMsg(n,ans);
 }
 tap('sendBtn',()=>sendChat());$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')sendChat()});
@@ -619,6 +853,12 @@ scene.onBeforeRenderObservable.add(()=>{
  // VERY SLOW, deliberate speed
  camera.cameraDirection.addInPlace(f.scale(-my*.021));
  camera.cameraDirection.addInPlace(r.scale(mx*.019));
+ if(drivingCar){
+   const forward=drivingCar.getDirection(BABYLON.Axis.Z);forward.y=0;if(forward.lengthSquared())forward.normalize();
+   drivingCar.rotation.y += mx*.018;
+   drivingCar.position.addInPlace(forward.scale(-my*.055));
+ }
+
 
  people.forEach(p=>{
    if(Math.random()<.003)p.metadata.target.set(-28+Math.random()*56,1,-28+Math.random()*56);
@@ -630,6 +870,6 @@ engine.runRenderLoop(()=>scene.render());
 window.addEventListener('resize',()=>engine.resize());
 })();
 </script>
-<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1400;background:#7b4ce2;color:white;padding:6px 12px;border-radius:999px;font:800 12px system-ui;pointer-events:none">✨ ANNA CITY V1 000 000 001 · OBJECTIF PHOTO</div>
-<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1600;background:#7b4ce2;color:#fff;padding:7px 13px;border-radius:999px;font:900 12px system-ui;pointer-events:none">📸 ANNA CITY · OBJECTIF PHOTO</div>
+<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1400;background:#7b4ce2;color:white;padding:6px 12px;border-radius:999px;font:800 12px system-ui;pointer-events:none">✨ ANNA CITY V1 000 000 003 · MONDE PLAT</div>
+<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1600;background:#7b4ce2;color:#fff;padding:7px 13px;border-radius:999px;font:900 12px system-ui;pointer-events:none">📸 ANNA CITY · GROSSE VERSION</div>
 </body></html>
