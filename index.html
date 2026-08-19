@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Anna City V1 000 000 000</title>
+<title>Anna City V1 000 000 001 PHOTO</title>
 <style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#78c9ff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
@@ -26,8 +26,8 @@ linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%
 .toolBtn{touch-action:manipulation;-webkit-tap-highlight-color:transparent;width:58px;height:58px;border:0;border-radius:11px;background:#142b43ed;color:white;font-size:22px}
 #cross{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:30px;text-shadow:0 2px 4px #000}
 #hint{position:absolute;left:50%;bottom:93px;transform:translateX(-50%);background:#11263ddd;border-radius:9px;padding:7px 11px;font-size:11px;font-weight:850;white-space:nowrap}
-#hotbar{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:5px;padding:7px;background:#0e1d2de8;border-radius:13px;pointer-events:auto}
-.slot{touch-action:manipulation;-webkit-tap-highlight-color:transparent;width:54px;height:54px;border:2px solid #ffffff4a;border-radius:9px;background:#263d58;color:#fff;font-size:25px}
+#hotbar{z-index:1750;position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:5px;padding:7px;background:#0e1d2de8;border-radius:13px;pointer-events:auto}
+.slot{touch-action:manipulation;-webkit-tap-highlight-color:transparent;z-index:1800;touch-action:manipulation;-webkit-tap-highlight-color:transparent;width:54px;height:54px;border:2px solid #ffffff4a;border-radius:9px;background:#263d58;color:#fff;font-size:25px}
 .slot.sel{border-color:#ffd84a;box-shadow:0 0 0 2px #ffd84a35;transform:translateY(-4px)}
 .modal{display:none;position:absolute;z-index:1200;left:50%;top:50%;transform:translate(-50%,-50%);width:min(860px,94vw);max-height:82vh;overflow:auto;padding:16px;pointer-events:auto}
 .modal h2{margin:0 0 10px}.close{float:right;border:0;border-radius:8px;padding:7px 10px}
@@ -50,7 +50,7 @@ linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%
 <canvas id="game"></canvas>
 
 <div class="ui">
-  <div id="profile" class="panel">👧 Anna ♥ Anna City<small>V1 000 000 000 · VITESSE NORMALE · NIVEAU 28 · MODE CRÉATIF · BLOCS ∞</small></div>
+  <div id="profile" class="panel">👧 Anna ♥ Anna City<small>V1 000 000 001 · OBJECTIF PHOTO · NIVEAU 28 · MODE CRÉATIF · BLOCS ∞</small></div>
   <div id="topbar">
     <button class="topBtn" id="saveBtn">💾</button>
     <button class="topBtn" id="peopleBtn">👥</button>
@@ -63,6 +63,7 @@ linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%
     <button class="menuBtn" id="bagBtn">🎒 Inventaire</button>
     <button class="menuBtn" id="catalogBtn">🏗️ Catalogue</button>
     <button class="menuBtn" id="avatarBtn">👤 Avatar</button>
+<button class="menuBtn" id="skinBtn">🎨 Mon skin</button>
     <button class="menuBtn" id="furnitureBtn">🛋️ Meubles</button>
     <button class="menuBtn" id="vehicleBtn">🚗 Véhicules</button>
     <button class="menuBtn" id="questsBtn">⭐ Quêtes</button>
@@ -114,7 +115,13 @@ linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%
     <div class="grid" id="peopleGrid"></div>
   </div>
 
-  <div id="chat" class="panel">
+  <div class="modal panel" id="skinModal"><button class="close" id="skinClose">✕</button>
+<h2>🎨 Mon skin</h2><p>Choisis ton look :</p><div class="grid">
+<button class="card">👩🏻<br>Brune</button><button class="card">👩🏼<br>Blonde</button>
+<button class="card">💜<br>Tenue violette</button><button class="card">🩷<br>Tenue rose</button>
+<button class="card">🎾<br>Sport</button><button class="card">👟<br>Sneakers</button>
+</div><p>En dézoomant, ton personnage devient visible en troisième personne.</p></div>
+<div id="chat" class="panel">
     <button class="close" id="chatClose">✕</button>
     <h3>💬 Chat du monde</h3>
     <div id="msgs"></div>
@@ -266,6 +273,8 @@ palette.forEach(it=>{
   invGrid.appendChild(b);
 });
 
+setTimeout(()=>{document.querySelectorAll('#hotbar .slot').forEach((el,i)=>{el.addEventListener('touchend',e=>{e.preventDefault();e.stopPropagation();const p=palette[i];if(!p)return;selected=p[0];document.querySelectorAll('#hotbar .slot').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');status(p[2]+' sélectionné ✅')},{passive:false})})},0);
+
 // CATALOG
 const catalogs={
  '🏠 Maisons':[
@@ -306,6 +315,16 @@ function buildTemplate(cat,m,index){
   let f=camera.getDirection(BABYLON.Axis.Z);f.y=0;if(f.lengthSquared())f.normalize();
   const cx=Math.round(camera.position.x+f.x*11),cz=Math.round(camera.position.z+f.z*11);
   const [emoji,name,w,d,h]=m;
+  if(name==='ÉNORME villa de luxe'){
+    for(let y=0;y<7;y++)for(let x=-10;x<=10;x++)for(let z=-7;z<=7;z++){
+      const edge=Math.abs(x)===10||Math.abs(z)===7;if(!edge)continue;
+      if(z===7&&Math.abs(x)<=1&&y<3)continue;
+      let k=((z===7||z===-7)&&y>=1&&y<=4&&Math.abs(x)<8)?'glass':'white';
+      addPlaced(cx+x,1.5+y,cz+z,k,false);
+    }
+    for(let x=-6;x<=6;x++)for(let z=9;z<=13;z++)addPlaced(cx+x,1.5,cz+z,'water',false);
+    saveWorld();status('Énorme villa de luxe construite 💎');return;
+  }
   if(cat.includes('Parcs')){
     for(let x=-Math.floor(w/2);x<=Math.floor(w/2);x++)for(let z=-Math.floor(d/2);z<=Math.floor(d/2);z++){
       if(Math.random()<.10)addPlaced(cx+x,1.5,cz+z,'leaf',false);
@@ -534,6 +553,8 @@ tap('furnitureClose',()=>{$('furnitureModal').style.display='none';status('Meubl
 tap('bagBtn',()=>{$('inventoryModal').style.display='block';status('Inventaire ouvert 🎒')});
 tap('catalogBtn',()=>{$('catalogModal').style.display='block';status('Catalogue ouvert 🏗️')});
 tap('avatarBtn',()=>{$('avatarModal').style.display='block';status('Avatar ouvert 👤')});
+tap('skinBtn',()=>{$('skinModal').style.display='block';status('Mon skin 🎨')});
+tap('skinClose',()=>{$('skinModal').style.display='none';status('Skin enregistré')});
 tap('peopleBtn',()=>{$('peopleModal').style.display='block';status('Habitants ouverts 👥')});
 
 tap('placeBtn',()=>placeBlock());
@@ -609,6 +630,6 @@ engine.runRenderLoop(()=>scene.render());
 window.addEventListener('resize',()=>engine.resize());
 })();
 </script>
-<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1400;background:#7b4ce2;color:white;padding:6px 12px;border-radius:999px;font:800 12px system-ui;pointer-events:none">✨ ANNA CITY V1 000 000 000 · VITESSE NORMALE</div>
-<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1600;background:#7b4ce2;color:#fff;padding:7px 13px;border-radius:999px;font:900 12px system-ui;pointer-events:none">🚀 ANNA CITY V1 000 000 000</div>
+<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1400;background:#7b4ce2;color:white;padding:6px 12px;border-radius:999px;font:800 12px system-ui;pointer-events:none">✨ ANNA CITY V1 000 000 001 · OBJECTIF PHOTO</div>
+<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1600;background:#7b4ce2;color:#fff;padding:7px 13px;border-radius:999px;font:900 12px system-ui;pointer-events:none">📸 ANNA CITY · OBJECTIF PHOTO</div>
 </body></html>
