@@ -2,185 +2,613 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>MonTube Privé</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Anna City V1 000 000 000</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#0f0f0f;color:#fff}
-header{position:sticky;top:0;z-index:10;background:#0f0f0f;padding:12px 14px;display:flex;gap:10px;align-items:center;border-bottom:1px solid #333}
-.logo{font-size:23px;font-weight:800;white-space:nowrap}
-.logo b{background:#f00;padding:5px 9px;border-radius:9px}
-#search{flex:1;background:#222;border:1px solid #555;border-radius:24px;padding:11px 15px;color:#fff;font-size:16px}
-.create{background:#fff;border:0;border-radius:20px;padding:10px 14px;font-weight:700}
-.notice{margin:12px 14px;padding:10px 12px;background:#1d1d1d;border-radius:12px;color:#bbb;font-size:13px}
-.grid{padding:8px 14px 90px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
-.card{cursor:pointer}
-.thumb{height:165px;border-radius:14px;background:#222;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:50px;position:relative}
-.thumb img,.thumb video{width:100%;height:100%;object-fit:cover}
-.badge{position:absolute;right:8px;bottom:8px;background:#000c;padding:4px 7px;border-radius:6px;font-size:12px}
-h3{margin:9px 0 4px}.meta{color:#aaa;font-size:14px}
-.player{display:none;padding:14px 14px 95px}
-.back{border:0;border-radius:20px;padding:10px 15px;font-weight:bold}
-video#mainVideo{width:100%;max-height:68vh;background:#000;border-radius:14px;margin-top:12px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
-.actions button{border:0;border-radius:20px;padding:10px 14px;font-weight:700}
-.danger{background:#ff4d4d;color:#fff}
-.empty{text-align:center;padding:70px 20px;color:#aaa}
-.modal{display:none;position:fixed;inset:0;z-index:30;background:#000b;align-items:center;justify-content:center;padding:18px}
-.box{width:min(520px,100%);background:#1b1b1b;border-radius:18px;padding:18px}
-.box h2{margin-top:0}
-.box input{width:100%;margin:8px 0 12px;background:#292929;border:1px solid #555;border-radius:12px;padding:12px;color:#fff;font-size:16px}
-.box label{display:block;color:#ccc;margin-top:8px}
-.row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
-.row button{border:0;border-radius:18px;padding:10px 14px;font-weight:700}
-nav{position:fixed;bottom:0;width:100%;background:#181818;display:flex;justify-content:space-around;padding:11px 4px;border-top:1px solid #333;z-index:12}
-nav span{text-align:center;font-size:12px;cursor:pointer}
+*{box-sizing:border-box;-webkit-user-select:none;user-select:none}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#78c9ff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
+#game{width:100%;height:100%;display:block;touch-action:none}
+.ui{position:fixed;inset:0;pointer-events:none;color:#fff;z-index:1000}
+.panel{background:#10243be8;border:1px solid #ffffff28;border-radius:13px;box-shadow:0 8px 20px #0005}
+#profile{position:absolute;left:12px;top:12px;padding:9px 12px;width:225px;font-weight:900}
+#profile small{display:block;color:#c8ddff;font-size:11px;margin-top:2px}
+#topbar{position:absolute;left:50%;top:12px;transform:translateX(-50%);display:flex;gap:7px;pointer-events:auto}
+.topBtn{touch-action:manipulation;-webkit-tap-highlight-color:transparent;width:49px;height:49px;border:0;border-radius:11px;background:#173653e8;color:#fff;font-size:22px;box-shadow:0 5px 14px #0004}
+#money{position:absolute;right:12px;top:12px;padding:8px 12px;text-align:right;font-weight:900}
+#mini{position:absolute;right:12px;top:78px;width:125px;height:88px;border:2px solid #fff7;background:#4e7d45;border-radius:11px}
+#mini:before{content:"";position:absolute;inset:0;background:
+linear-gradient(90deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%),
+linear-gradient(0deg,transparent 48%,#ffffff30 49%,#ffffff30 51%,transparent 52%)}
+#mini:after{content:"▲";position:absolute;left:53px;top:32px;font-size:20px}
+#leftMenu{position:absolute;left:12px;top:105px;display:grid;gap:6px;pointer-events:auto}
+.menuBtn{touch-action:manipulation;-webkit-tap-highlight-color:transparent;width:128px;height:40px;border:0;border-radius:9px;background:#142b43ed;color:white;text-align:left;padding:0 11px;font-weight:850}
+#rightTools{position:absolute;right:12px;top:180px;display:grid;gap:7px;pointer-events:auto}
+.toolBtn{touch-action:manipulation;-webkit-tap-highlight-color:transparent;width:58px;height:58px;border:0;border-radius:11px;background:#142b43ed;color:white;font-size:22px}
+#cross{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:30px;text-shadow:0 2px 4px #000}
+#hint{position:absolute;left:50%;bottom:93px;transform:translateX(-50%);background:#11263ddd;border-radius:9px;padding:7px 11px;font-size:11px;font-weight:850;white-space:nowrap}
+#hotbar{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:5px;padding:7px;background:#0e1d2de8;border-radius:13px;pointer-events:auto}
+.slot{touch-action:manipulation;-webkit-tap-highlight-color:transparent;width:54px;height:54px;border:2px solid #ffffff4a;border-radius:9px;background:#263d58;color:#fff;font-size:25px}
+.slot.sel{border-color:#ffd84a;box-shadow:0 0 0 2px #ffd84a35;transform:translateY(-4px)}
+.modal{display:none;position:absolute;z-index:1200;left:50%;top:50%;transform:translate(-50%,-50%);width:min(860px,94vw);max-height:82vh;overflow:auto;padding:16px;pointer-events:auto}
+.modal h2{margin:0 0 10px}.close{float:right;border:0;border-radius:8px;padding:7px 10px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.card{touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:88px;border:0;border-radius:11px;background:#f6f8fb;color:#142438;font-weight:850;padding:8px}
+.card b{display:block;font-size:28px;margin-bottom:4px}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
+.tab{touch-action:manipulation;-webkit-tap-highlight-color:transparent;border:0;border-radius:9px;padding:9px 11px;background:#314a66;color:#fff;font-weight:850}
+.tab.active{background:#875ed3}
+#catalogInfo{background:#ffffff12;padding:9px;border-radius:9px;margin-bottom:10px;font-size:13px}
+#chat{display:none;position:absolute;z-index:1200;right:14px;bottom:86px;width:min(390px,88vw);height:430px;padding:12px;pointer-events:auto}
+#msgs{height:310px;overflow:auto;margin:8px 0}
+.msg{max-width:88%;padding:8px 10px;border-radius:12px;margin:6px 0;font-size:13px}
+.me{margin-left:auto;background:#587df2}.npc{background:#35485f}
+.chatrow{display:flex;gap:6px}.chatrow input{flex:1;border:0;border-radius:9px;padding:10px;user-select:text}.chatrow button{border:0;border-radius:9px;padding:0 14px;background:#c45ee5;color:white;font-size:19px}
+#status{position:absolute;left:50%;top:73px;transform:translateX(-50%);background:#10243be8;border-radius:9px;padding:7px 11px;font-weight:800;opacity:0;transition:.15s}
 </style>
 </head>
 <body>
-<header>
-  <div class="logo"><b>▶</b> MonTube</div>
-  <input id="search" placeholder="Rechercher mes vidéos" oninput="render()">
-  <button class="create" onclick="openCreate()">➕ Créer</button>
-</header>
+<canvas id="game"></canvas>
 
-<div class="notice">🔒 Mode privé : cette page ne publie rien sur Internet. Les vidéos restent sélectionnées depuis ton appareil et ne sont pas envoyées à un serveur.</div>
-
-<section id="home">
-  <main id="grid" class="grid"></main>
-</section>
-
-<section id="player" class="player">
-  <button class="back" onclick="goHome()">← Retour</button>
-  <video id="mainVideo" controls playsinline></video>
-  <h2 id="ptitle"></h2>
-  <div id="pmeta" class="meta"></div>
-  <div class="actions">
-    <button onclick="likeCurrent()">👍 <span id="likeCount">0</span></button>
-    <button class="danger" onclick="deleteCurrent()">🗑 Supprimer</button>
+<div class="ui">
+  <div id="profile" class="panel">👧 Anna ♥ Anna City<small>V1 000 000 000 · VITESSE NORMALE · NIVEAU 28 · MODE CRÉATIF · BLOCS ∞</small></div>
+  <div id="topbar">
+    <button class="topBtn" id="saveBtn">💾</button>
+    <button class="topBtn" id="peopleBtn">👥</button>
+    <button class="topBtn" id="chatBtn">💬</button>
   </div>
-</section>
+  <div id="money" class="panel">🪙 125 860<br>💎 3 250</div>
+  <div id="mini"></div>
 
-<div id="modal" class="modal">
-  <div class="box">
-    <h2>Créer une vidéo</h2>
-    <label>Titre</label>
-    <input id="titleInput" placeholder="Ex : Ma vidéo trop drôle">
-    <label>Choisir une vidéo depuis ton iPad</label>
-    <input id="videoInput" type="file" accept="video/*">
-    <label>Miniature (facultatif)</label>
-    <input id="thumbInput" type="file" accept="image/*">
-    <div class="row">
-      <button onclick="closeCreate()">Annuler</button>
-      <button onclick="saveVideo()">Ajouter</button>
-    </div>
+  <div id="leftMenu">
+    <button class="menuBtn" id="bagBtn">🎒 Inventaire</button>
+    <button class="menuBtn" id="catalogBtn">🏗️ Catalogue</button>
+    <button class="menuBtn" id="avatarBtn">👤 Avatar</button>
+    <button class="menuBtn" id="furnitureBtn">🛋️ Meubles</button>
+    <button class="menuBtn" id="vehicleBtn">🚗 Véhicules</button>
+    <button class="menuBtn" id="questsBtn">⭐ Quêtes</button>
+    <button class="menuBtn" id="mapBtn">🗺️ Carte</button>
+  </div>
+
+  <div id="rightTools">
+    <button class="toolBtn" id="breakBtn">⛏️</button>
+    <button class="toolBtn" id="placeBtn">🧱</button>
+    <button class="toolBtn" id="jumpBtn">⬆️</button>
+  </div>
+
+  <div id="cross">＋</div>
+  <div id="hint">👈 gauche : marcher · 👉 droite : regarder · ✌️ pincer : zoom</div>
+  <div id="hotbar"></div>
+  <div id="status"></div>
+
+  <div class="modal panel" id="inventoryModal">
+    <button class="close" id="inventoryClose">✕</button>
+    <h2>🎒 Inventaire créatif</h2>
+    <div class="grid" id="inventoryGrid"></div>
+  </div>
+
+  <div class="modal panel" id="catalogModal">
+    <button class="close" id="catalogClose">✕</button>
+    <h2>🏗️ Catalogue de la ville</h2>
+    <div id="catalogInfo">Choisis une catégorie, puis un modèle. Le bâtiment sera placé devant toi et restera modifiable bloc par bloc.</div>
+    <div class="tabs" id="catalogTabs"></div>
+    <div class="grid" id="catalogGrid"></div>
+  </div>
+
+  <div class="modal panel" id="avatarModal">
+    <button class="close" id="avatarClose">✕</button>
+    <h2>👤 Avatar d’Anna</h2>
+    <div class="grid" id="avatarGrid"></div>
+  </div>
+
+  
+<div class="modal panel" id="furnitureModal">
+  <button class="close" id="furnitureClose">✕</button>
+  <h2>🛋️ Meubles incroyables</h2>
+  <div class="tabs" id="furnitureTabs"></div>
+  <div class="grid" id="furnitureGrid"></div>
+</div>
+
+<div class="modal panel" id="peopleModal">
+    <button class="close" id="peopleClose">✕</button>
+    <h2>👥 Habitants dans le monde</h2>
+    <div class="grid" id="peopleGrid"></div>
+  </div>
+
+  <div id="chat" class="panel">
+    <button class="close" id="chatClose">✕</button>
+    <h3>💬 Chat du monde</h3>
+    <div id="msgs"></div>
+    <div class="chatrow"><input id="chatInput" placeholder="Écris un message…"><button id="sendBtn">➤</button></div>
   </div>
 </div>
 
-<nav>
-  <span onclick="goHome()">🏠<br>Accueil</span>
-  <span onclick="openCreate()">➕<br>Créer</span>
-  <span onclick="alert('Toutes tes vidéos sont privées dans cette version 😊')">🔒<br>Privé</span>
-  <span onclick="showCount()">👤<br>Mes vidéos</span>
-</nav>
-
+<script src="https://cdn.babylonjs.com/babylon.js"></script>
 <script>
-let videos = JSON.parse(localStorage.getItem('montube_meta') || '[]');
-let currentId = null;
+(()=>{
+const $=id=>document.getElementById(id);
+const canvas=$('game');
+const engine=new BABYLON.Engine(canvas,true,{preserveDrawingBuffer:true,stencil:true});
+const scene=new BABYLON.Scene(engine);
+scene.clearColor=new BABYLON.Color4(.48,.79,1,1);
+scene.collisionsEnabled=true;
+scene.gravity=new BABYLON.Vector3(0,-.42,0);
 
-// Les vrais fichiers vidéo restent en mémoire tant que la page est ouverte.
-// Les métadonnées (titres, likes) sont mémorisées localement.
-const objectUrls = {};
-const thumbUrls = {};
+const camera=new BABYLON.UniversalCamera('Anna',new BABYLON.Vector3(0,3,10),scene);
+camera.applyGravity=true; camera.checkCollisions=true;
+camera.ellipsoid=new BABYLON.Vector3(.32,.82,.32);
+camera.minZ=.08; camera.fov=.9;
 
-function persist(){
-  localStorage.setItem('montube_meta', JSON.stringify(videos.map(v=>({
-    id:v.id,title:v.title,likes:v.likes||0,created:v.created||Date.now()
-  }))));
-}
+new BABYLON.HemisphericLight('sky',new BABYLON.Vector3(0,1,0),scene).intensity=1.05;
 
-function render(){
-  const q = document.getElementById('search').value.toLowerCase();
-  const grid = document.getElementById('grid');
-  const shown = videos.filter(v => (v.title||'').toLowerCase().includes(q));
-  if(!shown.length){
-    grid.innerHTML = '<div class="empty">🎬<br><br>Aucune vidéo ici pour le moment.<br>Appuie sur <b>➕ Créer</b> pour ajouter ta première vidéo.</div>';
-    return;
+// PIXELATED VOXEL MATERIALS
+function pixelTexture(name, topHex, dirtHex, mode){
+  const tex=new BABYLON.DynamicTexture(name,{width:64,height:64},scene,false);
+  const ctx=tex.getContext();
+  function fill(hex){ctx.fillStyle=hex;ctx.fillRect(0,0,64,64)}
+  fill(mode==='dirt'?dirtHex:topHex);
+  // pixel speckles
+  const colors=mode==='dirt'?['#73492c','#9a6840','#6a4329','#aa7548']:['#4ea63e','#6bc653','#3f9135','#78d05e'];
+  for(let i=0;i<140;i++){
+    ctx.fillStyle=colors[Math.floor(Math.random()*colors.length)];
+    const s=[2,3,4][Math.floor(Math.random()*3)];
+    ctx.fillRect(Math.floor(Math.random()*32)*2,Math.floor(Math.random()*32)*2,s,s);
   }
-  grid.innerHTML = shown.map(v=>{
-    const t = thumbUrls[v.id];
-    return `<div class="card" onclick="openVideo('${v.id}')">
-      <div class="thumb">${t ? `<img src="${t}">` : '🎥'}<span class="badge">Privée 🔒</span></div>
-      <h3>${escapeHtml(v.title)}</h3>
-      <div class="meta">Moi · ${v.likes||0} j’aime</div>
-    </div>`;
-  }).join('');
+  tex.update(false);
+  tex.updateSamplingMode(BABYLON.Texture.NEAREST_NEAREST);
+  return tex;
+}
+function matColor(name,hex,alpha=1){
+  const m=new BABYLON.StandardMaterial(name,scene);
+  m.diffuseColor=BABYLON.Color3.FromHexString(hex);m.alpha=alpha;
+  if(alpha<1)m.transparencyMode=BABYLON.Material.MATERIAL_ALPHABLEND;
+  return m;
+}
+const grassMat=new BABYLON.StandardMaterial('grassVoxel',scene);
+grassMat.diffuseTexture=pixelTexture('grassPixels','#59b746','#855631','grass');
+grassMat.diffuseTexture.uScale=1;grassMat.diffuseTexture.vScale=1;
+const dirtMat=new BABYLON.StandardMaterial('dirtVoxel',scene);
+dirtMat.diffuseTexture=pixelTexture('dirtPixels','#59b746','#855631','dirt');
+
+const mats={
+  grass:grassMat,dirt:dirtMat,
+  stone:matColor('stone','#858b91'),white:matColor('white','#eceae3'),
+  glass:matColor('glass','#8fdcea',.42),wood:matColor('wood','#ae7a49'),
+  dark:matColor('dark','#3b4046'),leaf:matColor('leaf','#4a994b'),
+  water:matColor('water','#35badc',.74),pink:matColor('pink','#df62a4'),
+  purple:matColor('purple','#8256cf'),blue:matColor('blue','#487ce1'),
+  cyan:matColor('cyan','#39bdd6'),green:matColor('green','#3db56a'),
+  yellow:matColor('yellow','#dfb93e'),orange:matColor('orange','#dc8234'),
+  red:matColor('red','#c94a42'),black:matColor('black','#222831'),
+  skin:matColor('skin','#d9a47e'),hair:matColor('hair','#5b3828')
+};
+
+function box(name,x,y,z,sx,sy,sz,material,kind='decor',collision=true){
+  const b=BABYLON.MeshBuilder.CreateBox(name,{size:1},scene);
+  b.position.set(x,y,z); b.scaling.set(sx,sy,sz); b.material=material;
+  b.checkCollisions=collision; b.isPickable=true; b.metadata={kind};
+  return b;
 }
 
-function openCreate(){
-  document.getElementById('modal').style.display='flex';
-}
-function closeCreate(){
-  document.getElementById('modal').style.display='none';
-}
-function saveVideo(){
-  const title = document.getElementById('titleInput').value.trim();
-  const vf = document.getElementById('videoInput').files[0];
-  const tf = document.getElementById('thumbInput').files[0];
-  if(!title || !vf){ alert('Ajoute un titre et choisis une vidéo 😊'); return; }
-  const id = 'v'+Date.now();
-  objectUrls[id] = URL.createObjectURL(vf);
-  if(tf) thumbUrls[id] = URL.createObjectURL(tf);
-  videos.unshift({id,title,likes:0,created:Date.now()});
-  persist();
-  document.getElementById('titleInput').value='';
-  document.getElementById('videoInput').value='';
-  document.getElementById('thumbInput').value='';
-  closeCreate();
-  render();
-}
-function openVideo(id){
-  currentId=id;
-  const v = videos.find(x=>x.id===id);
-  if(!v) return;
-  if(!objectUrls[id]){
-    alert("Pour des raisons de sécurité de l’iPad, il faut re-sélectionner cette vidéo après avoir complètement fermé la page. Le titre reste sauvegardé.");
-    return;
+// TRUE VOXEL GROUND: visible grass blocks with dirt underneath
+const CH=12, chunks=new Map();
+function makeChunk(cx,cz){
+  const key=cx+','+cz;if(chunks.has(key))return;
+  const root=new BABYLON.TransformNode('chunk',scene);
+  for(let x=0;x<CH;x++)for(let z=0;z<CH;z++){
+    const wx=cx*CH+x-CH/2, wz=cz*CH+z-CH/2;
+    const top=box('grassBlock',wx,.5,wz,1,1,1,mats.grass,'ground',true);top.parent=root;
+    const dirt=box('dirtBlock',wx,-.5,wz,1,1,1,mats.dirt,'ground',true);dirt.parent=root;
   }
-  document.getElementById('home').style.display='none';
-  document.getElementById('player').style.display='block';
-  const mv=document.getElementById('mainVideo');
-  mv.src=objectUrls[id];
-  document.getElementById('ptitle').textContent=v.title;
-  document.getElementById('pmeta').textContent='Moi · Vidéo privée 🔒';
-  document.getElementById('likeCount').textContent=v.likes||0;
+  chunks.set(key,root);
 }
-function goHome(){
-  const mv=document.getElementById('mainVideo');
-  mv.pause(); mv.removeAttribute('src'); mv.load();
-  document.getElementById('player').style.display='none';
-  document.getElementById('home').style.display='block';
-  render();
+function streamChunks(){
+  const cx=Math.round(camera.position.x/CH),cz=Math.round(camera.position.z/CH);
+  for(let x=cx-2;x<=cx+2;x++)for(let z=cz-2;z<=cz+2;z++)makeChunk(x,z);
+  for(const [k,r] of [...chunks]){
+    const [x,z]=k.split(',').map(Number);
+    if(Math.abs(x-cx)>3||Math.abs(z-cz)>3){r.dispose();chunks.delete(k)}
+  }
 }
-function likeCurrent(){
-  const v=videos.find(x=>x.id===currentId); if(!v) return;
-  v.likes=(v.likes||0)+1; persist();
-  document.getElementById('likeCount').textContent=v.likes;
+streamChunks();
+
+// BUILDING BLOCKS
+const palette=[
+ ['grass','🟩','Herbe'],['dirt','🟫','Terre'],['stone','🪨','Pierre'],['white','⬜','Béton blanc'],
+ ['glass','🪟','Verre'],['wood','🪵','Bois'],['dark','⬛','Béton foncé'],['leaf','🌿','Feuille'],
+ ['water','🟦','Eau'],['pink','🩷','Rose'],['purple','💜','Violet'],['blue','🔵','Bleu'],
+ ['cyan','🩵','Cyan'],['green','💚','Vert'],['yellow','💛','Jaune'],['orange','🧡','Orange'],['red','❤️','Rouge']
+];
+let selected='white',placed=[];
+
+function addPlaced(x,y,z,key,save=true){
+  const b=box('placed',x,y,z,1,1,1,mats[key]||mats.white,'placed',true);
+  b.metadata.key=key;placed.push(b);if(save)saveWorld();return b;
 }
-function deleteCurrent(){
-  if(!currentId) return;
-  if(!confirm('Supprimer cette vidéo de MonTube ?')) return;
-  videos=videos.filter(v=>v.id!==currentId);
-  delete objectUrls[currentId]; delete thumbUrls[currentId];
-  persist(); currentId=null; goHome();
+function saveWorld(){
+  try{
+    localStorage.setItem('annaV1000000000',JSON.stringify(
+      placed.filter(b=>!b.isDisposed()).map(b=>({x:b.position.x,y:b.position.y,z:b.position.z,k:b.metadata.key||'white'}))
+    ));
+  }catch(e){}
 }
-function showCount(){
-  alert(`Tu as ${videos.length} vidéo${videos.length>1?'s':''} dans MonTube.`);
+try{JSON.parse(localStorage.getItem('annaV1000000000')||'[]').forEach(o=>addPlaced(o.x,o.y,o.z,o.k,false))}catch(e){}
+
+function status(t){
+  const s=$('status');s.textContent=t;s.style.opacity=1;clearTimeout(status.t);status.t=setTimeout(()=>s.style.opacity=0,1200);
 }
-function escapeHtml(s){
-  return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function pick(){
+  return scene.pickWithRay(camera.getForwardRay(9),m=>m.isPickable!==false);
 }
-render();
+function placeBlock(){
+  const p=pick();if(!p.hit){status('Vise un bloc ou le sol');return}
+  const n=p.getNormal(true)||BABYLON.Axis.Y;
+  const q=p.pickedPoint.add(n.scale(.55));
+  const x=Math.round(q.x),y=Math.max(1.5,Math.round(q.y)),z=Math.round(q.z);
+  addPlaced(x,y,z,selected,true);status('Bloc posé ✅');
+}
+function breakBlock(){
+  const p=pick();
+  if(p.hit&&p.pickedMesh.metadata?.kind==='placed'){
+    const m=p.pickedMesh;placed=placed.filter(b=>b!==m);m.dispose();saveWorld();status('Bloc cassé');
+  }else status('Tu peux casser les blocs que tu as construits');
+}
+
+// HOTBAR / INVENTORY
+const hotbar=$('hotbar'),invGrid=$('inventoryGrid');
+palette.slice(0,10).forEach((it,i)=>{
+  const b=document.createElement('button');b.className='slot'+(i===3?' sel':'');b.textContent=it[1];
+  b.onclick=()=>{selected=it[0];document.querySelectorAll('.slot').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');status(it[2])};
+  hotbar.appendChild(b);
+});
+palette.forEach(it=>{
+  const b=document.createElement('button');b.className='card';b.innerHTML='<b>'+it[1]+'</b>'+it[2];
+  b.onclick=()=>{selected=it[0];$('inventoryModal').style.display='none';status(it[2]+' sélectionné')};
+  invGrid.appendChild(b);
+});
+
+// CATALOG
+const catalogs={
+ '🏠 Maisons':[
+  ['🏡','Maison moderne',7,6,5],['🏘️','Maison familiale',9,7,5],['🏠','Petite maison',5,5,4],['🌴','Villa contemporaine',11,8,6]
+ ],
+ '🏪 Magasins':[
+  ['👗','Boutique de mode',7,6,4],['🧸','Magasin de jouets',8,6,4],['🎮','Boutique gaming',7,6,4],['🛒','Supermarché',12,8,4],
+  ['🥐','Boulangerie',6,5,4],['💎','Bijouterie',6,5,4],['📚','Librairie',7,6,4],['🏬','Grand magasin',14,10,6]
+ ],
+ '🍕 Restaurants':[
+  ['🍕','Pizzeria',7,6,4],['🍔','Burger',7,6,4],['🍣','Sushi',7,6,4],['🍰','Café',6,5,4],['🍦','Glacier',5,5,3]
+ ],
+ '🌳 Parcs':[
+  ['🌷','Jardin fleuri',8,8,1],['🛝','Aire de jeux',10,8,1],['⛲','Parc avec fontaine',10,10,1],['🌴','Parc tropical',12,10,1]
+ ],
+ '🏢 Immeubles':[
+  ['🏢','Petit immeuble',8,7,9],['🏙️','Tour moderne',9,8,15],['🏨','Hôtel',11,9,10],['🏫','École',13,10,5],
+  ['🏥','Hôpital',14,11,6],['🏦','Banque',9,7,6],['🏤','Mairie',11,8,6],['🏬','Centre commercial',15,12,7]
+ ]
+};
+let currentCat=Object.keys(catalogs)[0];
+function renderCatalogTabs(){
+  const t=$('catalogTabs');t.innerHTML='';
+  Object.keys(catalogs).forEach(k=>{
+    const b=document.createElement('button');b.className='tab'+(k===currentCat?' active':'');b.textContent=k;
+    b.onclick=()=>{currentCat=k;renderCatalogTabs();renderCatalogCards()};t.appendChild(b);
+  });
+}
+function renderCatalogCards(){
+  const g=$('catalogGrid');g.innerHTML='';
+  catalogs[currentCat].forEach((m,i)=>{
+    const b=document.createElement('button');b.className='card';b.innerHTML='<b>'+m[0]+'</b>'+m[1];
+    b.onclick=()=>{buildTemplate(currentCat,m,i);$('catalogModal').style.display='none'};
+    g.appendChild(b);
+  });
+}
+function buildTemplate(cat,m,index){
+  let f=camera.getDirection(BABYLON.Axis.Z);f.y=0;if(f.lengthSquared())f.normalize();
+  const cx=Math.round(camera.position.x+f.x*11),cz=Math.round(camera.position.z+f.z*11);
+  const [emoji,name,w,d,h]=m;
+  if(cat.includes('Parcs')){
+    for(let x=-Math.floor(w/2);x<=Math.floor(w/2);x++)for(let z=-Math.floor(d/2);z<=Math.floor(d/2);z++){
+      if(Math.random()<.10)addPlaced(cx+x,1.5,cz+z,'leaf',false);
+    }
+  }else{
+    const halfW=Math.floor(w/2),halfD=Math.floor(d/2);
+    for(let y=0;y<h;y++){
+      for(let x=-halfW;x<=halfW;x++)for(let z=-halfD;z<=halfD;z++){
+        const edge=Math.abs(x)===halfW||Math.abs(z)===halfD;
+        if(!edge)continue;
+        // doorway
+        if(z===halfD&&Math.abs(x)<=1&&y<3)continue;
+        let key='white';
+        if(y>=2&&y<=3&&z===halfD&&Math.abs(x)>1&&Math.abs(x)<halfW)key='glass';
+        else if(index%3===1)key='wood';
+        else if(index%3===2)key='dark';
+        addPlaced(cx+x,1.5+y,cz+z,key,false);
+      }
+    }
+    // floor + roof
+    for(let x=-halfW;x<=halfW;x++)for(let z=-halfD;z<=halfD;z++){
+      addPlaced(cx+x,1.5,cz+z,index%2?'wood':'white',false);
+      addPlaced(cx+x,1.5+h,cz+z,'white',false);
+    }
+  }
+  saveWorld();status(name+' construit ✅');
+}
+renderCatalogTabs();renderCatalogCards();
+
+
+// REAL FURNITURE CATALOG
+const furnitureCatalog={
+ '🛋️ Salon':[['🛋️','Canapé luxe','sofa'],['📺','TV géante','tv'],['☕','Table basse','coffee'],['🪴','Grande plante','plant']],
+ '🛏️ Chambre':[['🛏️','Lit moderne','bed'],['🗄️','Armoire','wardrobe'],['💡','Lampe design','lamp'],['🪞','Miroir','mirror']],
+ '🍳 Cuisine':[['🍳','Cuisine équipée','kitchen'],['🧊','Réfrigérateur','fridge'],['🍽️','Table à manger','dining'],['🪑','Chaise','chair']],
+ '🎮 Gaming':[['🖥️','Setup gaming','gaming'],['🪑','Fauteuil gamer','gamerchair'],['🎧','Coin musique','music'],['📚','Bibliothèque','books']]
+};
+let furnitureCat=Object.keys(furnitureCatalog)[0];
+function renderFurniture(){
+ const tabs=$('furnitureTabs'),grid=$('furnitureGrid');tabs.innerHTML='';grid.innerHTML='';
+ Object.keys(furnitureCatalog).forEach(k=>{
+  const b=document.createElement('button');b.className='tab'+(k===furnitureCat?' active':'');b.textContent=k;
+  b.onclick=()=>{furnitureCat=k;renderFurniture()};tabs.appendChild(b);
+ });
+ furnitureCatalog[furnitureCat].forEach(f=>{
+  const b=document.createElement('button');b.className='card';b.innerHTML='<b>'+f[0]+'</b>'+f[1];
+  b.onclick=()=>{placeFurniture(f[2]);$('furnitureModal').style.display='none';status(f[1]+' placé ✨')};grid.appendChild(b);
+ });
+}
+function furnitureRoot(type,x,z){
+ const root=new BABYLON.TransformNode('furniture',scene);root.position.set(x,1.05,z);root.metadata={kind:'furniture',type};
+ function part(px,py,pz,sx,sy,sz,ma){const o=box('furniture',px,py,pz,sx,sy,sz,ma,'furniture',true);o.parent=root;return o}
+ if(type==='sofa'){part(0,.45,0,3,.55,1,mats.purple);part(0,1,.4,3,.75,.35,mats.purple);part(-1.35,.75,0,.3,.8,1,mats.purple);part(1.35,.75,0,.3,.8,1,mats.purple)}
+ else if(type==='tv'){part(0,1.25,0,3,1.7,.15,mats.black);part(0,.3,0,2.2,.4,.65,mats.dark)}
+ else if(type==='coffee'){part(0,.45,0,2.2,.15,1.2,mats.glass);part(-.8,.2,0,.12,.5,.12,mats.dark);part(.8,.2,0,.12,.5,.12,mats.dark)}
+ else if(type==='plant'){part(0,.45,0,.75,.8,.75,mats.white);for(let i=0;i<5;i++){let s=BABYLON.MeshBuilder.CreateSphere('leaf',{diameter:1.1,segments:8},scene);s.position.set((Math.random()-.5)*.7,1.2+Math.random()*.8,(Math.random()-.5)*.7);s.material=mats.leaf;s.parent=root}}
+ else if(type==='bed'){part(0,.35,0,2.6,.5,4,mats.white);part(0,.65,-1.55,2.6,.7,.3,mats.pink);part(-.65,.7,-1.2,1,.25,.8,mats.white);part(.65,.7,-1.2,1,.25,.8,mats.white)}
+ else if(type==='wardrobe'){part(0,1.3,0,2.4,2.6,.7,mats.wood);part(0,1.3,.37,.05,2.4,.05,mats.dark)}
+ else if(type==='lamp'){part(0,.7,0,.15,1.4,.15,mats.dark);let s=BABYLON.MeshBuilder.CreateSphere('lamp',{diameter:.75,segments:12},scene);s.position.set(0,1.55,0);s.material=mats.yellow;s.parent=root}
+ else if(type==='mirror'){part(0,1.3,0,1.5,2.4,.12,mats.glass)}
+ else if(type==='kitchen'){part(0,.55,0,3.8,1.1,.8,mats.white);part(0,1.2,.3,3.8,.12,.8,mats.dark)}
+ else if(type==='fridge'){part(0,1.25,0,1.3,2.5,1.2,mats.white);part(.35,1.25,.62,.06,2,.05,mats.dark)}
+ else if(type==='dining'){part(0,.8,0,3,.15,1.7,mats.wood);for(let x of [-1.1,1.1])for(let z2 of [-.6,.6])part(x,.4,z2,.12,.8,.12,mats.dark)}
+ else if(type==='chair'||type==='gamerchair'){part(0,.55,0,.9,.15,.9,type==='gamerchair'?mats.purple:mats.wood);part(0,1,.35,.9,1,.18,type==='gamerchair'?mats.purple:mats.wood)}
+ else if(type==='gaming'){part(0,.75,0,2.8,.15,1,mats.dark);part(0,1.55,.35,2.2,1.2,.12,mats.black);part(0,.9,-.15,.65,.12,.3,mats.purple)}
+ else if(type==='music'){part(-.55,.8,0,.8,1.6,.65,mats.black);part(.55,.8,0,.8,1.6,.65,mats.black)}
+ else if(type==='books'){part(0,1.25,0,2.5,2.5,.45,mats.wood);for(let y=.35;y<2.3;y+=.55)part(0,y,.25,2.3,.08,.45,mats.dark)}
+ return root;
+}
+function placeFurniture(type){
+ let f=camera.getDirection(BABYLON.Axis.Z);f.y=0;if(f.lengthSquared())f.normalize();
+ furnitureRoot(type,Math.round(camera.position.x+f.x*4),Math.round(camera.position.z+f.z*4));
+}
+renderFurniture();
+
+
+// NPCs: MANY PEOPLE
+const names=['Talcado','Awariz','Yoananas','Johanna','Inès','Léo','Camille','Noah','Mila','Lou','Hugo','Zoé','Adam','Nina','Tom','Sarah','Lucas','Chloé','Ethan','Manon','Jade','Emma','Lina','Maël','Lola','Arthur','Rose','Louis','Eva','Nora','Liam','Sofia','Gabriel','Alice','Enzo','Louna','Sacha','Clara','Nolan','Maya'];
+const people=[];
+function human(name,x,z,i){
+  const root=new BABYLON.TransformNode(name,scene);
+  root.position.set(x,1,z);
+
+  const shirts=[mats.pink,mats.purple,mats.blue,mats.cyan,mats.green,mats.yellow,mats.red,mats.white];
+  const pants=[mats.dark,mats.blue,mats.black,mats.purple];
+  const shirt=shirts[i%shirts.length], pant=pants[i%pants.length];
+  const hairColors=[mats.hair,mats.black,mats.yellow,mats.red,mats.dark];
+  const hairMat=hairColors[i%hairColors.length];
+
+  // Slightly varied human proportions
+  const scale=0.92 + (i%5)*0.03;
+  root.scaling.set(scale,scale,scale);
+
+  function cyl(n,px,py,pz,h,diam,ma){
+    const m=BABYLON.MeshBuilder.CreateCylinder(n,{height:h,diameter:diam,tessellation:16},scene);
+    m.position.set(px,py,pz);m.material=ma;m.parent=root;m.checkCollisions=false;m.isPickable=true;m.metadata={kind:'npc'};return m;
+  }
+  function sphere(n,px,py,pz,d,ma){
+    const m=BABYLON.MeshBuilder.CreateSphere(n,{diameter:d,segments:16},scene);
+    m.position.set(px,py,pz);m.material=ma;m.parent=root;m.checkCollisions=false;m.isPickable=true;m.metadata={kind:'npc'};return m;
+  }
+  function boxp(n,px,py,pz,sx,sy,sz,ma){
+    const m=box(n,px,py,pz,sx,sy,sz,ma,'npc',false);m.parent=root;return m;
+  }
+
+  // shoes
+  boxp('shoeL',-.18,.12,.08,.30,.18,.48,mats.black);
+  boxp('shoeR', .18,.12,.08,.30,.18,.48,mats.black);
+
+  // lower legs
+  const legL=cyl('legL',-.18,.55,0,.78,.22,pant);
+  const legR=cyl('legR', .18,.55,0,.78,.22,pant);
+
+  // hips / waist
+  boxp('hips',0,.98,0,.62,.34,.36,pant);
+
+  // torso shaped with shoulder/chest blocks
+  boxp('torso',0,1.46,0,.72,.86,.38,shirt);
+  boxp('shoulders',0,1.78,0,.88,.20,.40,shirt);
+
+  // neck
+  cyl('neck',0,1.96,0,.18,.18,mats.skin);
+
+  // arms: upper + forearm + hands
+  const upperL=cyl('upperL',-.53,1.55,0,.58,.18,shirt); upperL.rotation.z=-.05;
+  const upperR=cyl('upperR', .53,1.55,0,.58,.18,shirt); upperR.rotation.z=.05;
+  const foreL=cyl('foreL',-.56,1.15,0,.52,.15,mats.skin);
+  const foreR=cyl('foreR', .56,1.15,0,.52,.15,mats.skin);
+  sphere('handL',-.56,.88,0,.18,mats.skin);
+  sphere('handR', .56,.88,0,.18,mats.skin);
+
+  // head
+  const head=sphere('head',0,2.30,0,.62,mats.skin);
+
+  // ears
+  sphere('earL',-.31,2.30,0,.10,mats.skin);
+  sphere('earR', .31,2.30,0,.10,mats.skin);
+
+  // face: eyes, pupils, nose, mouth
+  const whiteEye=new BABYLON.StandardMaterial('eyeWhite'+i,scene);whiteEye.diffuseColor=new BABYLON.Color3(1,1,1);
+  const lipMat=new BABYLON.StandardMaterial('lip'+i,scene);lipMat.diffuseColor=BABYLON.Color3.FromHexString('#8b3a3a');
+  for(const ex of [-.12,.12]){
+    const ew=sphere('eyeWhite',ex,2.35,.285,.095,whiteEye);
+    sphere('pupil',ex,2.35,.335,.045,mats.black);
+  }
+  sphere('nose',0,2.25,.315,.07,mats.skin);
+  const mouth=boxp('mouth',0,2.14,.322,.14,.025,.025,lipMat);
+
+  // hair with multiple style parts
+  const cap=BABYLON.MeshBuilder.CreateSphere('hairCap',{diameter:.66,segments:16,slice:.55},scene);
+  cap.position.set(0,2.48,-.02);cap.material=hairMat;cap.parent=root;
+
+  if(i%4===0){
+    // long hair
+    boxp('hairBack',0,2.20,-.23,.58,.72,.16,hairMat);
+    boxp('hairL',-.27,2.20,-.02,.12,.68,.18,hairMat);
+    boxp('hairR', .27,2.20,-.02,.12,.68,.18,hairMat);
+  }else if(i%4===1){
+    // ponytail
+    sphere('pony',0,2.31,-.39,.30,hairMat);
+  }else if(i%4===2){
+    // side locks
+    boxp('lockL',-.29,2.27,.02,.10,.48,.12,hairMat);
+    boxp('lockR', .29,2.27,.02,.10,.48,.12,hairMat);
+  }else{
+    // short hair volume
+    boxp('hairTop',0,2.57,-.02,.52,.15,.48,hairMat);
+  }
+
+  // outfit details
+  if(i%3===0){
+    boxp('jacketL',-.34,1.48,.20,.08,.65,.05,mats.white);
+    boxp('jacketR', .34,1.48,.20,.08,.65,.05,mats.white);
+  }
+  if(i%5===0){
+    // skirt overlay
+    boxp('skirt',0,.93,0,.68,.42,.45,shirt);
+  }
+
+  root.metadata={
+    name,
+    target:new BABYLON.Vector3(x,1,z),
+    speed:.0035+Math.random()*.0015,
+    upperL,upperR,foreL,foreR,legL,legR,
+    phase:Math.random()*6
+  };
+  people.push(root);
+}
+names.forEach((n,i)=>human(n,-22+Math.random()*44,-22+Math.random()*44,i));
+
+const pg=$('peopleGrid');
+people.forEach(p=>{const b=document.createElement('button');b.className='card';b.innerHTML='<b>🧍</b>'+p.metadata.name;b.onclick=()=>{$('peopleModal').style.display='none';status(p.metadata.name+' est dans le monde')};pg.appendChild(b)});
+
+// AVATAR MENU
+['👧 Classique','👩🏻 Brune','👩🏼 Blonde','🧑🏽 Sport','👸 Princesse','🥷 Ninja','🧢 Street','🎾 Tennis'].forEach(a=>{
+ const b=document.createElement('button');b.className='card';b.innerHTML='<b>'+a.split(' ')[0]+'</b>'+a.split(' ').slice(1).join(' ');
+ b.onclick=()=>{$('avatarModal').style.display='none';status('Avatar changé')};$('avatarGrid').appendChild(b);
+});
+
+
+// iPad-safe button binding: pointerup + click fallback, with duplicate guard.
+function tap(id, fn){
+  const el=$(id);
+  if(!el) return;
+  let last=0;
+  const run=(e)=>{
+    if(e){ e.preventDefault(); e.stopPropagation(); }
+    const now=Date.now();
+    if(now-last<250) return;
+    last=now;
+    el.animate([{transform:'scale(.96)'},{transform:'scale(1)'}],{duration:120});
+    fn();
+  };
+  el.addEventListener('pointerup',run,{passive:false});
+  el.addEventListener('touchend',run,{passive:false});
+  el.addEventListener('click',run,{passive:false});
+}
+
+// BUTTONS: EXPLICIT, NO GLOBAL-ID DEPENDENCY
+tap('inventoryClose',()=>{$('inventoryModal').style.display='none';status('Inventaire fermé')});
+tap('catalogClose',()=>{$('catalogModal').style.display='none';status('Catalogue fermé')});
+tap('avatarClose',()=>{$('avatarModal').style.display='none';status('Avatar fermé')});
+tap('peopleClose',()=>{$('peopleModal').style.display='none';status('Habitants fermé')});
+tap('furnitureClose',()=>{$('furnitureModal').style.display='none';status('Meubles fermés')});
+
+tap('bagBtn',()=>{$('inventoryModal').style.display='block';status('Inventaire ouvert 🎒')});
+tap('catalogBtn',()=>{$('catalogModal').style.display='block';status('Catalogue ouvert 🏗️')});
+tap('avatarBtn',()=>{$('avatarModal').style.display='block';status('Avatar ouvert 👤')});
+tap('peopleBtn',()=>{$('peopleModal').style.display='block';status('Habitants ouverts 👥')});
+
+tap('placeBtn',()=>placeBlock());
+tap('breakBtn',()=>breakBlock());
+tap('jumpBtn',()=>{camera.cameraDirection.y+=.16;status('Saut ⬆️')});
+tap('saveBtn',()=>{saveWorld();status('Sauvegardé 💾')});
+
+tap('furnitureBtn',()=>{$('furnitureModal').style.display='block';status('Meubles ouverts 🛋️')});
+tap('vehicleBtn',()=>status('Bouton Véhicules OK ✅'));
+tap('questsBtn',()=>status('Bouton Quêtes OK ✅'));
+tap('mapBtn',()=>status('Bouton Carte OK ✅'));
+
+// CHAT
+function addMsg(name,text){
+ const d=document.createElement('div');d.className='msg '+(name==='Anna'?'me':'npc');d.innerHTML='<b>'+name+'</b><br>'+text;$('msgs').appendChild(d);$('msgs').scrollTop=$('msgs').scrollHeight;
+}
+tap('chatBtn',()=>{$('chat').style.display='block';status('Chat ouvert 💬')});
+tap('chatClose',()=>{$('chat').style.display='none';status('Chat fermé')});
+async function sendChat(){
+ const q=$('chatInput').value.trim();if(!q)return;$('chatInput').value='';addMsg('Anna',q);
+ const nearest=[...people].sort((a,b)=>BABYLON.Vector3.Distance(a.position,camera.position)-BABYLON.Vector3.Distance(b.position,camera.position))[0];
+ const n=nearest?.metadata?.name||'Talcado';
+ let ans='Coucou Anna 😊';
+ if(/constru|bloc|poser/i.test(q))ans='Choisis ton bloc en bas, vise le sol avec le + puis touche 🧱. Pour un bâtiment entier, ouvre 🏗️ Catalogue.';
+ else if(/catalogue|immeuble|magasin/i.test(q))ans='Ouvre 🏗️ Catalogue à gauche : il y a Maisons, Magasins, Restaurants, Parcs et Immeubles.';
+ else if(/vite|lent/i.test(q))ans='Je t’ai mise en vitesse lente maintenant 🙂';
+ else ans=['Je suis là 😊','Bonne idée !','On peut construire ça ensemble 😄','Je me promène dans ton monde !'][Math.floor(Math.random()*4)];
+ addMsg(n,ans);
+}
+tap('sendBtn',()=>sendChat());$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')sendChat()});
+addMsg('Talcado','Coucou Anna ❤️ Cette fois le catalogue est à gauche et tu peux vraiment poser les blocs.');
+
+// TOUCH CONTROLS — SLOW
+let moveT=null,lookT=null,pinch=null,mx=0,my=0;
+function isUI(t){return t&&t.closest&&t.closest('button,input,.modal,#chat,#hotbar,#leftMenu,#rightTools,#topbar,#profile,#money,#mini')}
+canvas.addEventListener('touchstart',e=>{
+ if(isUI(e.target))return;e.preventDefault();
+ if(e.touches.length>=2){const a=e.touches[0],b=e.touches[1];pinch=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)}
+ for(const t of e.changedTouches){
+   if(t.clientX<innerWidth*.5&&!moveT)moveT={id:t.identifier,x0:t.clientX,y0:t.clientY};
+   else if(!lookT)lookT={id:t.identifier,x:t.clientX,y:t.clientY};
+ }
+},{passive:false});
+canvas.addEventListener('touchmove',e=>{
+ if(isUI(e.target))return;e.preventDefault();
+ if(e.touches.length>=2){const a=e.touches[0],b=e.touches[1],d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);if(pinch)camera.fov=Math.max(.5,Math.min(1.25,camera.fov*(pinch/d)));pinch=d}
+ for(const t of e.changedTouches){
+  if(moveT&&t.identifier===moveT.id){mx=Math.max(-1,Math.min(1,(t.clientX-moveT.x0)/85));my=Math.max(-1,Math.min(1,(t.clientY-moveT.y0)/85))}
+  if(lookT&&t.identifier===lookT.id){camera.rotation.y+=(t.clientX-lookT.x)*.0035;camera.rotation.x=Math.max(-1.15,Math.min(1.15,camera.rotation.x+(t.clientY-lookT.y)*.0027));lookT.x=t.clientX;lookT.y=t.clientY}
+ }
+},{passive:false});
+canvas.addEventListener('touchend',e=>{
+ for(const t of e.changedTouches){if(moveT&&t.identifier===moveT.id){moveT=null;mx=my=0}if(lookT&&t.identifier===lookT.id)lookT=null}
+ if(e.touches.length<2)pinch=null;
+},{passive:false});
+
+// LOOP
+scene.onBeforeRenderObservable.add(()=>{
+ streamChunks();
+ let f=camera.getDirection(BABYLON.Axis.Z);f.y=0;if(f.lengthSquared())f.normalize();
+ let r=camera.getDirection(BABYLON.Axis.X);r.y=0;if(r.lengthSquared())r.normalize();
+ // VERY SLOW, deliberate speed
+ camera.cameraDirection.addInPlace(f.scale(-my*.021));
+ camera.cameraDirection.addInPlace(r.scale(mx*.019));
+
+ people.forEach(p=>{
+   if(Math.random()<.003)p.metadata.target.set(-28+Math.random()*56,1,-28+Math.random()*56);
+   const dx=p.metadata.target.x-p.position.x,dz=p.metadata.target.z-p.position.z,d=Math.hypot(dx,dz);
+   if(d>.6){p.position.x+=dx/d*p.metadata.speed;p.position.z+=dz/d*p.metadata.speed;p.rotation.y=Math.atan2(dx,dz);p.metadata.phase+=.075;const a=Math.sin(p.metadata.phase)*.45;if(p.metadata.upperL){p.metadata.upperL.rotation.x=a;p.metadata.upperR.rotation.x=-a;p.metadata.foreL.rotation.x=a*.55;p.metadata.foreR.rotation.x=-a*.55;p.metadata.legL.rotation.x=-a*.45;p.metadata.legR.rotation.x=a*.45}}
+ });
+});
+engine.runRenderLoop(()=>scene.render());
+window.addEventListener('resize',()=>engine.resize());
+})();
 </script>
-</body>
-</html>
+<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1400;background:#7b4ce2;color:white;padding:6px 12px;border-radius:999px;font:800 12px system-ui;pointer-events:none">✨ ANNA CITY V1 000 000 000 · VITESSE NORMALE</div>
+<div style="position:fixed;left:50%;top:72px;transform:translateX(-50%);z-index:1600;background:#7b4ce2;color:#fff;padding:7px 13px;border-radius:999px;font:900 12px system-ui;pointer-events:none">🚀 ANNA CITY V1 000 000 000</div>
+</body></html>
