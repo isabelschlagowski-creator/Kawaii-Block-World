@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Anna City — Nouvelle Base</title>
+<title>Anna City — Nouvelle Base FIX NOIR V2</title>
 <style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#7ecbff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
@@ -45,9 +45,10 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#7ecbff;fon
 </head>
 <body>
 <canvas id="game"></canvas>
+<div id="loading3d" style="position:fixed;inset:0;display:grid;place-items:center;background:#78c9ff;color:#102238;font:900 22px system-ui;z-index:999">🌱 Chargement du monde plat…</div>
 
 <div class="ui">
- <div id="profile" class="panel">👧 Anna ♥ Anna City<small>NOUVELLE BASE · MODE CRÉATIF · MONDE PLAT</small></div>
+ <div id="profile" class="panel">👧 Anna ♥ Anna City<small>FIX NOIR V2 · MODE CRÉATIF · MONDE PLAT</small></div>
  <div id="topbar">
    <button class="topBtn" id="saveBtn">💾</button>
    <button class="topBtn" id="chatBtn">💬</button>
@@ -122,10 +123,11 @@ const canvas=$('game');
 const engine=new BABYLON.Engine(canvas,true,{preserveDrawingBuffer:true,stencil:true});
 const scene=new BABYLON.Scene(engine);
 scene.clearColor=new BABYLON.Color4(.48,.79,1,1);
+scene.ambientColor=new BABYLON.Color3(.5,.5,.5);
 scene.collisionsEnabled=true;
 scene.gravity=new BABYLON.Vector3(0,-.35,0);
 
-new BABYLON.HemisphericLight('sky',new BABYLON.Vector3(.3,1,.2),scene).intensity=1.1;
+const skyLight=new BABYLON.HemisphericLight('sky',new BABYLON.Vector3(.3,1,.2),scene);skyLight.intensity=1.25;
 
 // ---------- Materials ----------
 function colorMat(name,hex,alpha=1){
@@ -168,23 +170,32 @@ function bindTap(id,fn){
  el.addEventListener('pointerup',run,{passive:false});el.addEventListener('touchend',run,{passive:false});el.addEventListener('click',run,{passive:false});
 }
 
-// ---------- Flat voxel world ----------
-const CH=16,chunks=new Map();
-function makeChunk(cx,cz){
- const key=cx+','+cz;if(chunks.has(key))return;
- const root=new BABYLON.TransformNode('chunk',scene);
- for(let x=0;x<CH;x++)for(let z=0;z<CH;z++){
-   const wx=cx*CH+x-CH/2,wz=cz*CH+z-CH/2;
-   const g=box('grass',wx,0,wz,1,1,1,mats.grass,'ground',true);g.parent=root;
-   const d=box('dirt',wx,-1,wz,1,1,1,mats.dirt,'ground',true);d.parent=root;
- }
- chunks.set(key,root);
+// ---------- Flat voxel world — iPad optimized ----------
+const dirtGround=BABYLON.MeshBuilder.CreateBox('dirtGround',{width:240,height:2,depth:240},scene);
+dirtGround.position.set(0,-1,0);
+dirtGround.material=mats.dirt;
+dirtGround.checkCollisions=true;
+dirtGround.isPickable=true;
+dirtGround.metadata={kind:'ground'};
+
+const grassGround=BABYLON.MeshBuilder.CreateBox('grassGround',{width:240,height:.18,depth:240},scene);
+grassGround.position.set(0,.09,0);
+grassGround.material=mats.grass;
+grassGround.checkCollisions=true;
+grassGround.isPickable=true;
+grassGround.metadata={kind:'ground'};
+
+if(mats.grass.diffuseTexture){
+  mats.grass.diffuseTexture.uScale=120;
+  mats.grass.diffuseTexture.vScale=120;
+  mats.grass.diffuseTexture.wrapU=BABYLON.Texture.WRAP_ADDRESSMODE;
+  mats.grass.diffuseTexture.wrapV=BABYLON.Texture.WRAP_ADDRESSMODE;
 }
-function stream(){
- const cx=Math.round(player.position.x/CH),cz=Math.round(player.position.z/CH);
- for(let x=cx-2;x<=cx+2;x++)for(let z=cz-2;z<=cz+2;z++)makeChunk(x,z);
- for(const [k,r] of [...chunks]){const [x,z]=k.split(',').map(Number);if(Math.abs(x-cx)>3||Math.abs(z-cz)>3){r.dispose();chunks.delete(k)}}
+if(mats.dirt.diffuseTexture){
+  mats.dirt.diffuseTexture.uScale=120;
+  mats.dirt.diffuseTexture.vScale=120;
 }
+function stream(){}
 
 // ---------- Player: Minecraft-like but clean ----------
 const player=new BABYLON.TransformNode('Anna',scene);player.position.set(0,1,0);
@@ -478,7 +489,8 @@ scene.onBeforeRenderObservable.add(()=>{
  });
 });
 updateCamera();
-engine.runRenderLoop(()=>scene.render());
+let firstFrame=true;
+engine.runRenderLoop(()=>{scene.render();if(firstFrame){firstFrame=false;const l=document.getElementById('loading3d');if(l)l.remove();}});
 window.addEventListener('resize',()=>engine.resize());
 })();
 </script>
