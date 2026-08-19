@@ -3,562 +3,193 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Anna City — VILLA + CHAT + BARRE + VITESSE</title>
+<title>Anna City 2 — Étape 1</title>
 <style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#7bcaff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#7ecbff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
 #game{width:100%;height:100%;display:block;touch-action:none}
-.ui{position:fixed;inset:0;pointer-events:none;color:white;z-index:1000}
-.panel{background:#102238e8;border:1px solid #ffffff25;border-radius:14px;box-shadow:0 8px 24px #0005}
-#profile{position:absolute;left:12px;top:12px;padding:10px 12px;width:230px;font-weight:900}
-#profile small{display:block;color:#cfe0ff;font-size:11px;margin-top:3px}
-#topbar{position:absolute;left:50%;top:12px;transform:translateX(-50%);display:flex;gap:7px;pointer-events:auto}
-.topBtn{width:50px;height:50px;border:0;border-radius:12px;background:#173450ed;color:#fff;font-size:22px;touch-action:manipulation}
-#money{position:absolute;right:12px;top:12px;padding:9px 12px;text-align:right;font-weight:900}
-#left{position:absolute;left:12px;top:112px;display:grid;gap:7px;pointer-events:auto}
-.menu{width:130px;height:42px;border:0;border-radius:10px;background:#142b43ed;color:#fff;text-align:left;padding:0 11px;font-weight:850;touch-action:manipulation}
-#right{position:absolute;right:12px;top:176px;display:grid;gap:7px;pointer-events:auto}
-.tool{width:58px;height:58px;border:0;border-radius:12px;background:#142b43ed;color:#fff;font-size:22px;touch-action:manipulation}
-#cross{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:30px;text-shadow:0 2px 4px #000}
-#hint{position:absolute;left:50%;bottom:95px;transform:translateX(-50%);background:#102238dd;padding:7px 11px;border-radius:10px;font-size:11px;font-weight:850;white-space:nowrap}
-#hotbar{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:6px;padding:8px;background:#0e1c2be9;border-radius:14px;pointer-events:auto;z-index:1400}
-.slot{width:55px;height:55px;border:2px solid #ffffff40;border-radius:10px;background:#263d58;color:#fff;font-size:25px;touch-action:manipulation}
-.slot.sel{border-color:#ffd84a;box-shadow:0 0 0 2px #ffd84a33;transform:translateY(-4px)}
-#selectedLabel{position:absolute;left:50%;bottom:78px;transform:translateX(-50%);background:#15283ddd;padding:6px 10px;border-radius:9px;font-size:11px;font-weight:900}
-.modal{display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(860px,94vw);max-height:82vh;overflow:auto;padding:16px;pointer-events:auto;z-index:2200}
-.close{float:right;border:0;border-radius:8px;padding:7px 10px;touch-action:manipulation}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
-.card{min-height:95px;border:0;border-radius:11px;background:#f6f8fb;color:#152235;font-weight:850;padding:8px;touch-action:manipulation}
-.card b{display:block;font-size:30px;margin-bottom:4px}
-.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
-.tab{border:0;border-radius:9px;padding:9px 11px;background:#314a66;color:#fff;font-weight:850;touch-action:manipulation}
-.tab.active{background:#875ed3}
-#chat{display:none;position:absolute;right:14px;bottom:88px;width:min(390px,90vw);height:430px;padding:12px;pointer-events:auto;z-index:2200}
-#msgs{height:310px;overflow:auto;margin:8px 0}
-.msg{max-width:88%;padding:8px 10px;border-radius:12px;margin:6px 0;font-size:13px}
-.me{margin-left:auto;background:#5c7ef1}.them{background:#35485e}
-.chatrow{display:flex;gap:6px}.chatrow input{flex:1;border:0;border-radius:9px;padding:10px;user-select:text}.chatrow button{border:0;border-radius:9px;padding:0 14px;background:#bf5edf;color:white;font-size:19px}
-#toast{position:absolute;left:50%;top:74px;transform:translateX(-50%);background:#102238e8;padding:8px 12px;border-radius:10px;font-weight:900;opacity:0;transition:.15s}
-.skinGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.skinGrid button{height:70px;border:0;border-radius:10px;font-weight:850;touch-action:manipulation}
+#badge{position:fixed;left:14px;top:14px;padding:10px 14px;border-radius:14px;background:#142a42e8;color:#fff;font-weight:900;z-index:10;box-shadow:0 7px 20px #0004}
+#badge small{display:block;color:#cfe1ff;margin-top:3px}
+#hint{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);padding:8px 13px;border-radius:12px;background:#142a42e8;color:#fff;font-size:12px;font-weight:850;z-index:10;white-space:nowrap}
+#speed{position:fixed;right:14px;top:14px;padding:10px 13px;border-radius:14px;background:#142a42e8;color:#fff;font-weight:900;z-index:10}
 </style>
 </head>
 <body>
 <canvas id="game"></canvas>
-<div id="loading3d" style="position:fixed;inset:0;display:grid;place-items:center;background:#78c9ff;color:#102238;font:900 22px system-ui;z-index:999">🌱 Chargement du monde plat…</div>
-
-<div class="ui">
- <div id="profile" class="panel">👧 Anna ♥ Anna City<small>VILLA XXL · CHAT BULLES · VITESSE +</small></div>
- <div id="topbar">
-   <button class="topBtn" id="saveBtn">💾</button>
-   <button class="topBtn" id="chatBtn">💬</button>
- </div>
- <div id="money" class="panel">🪙 125 860<br>💎 3 250</div>
-
- <div id="left">
-   <button class="menu" id="inventoryBtn">🎒 Inventaire</button>
-   <button class="menu" id="catalogBtn">🏗️ Catalogue</button>
-   <button class="menu" id="skinBtn">🎨 Mon skin</button>
-   <button class="menu" id="furnitureBtn">🛋️ Meubles</button>
-   <button class="menu" id="vehicleBtn">🚗 Véhicules</button>
- </div>
-
- <div id="right">
-   <button class="tool" id="placeBtn">🧱</button>
-   <button class="tool" id="breakBtn">⛏️</button>
-   <button class="tool" id="jumpBtn">⬆️</button>
-   <button class="tool" id="driveBtn">🚘</button>
- </div>
-
- <div id="cross">＋</div>
- <div id="hint">👈 gauche : marcher · 👉 droite : regarder · ✌️ pincer : zoom</div>
- <div id="selectedLabel">⬜ Béton blanc</div>
- <div id="hotbar"></div>
- <div id="toast"></div>
-
- <div id="inventory" class="modal panel">
-   <button class="close" id="inventoryClose">✕</button>
-   <h2>🎒 Inventaire créatif</h2>
-   <div class="grid" id="inventoryGrid"></div>
- </div>
-
- <div id="catalog" class="modal panel">
-   <button class="close" id="catalogClose">✕</button>
-   <h2>🏗️ Catalogue</h2>
-   <div class="tabs" id="catalogTabs"></div>
-   <div class="grid" id="catalogGrid"></div>
- </div>
-
- <div id="skin" class="modal panel">
-   <button class="close" id="skinClose">✕</button>
-   <h2>🎨 Mon skin</h2>
-   <div class="skinGrid" id="skinGrid"></div>
- </div>
-
- <div id="furniture" class="modal panel">
-   <button class="close" id="furnitureClose">✕</button>
-   <h2>🛋️ Meubles</h2>
-   <div class="grid" id="furnitureGrid"></div>
- </div>
-
- <div id="vehicles" class="modal panel">
-   <button class="close" id="vehicleClose">✕</button>
-   <h2>🚗 Véhicules</h2>
-   <div class="grid" id="vehicleGrid"></div>
- </div>
-
- <div id="chat" class="panel">
-   <button class="close" id="chatClose">✕</button>
-   <h3>💬 Chat du monde</h3>
-   <div id="msgs"></div>
-   <div class="chatrow"><input id="chatInput" placeholder="Écris un message…"><button id="sendBtn">➤</button></div>
- </div>
-</div>
+<div id="badge">🌸 ANNA CITY 2<small>ÉTAPE 1 · MONDE + ANNA + DÉPLACEMENTS</small></div>
+<div id="speed">🏃 Vitesse normale</div>
+<div id="hint">👈 moitié gauche : marcher · 👉 moitié droite : regarder · ✌️ pincer : zoom</div>
 
 <script src="https://cdn.babylonjs.com/babylon.js"></script>
 <script>
 (()=>{
-const $=id=>document.getElementById(id);
-const canvas=$('game');
+const canvas=document.getElementById('game');
 const engine=new BABYLON.Engine(canvas,true,{preserveDrawingBuffer:true,stencil:true});
 const scene=new BABYLON.Scene(engine);
 scene.clearColor=new BABYLON.Color4(.48,.79,1,1);
-scene.ambientColor=new BABYLON.Color3(.5,.5,.5);
-scene.collisionsEnabled=true;
-scene.gravity=new BABYLON.Vector3(0,-.35,0);
+scene.ambientColor=new BABYLON.Color3(.45,.45,.45);
 
-const skyLight=new BABYLON.HemisphericLight('sky',new BABYLON.Vector3(.3,1,.2),scene);skyLight.intensity=1.25;
+const light=new BABYLON.HemisphericLight('sun',new BABYLON.Vector3(.2,1,.1),scene);
+light.intensity=1.15;
 
-// ---------- Materials ----------
-function colorMat(name,hex,alpha=1){
+function mat(name,hex){
  const m=new BABYLON.StandardMaterial(name,scene);
- m.diffuseColor=BABYLON.Color3.FromHexString(hex);m.alpha=alpha;
- if(alpha<1)m.transparencyMode=BABYLON.Material.MATERIAL_ALPHABLEND;
+ m.diffuseColor=BABYLON.Color3.FromHexString(hex);
  return m;
 }
-function pixelTex(name,base,spots){
- const t=new BABYLON.DynamicTexture(name,{width:64,height:64},scene,false);
- const c=t.getContext();c.fillStyle=base;c.fillRect(0,0,64,64);
- for(let i=0;i<180;i++){c.fillStyle=spots[i%spots.length];const s=(i%3)+2;c.fillRect((i*13)%64,(i*29)%64,s,s)}
- t.update(false);t.updateSamplingMode(BABYLON.Texture.NEAREST_NEAREST);return t;
-}
-const mats={
- grass:new BABYLON.StandardMaterial('grass',scene),
- dirt:new BABYLON.StandardMaterial('dirt',scene),
- stone:colorMat('stone','#858b91'),white:colorMat('white','#eeeae2'),
- glass:colorMat('glass','#8fdcea',.42),wood:colorMat('wood','#a97445'),
- dark:colorMat('dark','#343940'),leaf:colorMat('leaf','#4a994b'),
- water:colorMat('water','#38bad9',.72),pink:colorMat('pink','#e363a4'),
- purple:colorMat('purple','#8256cf'),blue:colorMat('blue','#477de0'),
- cyan:colorMat('cyan','#38bdd6'),green:colorMat('green','#3db46a'),
- yellow:colorMat('yellow','#dfb93e'),red:colorMat('red','#c94a42'),
- black:colorMat('black','#222831'),skin:colorMat('skin','#dca680'),
- hair:colorMat('hair','#5c3828')
+const M={
+ grass:mat('grass','#55b846'), dirt:mat('dirt','#80502d'),
+ skin:mat('skin','#e2aa84'), hair:mat('hair','#5a3828'),
+ pink:mat('pink','#d94f93'), pink2:mat('pink2','#f17ab2'),
+ denim:mat('denim','#315da8'), white:mat('white','#f5f2ee'),
+ black:mat('black','#22252b'), shoe:mat('shoe','#f1f1f1')
 };
-mats.grass.diffuseTexture=pixelTex('gpx','#5cb848',['#4ba23b','#6bc84f','#388a32','#77d35d']);
-mats.dirt.diffuseTexture=pixelTex('dpx','#83552f',['#6d4328','#99663d','#72472b','#a67447']);
 
-// ---------- Helpers ----------
-function box(name,x,y,z,sx,sy,sz,mat,kind='decor',col=true){
- const b=BABYLON.MeshBuilder.CreateBox(name,{size:1},scene);
- b.position.set(x,y,z);b.scaling.set(sx,sy,sz);b.material=mat;b.checkCollisions=col;b.isPickable=true;b.metadata={kind};return b;
+// Pixel grass texture
+const tex=new BABYLON.DynamicTexture('grassPixels',{width:128,height:128},scene,false);
+const ctx=tex.getContext();
+ctx.fillStyle='#58b947';ctx.fillRect(0,0,128,128);
+const spots=['#449c39','#69c755','#388c32','#77d361'];
+for(let i=0;i<520;i++){ctx.fillStyle=spots[i%spots.length];ctx.fillRect((i*17)%128,(i*43)%128,2+(i%4),2+(i%3))}
+tex.update(false);tex.updateSamplingMode(BABYLON.Texture.NEAREST_NEAREST);
+tex.uScale=80;tex.vScale=80;M.grass.diffuseTexture=tex;
+
+// Flat empty world, deliberately lightweight
+const dirt=BABYLON.MeshBuilder.CreateBox('earth',{width:180,height:2,depth:180},scene);
+dirt.position.y=-1;dirt.material=M.dirt;
+const grass=BABYLON.MeshBuilder.CreateBox('grass',{width:180,height:.18,depth:180},scene);
+grass.position.y=.09;grass.material=M.grass;
+
+// Avatar root. Feet sit exactly on grass top (y=.18)
+const anna=new BABYLON.TransformNode('Anna',scene);
+anna.position.set(0,.18,0);
+const parts={};
+
+function box(name,w,h,d,x,y,z,material,parent=anna){
+ const b=BABYLON.MeshBuilder.CreateBox(name,{width:w,height:h,depth:d},scene);
+ b.position.set(x,y,z);b.material=material;b.parent=parent;b.isPickable=false;parts[name]=b;return b;
 }
-function toast(t){const e=$('toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,1100)}
-function bindTap(id,fn){
- const el=$(id);if(!el)return;let last=0;
- const run=e=>{if(e){e.preventDefault();e.stopPropagation()}const n=Date.now();if(n-last<220)return;last=n;fn()};
- el.addEventListener('pointerup',run,{passive:false});el.addEventListener('touchend',run,{passive:false});el.addEventListener('click',run,{passive:false});
+function sphere(name,diam,x,y,z,material,parent=anna,scale=null){
+ const s=BABYLON.MeshBuilder.CreateSphere(name,{diameter:diam,segments:16},scene);
+ s.position.set(x,y,z);s.material=material;s.parent=parent;s.isPickable=false;
+ if(scale)s.scaling.set(scale[0],scale[1],scale[2]);parts[name]=s;return s;
 }
 
-// ---------- Flat voxel world — iPad optimized ----------
-const dirtGround=BABYLON.MeshBuilder.CreateBox('dirtGround',{width:240,height:2,depth:240},scene);
-dirtGround.position.set(0,-1,0);
-dirtGround.material=mats.dirt;
-dirtGround.checkCollisions=true;
-dirtGround.isPickable=true;
-dirtGround.metadata={kind:'ground'};
+// More character-like proportions than the old block person
+box('torso',.76,.86,.36,0,1.43,0,M.pink);
+box('skirt',.84,.38,.43,0,.93,0,M.pink2);
+box('legL',.22,.72,.25,-.20,.52,0,M.skin);
+box('legR',.22,.72,.25,.20,.52,0,M.skin);
+box('shoeL',.28,.16,.48,-.20,.10,.08,M.white);
+box('shoeR',.28,.16,.48,.20,.10,.08,M.white);
 
-const grassGround=BABYLON.MeshBuilder.CreateBox('grassGround',{width:240,height:.18,depth:240},scene);
-grassGround.position.set(0,.09,0);
-grassGround.material=mats.grass;
-grassGround.checkCollisions=true;
-grassGround.isPickable=true;
-grassGround.metadata={kind:'ground'};
+box('armL',.19,.78,.22,-.48,1.40,0,M.skin);
+box('armR',.19,.78,.22,.48,1.40,0,M.skin);
 
-if(mats.grass.diffuseTexture){
-  mats.grass.diffuseTexture.uScale=120;
-  mats.grass.diffuseTexture.vScale=120;
-  mats.grass.diffuseTexture.wrapU=BABYLON.Texture.WRAP_ADDRESSMODE;
-  mats.grass.diffuseTexture.wrapV=BABYLON.Texture.WRAP_ADDRESSMODE;
-}
-if(mats.dirt.diffuseTexture){
-  mats.dirt.diffuseTexture.uScale=120;
-  mats.dirt.diffuseTexture.vScale=120;
-}
-function stream(){}
+sphere('head',.72,0,2.22,0,M.skin,null,[.92,1.05,.90]);
+box('hairTop',.69,.20,.68,0,2.52,-.02,M.hair);
+box('hairBack',.66,.72,.18,0,2.18,-.31,M.hair);
+box('hairL',.15,.64,.20,-.32,2.14,-.10,M.hair);
+box('hairR',.15,.64,.20,.32,2.14,-.10,M.hair);
 
-// ---------- Player: Minecraft-like but clean ----------
-const player=new BABYLON.TransformNode('Anna',scene);player.position.set(0,0,0);
-let playerParts={};
-function playerPart(name,mesh,mat,x,y,z){mesh.name=name;mesh.material=mat;mesh.position.set(x,y,z);mesh.parent=player;mesh.isPickable=false;playerParts[name]=mesh;return mesh}
-function makePlayer(){
- playerPart('body',BABYLON.MeshBuilder.CreateBox('pb',{width:.75,height:1.0,depth:.42},scene),mats.pink,0,1.45,0);
- playerPart('head',BABYLON.MeshBuilder.CreateBox('ph',{size:.68},scene),mats.skin,0,2.28,0);
- playerPart('hair',BABYLON.MeshBuilder.CreateBox('phr',{width:.72,height:.22,depth:.72},scene),mats.hair,0,2.56,-.01);
- playerPart('hairBack',BABYLON.MeshBuilder.CreateBox('phb',{width:.62,height:.7,depth:.14},scene),mats.hair,0,2.15,-.33);
- playerPart('legL',BABYLON.MeshBuilder.CreateBox('pll',{width:.24,height:.9,depth:.28},scene),mats.blue,-.18,.63,0);
- playerPart('legR',BABYLON.MeshBuilder.CreateBox('plr',{width:.24,height:.9,depth:.28},scene),mats.blue,.18,.63,0);
- playerPart('armL',BABYLON.MeshBuilder.CreateBox('pal',{width:.20,height:.82,depth:.24},scene),mats.skin,-.48,1.45,0);
- playerPart('armR',BABYLON.MeshBuilder.CreateBox('par',{width:.20,height:.82,depth:.24},scene),mats.skin,.48,1.45,0);
- // eyes + mouth
- const eyeL=box('eye',-.13,2.33,.35,.08,.10,.04,mats.black,'face',false);eyeL.parent=player;
- const eyeR=box('eye',.13,2.33,.35,.08,.10,.04,mats.black,'face',false);eyeR.parent=player;
- const mouth=box('mouth',0,2.13,.35,.16,.04,.04,mats.red,'face',false);mouth.parent=player;
-}
-makePlayer();
+// face
+sphere('eyeL',.075,-.13,2.27,.34,M.black);
+sphere('eyeR',.075,.13,2.27,.34,M.black);
+box('mouth',.14,.035,.025,0,2.08,.355,M.pink);
 
-// Third person orbit camera
-const camera=new BABYLON.FreeCamera('cam',new BABYLON.Vector3(0,3.3,-6.5),scene);
-camera.minZ=.08;camera.fov=.82;
-let yaw=0,pitch=.14,distance=6.5;
+// small ponytail
+sphere('pony',.34,.38,2.27,-.28,M.hair,null,[.8,1.25,.8]);
+
+// Camera — always behind and above, never under ground
+const camera=new BABYLON.FreeCamera('camera',new BABYLON.Vector3(0,3,-6),scene);
+camera.minZ=.05;camera.fov=.80;
+let yaw=0,pitch=.14,distance=6.0;
 function updateCamera(){
  const cp=Math.cos(pitch),sp=Math.sin(pitch);
- // Camera stays BEHIND and ABOVE Anna — never under the grass.
  camera.position.set(
-   player.position.x - Math.sin(yaw)*cp*distance,
-   player.position.y + 1.75 + sp*distance,
-   player.position.z - Math.cos(yaw)*cp*distance
+   anna.position.x-Math.sin(yaw)*cp*distance,
+   anna.position.y+1.7+sp*distance,
+   anna.position.z-Math.cos(yaw)*cp*distance
  );
- camera.setTarget(player.position.add(new BABYLON.Vector3(0,1.35,0)));
+ camera.setTarget(anna.position.add(new BABYLON.Vector3(0,1.25,0)));
 }
+updateCamera();
 
-// ---------- Blocks ----------
-const palette=[
- ['grass','🟩','Herbe'],['dirt','🟫','Terre'],['stone','🪨','Pierre'],['white','⬜','Béton blanc'],
- ['glass','🪟','Verre'],['wood','🪵','Bois'],['dark','⬛','Béton noir'],['leaf','🌿','Feuilles'],['water','🟦','Eau'],['pink','🩷','Rose']
-];
-let selected='white',placed=[];
-function addBlock(x,y,z,key,save=true){
- const b=box('placed',x,y,z,1,1,1,mats[key]||mats.white,'placed',true);b.metadata.key=key;placed.push(b);if(save)saveWorld();return b;
-}
-function saveWorld(){
- try{localStorage.setItem('annaNewBaseBlocks',JSON.stringify(placed.filter(b=>!b.isDisposed()).map(b=>({x:b.position.x,y:b.position.y,z:b.position.z,k:b.metadata.key}))));localStorage.setItem('annaNewBaseSkin',JSON.stringify(skinState))}catch(e){}
-}
-try{JSON.parse(localStorage.getItem('annaNewBaseBlocks')||'[]').forEach(o=>addBlock(o.x,o.y,o.z,o.k,false))}catch(e){}
-
-const hotbar=$('hotbar'),invGrid=$('inventoryGrid');
-function selectBlock(i,btn){
- const p=palette[i];if(!p)return;selected=p[0];
- document.querySelectorAll('.slot').forEach(x=>x.classList.remove('sel'));if(btn)btn.classList.add('sel');
- $('selectedLabel').textContent=p[1]+' '+p[2];toast(p[2]+' sélectionné');
-}
-palette.forEach((p,i)=>{
- const s=document.createElement('button');s.className='slot'+(i===3?' sel':'');s.textContent=p[1];
- const choose=e=>{if(e){e.preventDefault();e.stopPropagation()}selectBlock(i,s)};
- s.addEventListener('pointerdown',choose,{passive:false});
- s.addEventListener('pointerup',choose,{passive:false});
- s.addEventListener('touchend',choose,{passive:false});
- s.addEventListener('click',choose,{passive:false});
- hotbar.appendChild(s);
- const c=document.createElement('button');c.className='card';c.innerHTML='<b>'+p[1]+'</b>'+p[2];
- const choose2=e=>{if(e){e.preventDefault();e.stopPropagation()}selected=p[0];$('selectedLabel').textContent=p[1]+' '+p[2];$('inventory').style.display='none';toast(p[2])};
- c.addEventListener('pointerup',choose2,{passive:false});invGrid.appendChild(c);
-});
-
-function placeBlock(){
- const forward=new BABYLON.Vector3(Math.sin(yaw),0,Math.cos(yaw));
- const pos=player.position.add(forward.scale(3));
- const x=Math.round(pos.x),z=Math.round(pos.z);
- let y=1;
- // stack if same x,z already occupied
- const at=placed.filter(b=>!b.isDisposed()&&Math.round(b.position.x)===x&&Math.round(b.position.z)===z);
- if(at.length)y=Math.max(...at.map(b=>b.position.y))+1;
- addBlock(x,y,z,selected,true);toast('Bloc posé 🧱');
-}
-function breakBlock(){
- let best=null,dist=999;
- for(const b of placed){
-  if(b.isDisposed())continue;
-  const d=BABYLON.Vector3.Distance(player.position,b.position);
-  if(d<dist&&d<5){dist=d;best=b}
- }
- if(best){placed=placed.filter(b=>b!==best);best.dispose();saveWorld();toast('Bloc cassé ⛏️')}else toast('Aucun bloc construit assez près');
-}
-
-// ---------- Catalog ----------
-const catalogData={
- '🏠 Maisons':[
-  ['🏡','Petite maison','small'],['🏘️','Maison moderne','modern'],['💎','Grande villa','villa'],['🏊','Villa piscine','poolvilla']
- ],
- '🏪 Magasins':[
-  ['👗','Boutique','shop'],['🛒','Supermarché','market'],['🎮','Gaming','gaming'],['🥐','Boulangerie','bakery']
- ],
- '🍕 Restaurants':[
-  ['🍕','Pizzeria','pizza'],['🍔','Burger','burger'],['🍣','Sushi','sushi'],['🍰','Café','cafe']
- ]
-};
-let currentCat=Object.keys(catalogData)[0];
-function renderCatalog(){
- const tabs=$('catalogTabs'),grid=$('catalogGrid');tabs.innerHTML='';grid.innerHTML='';
- Object.keys(catalogData).forEach(k=>{
-   const b=document.createElement('button');b.className='tab'+(k===currentCat?' active':'');b.textContent=k;
-   b.addEventListener('pointerup',e=>{e.preventDefault();currentCat=k;renderCatalog()},{passive:false});tabs.appendChild(b);
- });
- catalogData[currentCat].forEach(m=>{
-   const b=document.createElement('button');b.className='card';b.innerHTML='<b>'+m[0]+'</b>'+m[1];
-   b.addEventListener('pointerup',e=>{e.preventDefault();buildModel(m[2]);$('catalog').style.display='none'},{passive:false});grid.appendChild(b);
- });
-}
-function addWall(cx,cz,x,y,z,k){addBlock(cx+x,y,cz+z,k,false)}
-function buildModel(type){
- const f=new BABYLON.Vector3(Math.sin(yaw),0,Math.cos(yaw)),c=player.position.add(f.scale(10));
- const cx=Math.round(c.x),cz=Math.round(c.z);
- let w=7,d=6,h=4;
- if(type==='villa'||type==='poolvilla'){w=27;d=19;h=8}
- if(type==='market'){w=12;d=9;h=5}
- // shell with door and windows
- const hw=Math.floor(w/2),hd=Math.floor(d/2);
- for(let yy=1;yy<=h;yy++)for(let x=-hw;x<=hw;x++)for(let z=-hd;z<=hd;z++){
-   const edge=Math.abs(x)===hw||Math.abs(z)===hd;if(!edge)continue;
-   if(z===hd&&Math.abs(x)<=1&&yy<=3)continue;
-   let k='white';
-   if((z===hd||z===-hd)&&yy>=2&&yy<=3&&Math.abs(x)<hw-1)k='glass';
-   if(type==='shop'||type==='gaming'||type==='bakery')k=(yy===1?'dark':k);
-   addWall(cx,cz,x,yy,z,k);
- }
- // floor and roof
- for(let x=-hw;x<=hw;x++)for(let z=-hd;z<=hd;z++){addWall(cx,cz,x,1,z,'wood');if(type!=='small')addWall(cx,cz,x,h+1,z,'white')}
- if(type==='villa'||type==='poolvilla'){
-   // second wing / terrace
-   for(let x=-hw+2;x<=hw-2;x++)for(let z=-hd+2;z<=hd-2;z++){
-     if(Math.abs(x)===hw-2||Math.abs(z)===hd-2){addWall(cx,cz,x,h-1,z,(z===hd-2?'glass':'white'));addWall(cx,cz,x,h,z,(z===hd-2?'glass':'white'))}
-   }
- }
- if(type==='poolvilla'){
-   for(let x=-10;x<=10;x++)for(let z=hd+3;z<=hd+10;z++)addWall(cx,cz,x,1,z,'water');
-   // enormous terrace and entrance
-   for(let x=-12;x<=12;x++)for(let z=hd+1;z<=hd+2;z++)addWall(cx,cz,x,1,z,'white');
-   // glass balcony across the front
-   for(let x=-10;x<=10;x++)addWall(cx,cz,x,h-1,hd+1,'glass');
- }
- saveWorld();toast('Modèle construit ✅');
-}
-renderCatalog();
-
-// ---------- Skin ----------
-const skinState={hair:'brown',shirt:'pink',pants:'blue'};
-try{Object.assign(skinState,JSON.parse(localStorage.getItem('annaNewBaseSkin')||'{}'))}catch(e){}
-function applySkin(){
- playerParts.hair.material=skinState.hair==='blonde'?mats.yellow:skinState.hair==='black'?mats.black:mats.hair;
- playerParts.hairBack.material=playerParts.hair.material;
- playerParts.body.material=skinState.shirt==='purple'?mats.purple:skinState.shirt==='blue'?mats.blue:mats.pink;
- const pm=skinState.pants==='black'?mats.black:skinState.pants==='purple'?mats.purple:mats.blue;
- playerParts.legL.material=pm;playerParts.legR.material=pm;saveWorld();toast('Skin appliqué 🎨');
-}
-const skinOptions=[
- ['🤎','Cheveux bruns',()=>skinState.hair='brown'],['💛','Cheveux blonds',()=>skinState.hair='blonde'],['🖤','Cheveux noirs',()=>skinState.hair='black'],
- ['🩷','Haut rose',()=>skinState.shirt='pink'],['💜','Haut violet',()=>skinState.shirt='purple'],['🩵','Haut bleu',()=>skinState.shirt='blue'],
- ['👖','Jean',()=>skinState.pants='blue'],['⬛','Pantalon noir',()=>skinState.pants='black'],['💜','Pantalon violet',()=>skinState.pants='purple']
-];
-skinOptions.forEach(o=>{const b=document.createElement('button');b.innerHTML=o[0]+'<br>'+o[1];b.addEventListener('pointerup',e=>{e.preventDefault();o[2]();applySkin()},{passive:false});$('skinGrid').appendChild(b)});
-applySkin();
-
-// ---------- Furniture ----------
-const furn=[
- ['🛋️','Canapé','sofa'],['🛏️','Lit','bed'],['📺','TV','tv'],['🪴','Plante','plant'],
- ['🍽️','Table','table'],['🪑','Chaise','chair'],['💡','Lampe','lamp'],['🖥️','Gaming','gaming']
-];
-function placeFurniture(type){
- const f=new BABYLON.Vector3(Math.sin(yaw),0,Math.cos(yaw)),p=player.position.add(f.scale(3.5));
- const r=new BABYLON.TransformNode('furn',scene);r.position.set(Math.round(p.x),1,Math.round(p.z));
- const part=(x,y,z,sx,sy,sz,mat)=>{const m=box('f',x,y,z,sx,sy,sz,mat,'furniture',true);m.parent=r};
- if(type==='sofa'){part(0,.45,0,2.8,.55,1,mats.purple);part(0,1,.4,2.8,.75,.3,mats.purple)}
- else if(type==='bed'){part(0,.35,0,2.6,.45,4,mats.white);part(0,.65,-1.5,2.6,.6,.28,mats.pink)}
- else if(type==='tv'){part(0,1.2,0,2.8,1.6,.15,mats.black);part(0,.25,0,2,.4,.6,mats.dark)}
- else if(type==='plant'){part(0,.35,0,.7,.7,.7,mats.white);part(0,1.1,0,1.3,1.3,1.3,mats.leaf)}
- else if(type==='table'){part(0,.75,0,2.6,.14,1.6,mats.wood);part(-1,.35,0,.12,.7,.12,mats.dark);part(1,.35,0,.12,.7,.12,mats.dark)}
- else if(type==='chair'){part(0,.45,0,.9,.15,.9,mats.wood);part(0,.95,.35,.9,.85,.15,mats.wood)}
- else if(type==='lamp'){part(0,.6,0,.12,1.2,.12,mats.dark);part(0,1.4,0,.6,.6,.6,mats.yellow)}
- else if(type==='gaming'){part(0,.7,0,2.6,.14,1,mats.dark);part(0,1.45,.3,2.0,1.1,.1,mats.black)}
- toast('Meuble placé ✨');
-}
-furn.forEach(f=>{const b=document.createElement('button');b.className='card';b.innerHTML='<b>'+f[0]+'</b>'+f[1];b.addEventListener('pointerup',e=>{e.preventDefault();placeFurniture(f[2]);$('furniture').style.display='none'},{passive:false});$('furnitureGrid').appendChild(b)});
-
-// ---------- Vehicles ----------
-const cars=[];let driving=null;
-
-let lastCarPrompt=false;
-
-const veh=[['🚗','Rose','pink'],['🏎️','Rouge','red'],['🚙','Bleu','blue'],['🚕','Jaune','yellow'],['🚘','Violet','purple']];
-function spawnCar(key,label){
- const f=new BABYLON.Vector3(Math.sin(yaw),0,Math.cos(yaw)),p=player.position.add(f.scale(5));
- const r=new BABYLON.TransformNode('car',scene);r.position.set(Math.round(p.x),1,Math.round(p.z));r.metadata={label};
- const body=box('body',0,.45,0,3.3,.7,1.55,mats[key],'vehicle',false);body.parent=r;
- const cab=box('cab',-.2,1.0,0,1.8,.65,1.3,mats.glass,'vehicle',false);cab.parent=r;
- [[-1,-.75],[-1,.75],[1,-.75],[1,.75]].forEach(([x,z])=>{const w=BABYLON.MeshBuilder.CreateCylinder('wheel',{height:.22,diameter:.58,tessellation:12},scene);w.rotation.x=Math.PI/2;w.position.set(x,.2,z);w.material=mats.black;w.parent=r});
- cars.push(r);toast(label+' placée 🚗');
-}
-veh.forEach(v=>{const b=document.createElement('button');b.className='card';b.innerHTML='<b>'+v[0]+'</b>'+v[1];b.addEventListener('pointerup',e=>{e.preventDefault();spawnCar(v[2],v[1]);$('vehicles').style.display='none'},{passive:false});$('vehicleGrid').appendChild(b)});
-function toggleDrive(){
- 
- if(!driving){
-   let nearCar=false;
-   for(const c of cars){
-     if(BABYLON.Vector3.Distance(c.position,player.position)<8){nearCar=true;break;}
-   }
-   if(nearCar && !lastCarPrompt){toast('🚘 Voiture proche : appuie sur le bouton 🚘');lastCarPrompt=true;}
-   if(!nearCar)lastCarPrompt=false;
- }
-
-if(driving){
-   // Exit next to the car.
-   const exitSide=new BABYLON.Vector3(Math.cos(yaw),0,-Math.sin(yaw)).scale(2.2);
-   player.setEnabled(true);
-   player.position.copyFrom(driving.position.add(exitSide));
-   player.position.y=0;
-   driving=null;
-   toast('Tu descends de la voiture 🚶');
-   return;
- }
-
- let best=null,dmin=999;
- for(const c of cars){
-   const d=BABYLON.Vector3.Distance(c.position,player.position);
-   if(d<dmin){dmin=d;best=c}
- }
-
- if(best && dmin<8){
-   driving=best;
-   player.setEnabled(false);
-   toast('Tu es dans la voiture 🚘');
- }else{
-   toast('Approche-toi d’une voiture puis appuie sur 🚘');
- }
-}
-
-// ---------- NPCs ----------
-const npcNames=['Talcado','Awariz','Yoananas','Lou','Inès','Liam','Nina','Lucas','Emma','Noah','Maya','Chloé'];
-const npcs=[];
-function makeNpc(name,x,z,i){
- const r=new BABYLON.TransformNode(name,scene);r.position.set(x,1,z);
- const shirts=[mats.black,mats.white,mats.purple,mats.pink,mats.blue,mats.green,mats.red];
- const body=box('nb',0,1.35,0,.72,1,.4,shirts[i%shirts.length],'npc',false);body.parent=r;
- const head=box('nh',0,2.22,0,.66,.66,.66,mats.skin,'npc',false);head.parent=r;
- const hair=box('nhr',0,2.54,0,.7,.18,.7,[mats.hair,mats.black,mats.yellow][i%3],'npc',false);hair.parent=r;
- const ll=box('nll',-.17,.52,0,.23,.9,.27,mats.dark,'npc',false);ll.parent=r;
- const rr=box('nrr',.17,.52,0,.23,.9,.27,mats.dark,'npc',false);rr.parent=r;
- const la=box('nla',-.47,1.35,0,.18,.8,.22,mats.skin,'npc',false);la.parent=r;
- const ra=box('nra',.47,1.35,0,.18,.8,.22,mats.skin,'npc',false);ra.parent=r;
- // face
- for(const ex of [-.12,.12]){const e=box('eye',ex,2.28,.34,.07,.08,.03,mats.black,'face',false);e.parent=r}
- r.metadata={name,target:new BABYLON.Vector3(x,1,z),phase:Math.random()*6,la,ra,ll,rr};npcs.push(r);
-}
-npcNames.forEach((n,i)=>makeNpc(n,-18+Math.random()*36,-18+Math.random()*36,i));
-
-
-function speechBubble(target,text){
- if(!target)return;
- const old=target.metadata&&target.metadata.bubble;
- if(old){try{old.dispose()}catch(e){}}
- const plane=BABYLON.MeshBuilder.CreatePlane('bubble',{width:3.8,height:1.05},scene);
- plane.billboardMode=BABYLON.Mesh.BILLBOARDMODE_ALL;
- plane.parent=target;plane.position.set(0,3.35,0);plane.isPickable=false;
- const dt=new BABYLON.DynamicTexture('bubbleTex',{width:512,height:140},scene,true);
- const ctx=dt.getContext();ctx.fillStyle='rgba(255,255,255,.96)';ctx.fillRect(0,0,512,140);
- ctx.strokeStyle='#202b38';ctx.lineWidth=8;ctx.strokeRect(4,4,504,132);
- ctx.fillStyle='#172231';ctx.font='bold 34px Arial';ctx.textAlign='center';ctx.textBaseline='middle';
- let t=String(text);if(t.length>28)t=t.slice(0,27)+'…';ctx.fillText(t,256,70);dt.update();
- const mat=new BABYLON.StandardMaterial('bubbleMat',scene);mat.diffuseTexture=dt;mat.emissiveColor=new BABYLON.Color3(1,1,1);mat.backFaceCulling=false;
- plane.material=mat;
- target.metadata=target.metadata||{};target.metadata.bubble=plane;
- setTimeout(()=>{try{plane.dispose();dt.dispose();mat.dispose()}catch(e){}},4200);
-}
-
-// ---------- Chat ----------
-function addMsg(n,t){const d=document.createElement('div');d.className='msg '+(n==='Anna'?'me':'them');d.innerHTML='<b>'+n+'</b><br>'+t;$('msgs').appendChild(d);$('msgs').scrollTop=$('msgs').scrollHeight}
-function answer(q,n){
- const t=q.toLowerCase();
- if(/salut|bonjour|coucou/.test(t))return 'Coucou Anna 😄';
- if(/où|ou est|tu es ou/.test(t))return 'Je suis juste à côté de toi sur le terrain 🌱';
- if(/villa|maison/.test(t))return 'Ouvre 🏗️ Catalogue → Maisons. Tu peux placer une villa directement.';
- if(/voiture/.test(t))return 'Ouvre 🚗 Véhicules, choisis une voiture puis approche-toi et appuie sur 🚘.';
- if(/skin|cheveux|habit/.test(t))return 'Va dans 🎨 Mon skin : les changements s’appliquent tout de suite.';
- if(/bloc|poser|constru/.test(t))return 'Choisis ton bloc en bas puis appuie sur 🧱.';
- return ['Oui 😄','Bonne idée !','Je viens voir 👀','On construit ça ensemble !','Trop bien 💜'][Math.floor(Math.random()*5)];
-}
-function sendChat(){
- const q=$('chatInput').value.trim();if(!q)return;$('chatInput').value='';addMsg('Anna',q);speechBubble(player,q);
- let nearest=npcs[0],d=999;for(const n of npcs){const nd=BABYLON.Vector3.Distance(n.position,player.position);if(nd<d){d=nd;nearest=n}}
- const reply=answer(q,nearest?.metadata?.name||'Talcado');
- addMsg(nearest?.metadata?.name||'Talcado',reply);
- speechBubble(nearest,reply);
-}
-addMsg('Talcado','Coucou Anna ❤️ Nouvelle base : construis tout toi-même !');
-
-// ---------- UI bindings ----------
-bindTap('inventoryBtn',()=>$('inventory').style.display='block');bindTap('inventoryClose',()=>$('inventory').style.display='none');
-bindTap('catalogBtn',()=>$('catalog').style.display='block');bindTap('catalogClose',()=>$('catalog').style.display='none');
-bindTap('skinBtn',()=>$('skin').style.display='block');bindTap('skinClose',()=>$('skin').style.display='none');
-bindTap('furnitureBtn',()=>$('furniture').style.display='block');bindTap('furnitureClose',()=>$('furniture').style.display='none');
-bindTap('vehicleBtn',()=>$('vehicles').style.display='block');bindTap('vehicleClose',()=>$('vehicles').style.display='none');
-bindTap('chatBtn',()=>$('chat').style.display='block');bindTap('chatClose',()=>$('chat').style.display='none');
-bindTap('placeBtn',placeBlock);bindTap('breakBtn',breakBlock);bindTap('driveBtn',toggleDrive);bindTap('saveBtn',()=>{saveWorld();toast('Sauvegardé 💾')});
-bindTap('jumpBtn',()=>{if(!driving){player.position.y+=.55;setTimeout(()=>player.position.y=1,220)}});
-bindTap('sendBtn',sendChat);$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')sendChat()});
-
-// ---------- Touch controls ----------
-let moveT=null,lookT=null,pinch=null,mx=0,my=0;
-function isUI(t){return t&&t.closest&&t.closest('button,input,.modal,#chat,#hotbar,#left,#right,#topbar')}
+// Touch controls
+let move=null,look=null,pinch=null,mx=0,my=0;
 canvas.addEventListener('touchstart',e=>{
- if(isUI(e.target))return;e.preventDefault();
- if(e.touches.length>=2){const a=e.touches[0],b=e.touches[1];pinch=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)}
+ e.preventDefault();
+ if(e.touches.length>=2){
+   const a=e.touches[0],b=e.touches[1];
+   pinch=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
+ }
  for(const t of e.changedTouches){
-   if(t.clientX<innerWidth*.5&&!moveT)moveT={id:t.identifier,x0:t.clientX,y0:t.clientY};
-   else if(!lookT)lookT={id:t.identifier,x:t.clientX,y:t.clientY};
+   if(t.clientX<innerWidth*.5&&!move)move={id:t.identifier,x:t.clientX,y:t.clientY};
+   else if(!look)look={id:t.identifier,x:t.clientX,y:t.clientY};
  }
 },{passive:false});
 canvas.addEventListener('touchmove',e=>{
- if(isUI(e.target))return;e.preventDefault();
- if(e.touches.length>=2){const a=e.touches[0],b=e.touches[1],d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);if(pinch)distance=Math.max(2.5,Math.min(10,distance*(pinch/d)));pinch=d}
+ e.preventDefault();
+ if(e.touches.length>=2){
+   const a=e.touches[0],b=e.touches[1],d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
+   if(pinch)distance=Math.max(2.6,Math.min(9,distance*(pinch/d)));
+   pinch=d;
+ }
  for(const t of e.changedTouches){
-   if(moveT&&t.identifier===moveT.id){mx=Math.max(-1,Math.min(1,(t.clientX-moveT.x0)/85));my=Math.max(-1,Math.min(1,(t.clientY-moveT.y0)/85))}
-   if(lookT&&t.identifier===lookT.id){yaw-=(t.clientX-lookT.x)*.004;pitch=Math.max(-.15,Math.min(.55,pitch+(t.clientY-lookT.y)*.003));lookT.x=t.clientX;lookT.y=t.clientY}
+   if(move&&t.identifier===move.id){
+     mx=Math.max(-1,Math.min(1,(t.clientX-move.x)/80));
+     my=Math.max(-1,Math.min(1,(t.clientY-move.y)/80));
+   }
+   if(look&&t.identifier===look.id){
+     yaw-=(t.clientX-look.x)*.0042;
+     pitch=Math.max(-.08,Math.min(.52,pitch+(t.clientY-look.y)*.003));
+     look.x=t.clientX;look.y=t.clientY;
+   }
  }
 },{passive:false});
 canvas.addEventListener('touchend',e=>{
- for(const t of e.changedTouches){if(moveT&&t.identifier===moveT.id){moveT=null;mx=my=0}if(lookT&&t.identifier===lookT.id)lookT=null}
+ for(const t of e.changedTouches){
+   if(move&&t.identifier===move.id){move=null;mx=0;my=0}
+   if(look&&t.identifier===look.id)look=null;
+ }
  if(e.touches.length<2)pinch=null;
 },{passive:false});
 
-// ---------- Loop ----------
-scene.onBeforeRenderObservable.add(()=>{
- stream();
- const forward=new BABYLON.Vector3(Math.sin(yaw),0,Math.cos(yaw));
- const right=new BABYLON.Vector3(-Math.cos(yaw),0,Math.sin(yaw));
+// Desktop fallback for testing
+const keys={};
+addEventListener('keydown',e=>keys[e.key.toLowerCase()]=true);
+addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
 
- if(driving){
-   driving.rotation.y=yaw;
-   driving.position.addInPlace(forward.scale(-my*.055));
-   driving.position.addInPlace(right.scale(mx*.028));
-   player.position.copyFrom(driving.position);
+let walkPhase=0;
+scene.onBeforeRenderObservable.add(()=>{
+ let sx=mx,sy=my;
+ if(keys['a'])sx=-1;if(keys['d'])sx=1;if(keys['w'])sy=-1;if(keys['s'])sy=1;
+
+ const forward=new BABYLON.Vector3(Math.sin(yaw),0,Math.cos(yaw));
+ const right=new BABYLON.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
+ const moving=Math.abs(sx)+Math.abs(sy)>.02;
+
+ // Comfortable speed: faster than the slow version, but controllable
+ anna.position.addInPlace(forward.scale(-sy*.042));
+ anna.position.addInPlace(right.scale(sx*.038));
+ anna.position.y=.18;
+
+ if(moving){
+   anna.rotation.y=yaw+Math.PI;
+   walkPhase+=.12;
+   parts.armL.rotation.x=Math.sin(walkPhase)*.45;
+   parts.armR.rotation.x=-Math.sin(walkPhase)*.45;
+   parts.legL.rotation.x=-Math.sin(walkPhase)*.32;
+   parts.legR.rotation.x=Math.sin(walkPhase)*.32;
  }else{
-   // EXACT validated walking speed preserved
-   player.position.addInPlace(forward.scale(-my*.034));
-   player.position.addInPlace(right.scale(mx*.031));
-   if(Math.abs(mx)+Math.abs(my)>.02)player.rotation.y=yaw+Math.PI;
+   parts.armL.rotation.x*=.7;parts.armR.rotation.x*=.7;
+   parts.legL.rotation.x*=.7;parts.legR.rotation.x*=.7;
  }
  updateCamera();
-
- npcs.forEach(n=>{
-   if(Math.random()<.0025)n.metadata.target.set(-24+Math.random()*48,1,-24+Math.random()*48);
-   const dx=n.metadata.target.x-n.position.x,dz=n.metadata.target.z-n.position.z,dd=Math.hypot(dx,dz);
-   if(dd>.6){n.position.x+=dx/dd*.004;n.position.z+=dz/dd*.004;n.rotation.y=Math.atan2(dx,dz);n.metadata.phase+=.07;const a=Math.sin(n.metadata.phase)*.45;n.metadata.la.rotation.x=a;n.metadata.ra.rotation.x=-a;n.metadata.ll.rotation.x=-a*.5;n.metadata.rr.rotation.x=a*.5}
- });
 });
-updateCamera();
-let firstFrame=true;
-engine.runRenderLoop(()=>{scene.render();if(firstFrame){firstFrame=false;const l=document.getElementById('loading3d');if(l)l.remove();}});
-window.addEventListener('resize',()=>engine.resize());
+
+engine.runRenderLoop(()=>scene.render());
+addEventListener('resize',()=>engine.resize());
 })();
 </script>
 </body>
