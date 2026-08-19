@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Anna City — Nouvelle Base FIX NOIR V2</title>
+<title>Anna City — FIX CAMÉRA</title>
 <style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#7ecbff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
@@ -48,7 +48,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#7ecbff;fon
 <div id="loading3d" style="position:fixed;inset:0;display:grid;place-items:center;background:#78c9ff;color:#102238;font:900 22px system-ui;z-index:999">🌱 Chargement du monde plat…</div>
 
 <div class="ui">
- <div id="profile" class="panel">👧 Anna ♥ Anna City<small>FIX NOIR V2 · MODE CRÉATIF · MONDE PLAT</small></div>
+ <div id="profile" class="panel">👧 Anna ♥ Anna City<small>FIX CAMÉRA · MODE CRÉATIF · MONDE PLAT</small></div>
  <div id="topbar">
    <button class="topBtn" id="saveBtn">💾</button>
    <button class="topBtn" id="chatBtn">💬</button>
@@ -198,7 +198,7 @@ if(mats.dirt.diffuseTexture){
 function stream(){}
 
 // ---------- Player: Minecraft-like but clean ----------
-const player=new BABYLON.TransformNode('Anna',scene);player.position.set(0,1,0);
+const player=new BABYLON.TransformNode('Anna',scene);player.position.set(0,1.05,0);
 let playerParts={};
 function playerPart(name,mesh,mat,x,y,z){mesh.name=name;mesh.material=mat;mesh.position.set(x,y,z);mesh.parent=player;mesh.isPickable=false;playerParts[name]=mesh;return mesh}
 function makePlayer(){
@@ -223,9 +223,13 @@ camera.minZ=.08;camera.fov=.82;
 let yaw=0,pitch=.14,distance=6.5;
 function updateCamera(){
  const cp=Math.cos(pitch),sp=Math.sin(pitch);
- const off=new BABYLON.Vector3(Math.sin(yaw)*cp*distance,1.9+sp*distance,Math.cos(yaw)*cp*distance);
- camera.position=player.position.subtract(off);
- camera.setTarget(player.position.add(new BABYLON.Vector3(0,1.45,0)));
+ // Camera stays BEHIND and ABOVE Anna — never under the grass.
+ camera.position.set(
+   player.position.x - Math.sin(yaw)*cp*distance,
+   player.position.y + 1.75 + sp*distance,
+   player.position.z - Math.cos(yaw)*cp*distance
+ );
+ camera.setTarget(player.position.add(new BABYLON.Vector3(0,1.35,0)));
 }
 
 // ---------- Blocks ----------
