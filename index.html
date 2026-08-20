@@ -1,73 +1,120 @@
 <!doctype html>
-<html lang="fr"><head><meta charset="utf-8">
+<html lang="fr">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>Anna City V11 — Skin bleu + caméra</title>
+<title>Anna City V12 — Terrain vide</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;overflow:hidden;background:#79c9ff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
-canvas{width:100%;height:100%;display:block}
-#start{position:fixed;inset:0;z-index:50;background:linear-gradient(#9ed9ff,#f4fbff);display:grid;place-items:center}
-.card{background:#fffffff2;padding:26px;border-radius:24px;text-align:center;box-shadow:0 20px 60px #0004}
-.card h1{font-size:44px;margin:0 0 8px}.card button,.icon,.act,.zoom{border:0;border-radius:12px;font-weight:900}
-.card button{padding:14px 30px;font-size:20px;background:#4ba76a;color:white}
+html,body{margin:0;height:100%;overflow:hidden;background:#82c6f4;font-family:system-ui,-apple-system,sans-serif;touch-action:none}
+canvas{display:block;width:100%;height:100%}
+#start{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:linear-gradient(#92d2ff,#f8fcff)}
+.card{width:min(520px,90vw);background:#fffffff2;padding:26px;border-radius:24px;text-align:center;box-shadow:0 18px 50px #0003}
+.card h1{margin:0 0 6px;font-size:42px}.card p{color:#52606d}.card button{border:0;border-radius:14px;padding:14px 28px;background:#4ba76a;color:white;font-size:20px;font-weight:900}
 #hud{display:none;position:fixed;inset:0;pointer-events:none}
-.pill{position:absolute;left:10px;top:10px;background:#172431e8;color:white;padding:8px 11px;border-radius:10px;font-weight:850}
+.pill{position:absolute;top:10px;left:10px;background:#172431e8;color:#fff;padding:8px 11px;border-radius:10px;font-weight:850}
 .tools{position:absolute;right:10px;top:10px;display:flex;gap:6px;pointer-events:auto}
-.icon,.zoom{width:44px;height:44px;background:#172431e8;color:#fff;font-size:20px}
-#joy{position:absolute;left:18px;bottom:90px;width:120px;height:120px;border:2px solid #fff8;border-radius:50%;background:#fff3;pointer-events:auto}
-#nub{position:absolute;left:39px;top:39px;width:42px;height:42px;border-radius:50%;background:#fffc}
-.actions{position:absolute;right:14px;bottom:95px;display:grid;gap:7px;pointer-events:auto}
-.act{width:82px;height:54px;background:#fffffff2}
-#hint{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:#172431dd;color:#fff;padding:8px 12px;border-radius:10px;font-size:13px}
-</style></head><body>
+.tools button{width:44px;height:44px;border:0;border-radius:10px;background:#172431e8;color:#fff;font-size:21px;font-weight:900}
+#joy{position:absolute;left:18px;bottom:88px;width:122px;height:122px;border:2px solid #fff9;border-radius:50%;background:#ffffff32;pointer-events:auto}
+#nub{position:absolute;left:40px;top:40px;width:42px;height:42px;border-radius:50%;background:#ffffffe8}
+.actions{position:absolute;right:14px;bottom:92px;pointer-events:auto}
+.actions button{width:84px;height:54px;border:0;border-radius:12px;background:#fffffff2;font-weight:900}
+#hint{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);background:#172431dd;color:#fff;padding:8px 12px;border-radius:10px;font-size:13px;white-space:nowrap}
+</style>
+</head>
+<body>
 <canvas id="c"></canvas>
-<div id="start"><div class="card"><h1>ANNA CITY V11</h1><p>Caméra corrigée + zoom/dézoom tactile 💙</p><button id="play">JOUER</button></div></div>
+
+<div id="start"><div class="card">
+<h1>ANNA CITY V12</h1>
+<p>Terrain vide + commandes corrigées 💙</p>
+<button id="play">JOUER</button>
+</div></div>
+
 <div id="hud">
-  <div class="pill">💙 Anna · Skin bleu</div>
-  <div class="tools">
-    <button class="zoom" id="zoomOut">−</button>
-    <button class="zoom" id="zoomIn">＋</button>
-    <button class="icon" id="view">👤</button>
-  </div>
-  <div id="joy"><div id="nub"></div></div>
-  <div class="actions"><button class="act" id="jump">⬆️ Sauter</button></div>
-  <div id="hint">Glisse pour regarder · pince avec 2 doigts ou utilise − / ＋ pour zoomer</div>
+<div class="pill">💙 Anna · Skin bleu</div>
+<div class="tools">
+<button id="zoomOut">−</button>
+<button id="zoomIn">＋</button>
+</div>
+<div id="joy"><div id="nub"></div></div>
+<div class="actions"><button id="jump">⬆️ Sauter</button></div>
+<div id="hint">Joystick à droite = Anna va à droite · pince pour zoomer</div>
 </div>
 
 <script src="https://cdn.babylonjs.com/babylon.js"></script>
 <script>
-const canvas=document.getElementById('c'),engine=new BABYLON.Engine(canvas,true,{adaptToDeviceRatio:true}),scene=new BABYLON.Scene(engine);
-scene.clearColor=new BABYLON.Color4(.48,.78,1,1);
-new BABYLON.HemisphericLight('sun',new BABYLON.Vector3(.2,1,.1),scene).intensity=1.08;
+const canvas=document.getElementById('c');
+const engine=new BABYLON.Engine(canvas,true,{adaptToDeviceRatio:true});
+const scene=new BABYLON.Scene(engine);
+scene.clearColor=new BABYLON.Color4(.49,.76,.95,1);
+new BABYLON.HemisphericLight('sun',new BABYLON.Vector3(.2,1,.1),scene).intensity=1.12;
 
-function mat(n,c,a=1){let m=new BABYLON.StandardMaterial(n,scene);m.diffuseColor=BABYLON.Color3.FromHexString(c);m.alpha=a;return m}
+function mat(n,c,a=1){
+ const m=new BABYLON.StandardMaterial(n,scene);
+ m.diffuseColor=BABYLON.Color3.FromHexString(c); m.alpha=a; return m;
+}
 const M={
- grass:mat('grass','#72b95a'),skin:mat('skin','#f2d8cc'),hair:mat('hair','#e5caa4'),
- hair2:mat('hair2','#caae88'),blue:mat('blue','#b6c5d8'),blue2:mat('blue2','#8fa2ba'),
- white:mat('white','#faf6f4'),shorts:mat('shorts','#535d6c'),shoe:mat('shoe','#514949'),
- eye:mat('eye','#65435e'),road:mat('road','#3d4349'),house:mat('house','#f2eee8'),
- glass:mat('glass','#8dd8ed',.45),water:mat('water','#38cbe8',.8)
+ grass:mat('grass','#80bf63'),
+ skin:mat('skin','#f3d7c9'),
+ hair:mat('hair','#e3c79e'),
+ hair2:mat('hair2','#c9aa83'),
+ blue:mat('blue','#b2c2d7'),
+ blue2:mat('blue2','#879bb6'),
+ shorts:mat('shorts','#4d5665'),
+ shoe:mat('shoe','#504949'),
+ eye:mat('eye','#69465f'),
+ white:mat('white','#f7f4f2')
 };
-function box(n,x,y,z,sx,sy,sz,ma,parent=null){
- let b=BABYLON.MeshBuilder.CreateBox(n,{size:1},scene);b.position.set(x,y,z);b.scaling.set(sx,sy,sz);b.material=ma;
- if(parent)b.parent=parent;return b
+function box(n,x,y,z,sx,sy,sz,m,parent=null){
+ const b=BABYLON.MeshBuilder.CreateBox(n,{size:1},scene);
+ b.position.set(x,y,z); b.scaling.set(sx,sy,sz); b.material=m;
+ if(parent)b.parent=parent; return b;
 }
 
-/* Monde */
-box('ground',0,-.5,0,180,1,180,M.grass);
-box('road',0,.03,10,100,.12,5,M.road);
-for(let x=-45;x<=45;x+=15){box('house',x,3,-18,10,6,9,M.house);box('window',x,3,-13.48,5,2.4,.08,M.glass)}
-box('villa',0,4,-40,30,8,18,M.house);box('glass',0,4,-30.98,12,4,.08,M.glass);box('pool',9,.1,-27,11,.2,7,M.water);
+/* Terrain totalement vide — herbe voxel texturée */
+const grassMats=[
+ mat('grassA','#6fac50'),mat('grassB','#78b85a'),mat('grassC','#65a947'),
+ mat('grassD','#83bd61'),mat('grassE','#72b252')
+];
+const dirt=mat('dirt','#79543b');
+const dirtDark=mat('dirtDark','#65452f');
+
+/* grand socle terreux, visible surtout à l'horizon/aux éventuels bords */
+box('earth',0,-1.05,0,260,1.1,260,dirt);
+
+/* tuiles d'herbe 4x4 avec variations discrètes façon Minecraft */
+const TILE=4, HALF=32;
+for(let gx=-HALF;gx<HALF;gx++){
+ for(let gz=-HALF;gz<HALF;gz++){
+   const x=(gx+.5)*TILE, z=(gz+.5)*TILE;
+   const hash=Math.abs((gx*73856093)^(gz*19349663));
+   const gm=grassMats[hash%grassMats.length];
+   const g=box('grassBlock',x,-.43,z,TILE-.025,.18,TILE-.025,gm);
+   /* petites touches carrées intégrées à la surface, sans objets qui gênent la marche */
+   if(hash%5===0){
+     const patch=box('grassPixel',x+((hash%7)-3)*.28,-.325,z+(((hash>>3)%7)-3)*.28,
+                     .42,.012,.42,grassMats[(hash+2)%grassMats.length]);
+   }
+ }
+}
+
+/* quelques micro-pixels de teinte, uniquement plats au sol */
+for(let i=0;i<520;i++){
+ const x=((i*37)%247)-123.5, z=((i*83)%247)-123.5;
+ const sz=.12+((i*17)%20)/100;
+ box('grassDetail',x,-.315,z,sz,.01,sz,grassMats[(i*3)%grassMats.length]);
+}
 
 /* Joueur */
 const player=new BABYLON.TransformNode('Player',scene);
-player.position.set(0,.55,10);
+player.position.set(0,.55,0);
 const avatar=new BABYLON.TransformNode('AnnaSkin',scene);
 avatar.parent=player;
 
 function p(n,x,y,z,sx,sy,sz,m,parent=avatar){return box(n,x,y,z,sx,sy,sz,m,parent)}
 
-/* silhouette plus fine, proche du skin validé */
+/* Skin Minecraft fin bleu */
 p('torso',0,1.72,0,.78,1.12,.38,M.blue);
 p('neck',0,2.34,0,.28,.14,.28,M.skin);
 p('head',0,2.83,0,.82,.82,.82,M.skin);
@@ -90,7 +137,9 @@ const legRPivot=new BABYLON.TransformNode('legRPivot',scene); legRPivot.parent=a
 const armLPivot=new BABYLON.TransformNode('armLPivot',scene); armLPivot.parent=avatar; armLPivot.position.set(-.52,2.18,0);
 const armRPivot=new BABYLON.TransformNode('armRPivot',scene); armRPivot.parent=avatar; armRPivot.position.set(.52,2.18,0);
 
-function limb(parent,n,px,py,pz,sx,sy,sz,m){return p(n,px,py,pz,sx,sy,sz,m,parent)}
+function limb(parent,n,px,py,pz,sx,sy,sz,m){
+ return p(n,px,py,pz,sx,sy,sz,m,parent)
+}
 limb(legLPivot,'legL',0,-.52,0,.31,1.05,.33,M.skin);
 limb(legRPivot,'legR',0,-.52,0,.31,1.05,.33,M.skin);
 limb(legLPivot,'sockL',0,-.65,.01,.33,.50,.35,M.blue);
@@ -98,37 +147,45 @@ limb(legRPivot,'sockR',0,-.65,.01,.33,.50,.35,M.blue);
 limb(legLPivot,'shoeL',0,-.94,.07,.34,.16,.44,M.shoe);
 limb(legRPivot,'shoeR',0,-.94,.07,.34,.16,.44,M.shoe);
 
-/* vraie caméra 3e personne */
-let yaw=Math.PI, pitch=-0.12, distance=7.2, minDist=3.8, maxDist=13;
-const targetHeight=2.0;
-const cam=new BABYLON.FreeCamera('camera',new BABYLON.Vector3(0,4,18),scene);
+/* Caméra 3e personne */
+let yaw=0, pitch=-0.18, distance=7.8;
+const minDist=4.2,maxDist=14,targetHeight=2.0;
+const cam=new BABYLON.FreeCamera('camera',new BABYLON.Vector3(0,4,-8),scene);
 cam.minZ=.1;
 
 function updateCamera(){
- const cp=Math.cos(pitch), sp=Math.sin(pitch), sy=Math.sin(yaw), cy=Math.cos(yaw);
- const tx=player.position.x, ty=player.position.y+targetHeight, tz=player.position.z;
- cam.position.set(tx - sy*cp*distance, ty + sp*distance, tz - cy*cp*distance);
+ const cp=Math.cos(pitch),sp=Math.sin(pitch),sy=Math.sin(yaw),cy=Math.cos(yaw);
+ const tx=player.position.x,ty=player.position.y+targetHeight,tz=player.position.z;
+ cam.position.set(tx-sy*cp*distance,ty+sp*distance,tz-cy*cp*distance);
  cam.setTarget(new BABYLON.Vector3(tx,ty,tz));
 }
 
-/* déplacement */
+/* Joystick */
 let jx=0,jy=0;
 const joy=document.getElementById('joy'),nub=document.getElementById('nub');
 function jm(e){
- e.preventDefault();let t=e.touches[0],r=joy.getBoundingClientRect(),x=t.clientX-r.left-60,y=t.clientY-r.top-60,d=Math.hypot(x,y),mx=39;
- if(d>mx){x=x/d*mx;y=y/d*mx}jx=x/mx;jy=y/mx;nub.style.transform=`translate(${x}px,${y}px)`
+ e.preventDefault();
+ let t=e.touches[0],r=joy.getBoundingClientRect();
+ let x=t.clientX-r.left-61,y=t.clientY-r.top-61,d=Math.hypot(x,y),mx=40;
+ if(d>mx){x=x/d*mx;y=y/d*mx}
+ jx=x/mx;jy=y/mx;
+ nub.style.transform=`translate(${x}px,${y}px)`;
 }
-joy.addEventListener('touchstart',jm,{passive:false});joy.addEventListener('touchmove',jm,{passive:false});
+joy.addEventListener('touchstart',jm,{passive:false});
+joy.addEventListener('touchmove',jm,{passive:false});
 joy.addEventListener('touchend',()=>{jx=jy=0;nub.style.transform=''});
 
+/* Glisser la caméra + pinch */
 let look=null,pinchStart=null,pinchDistStart=null;
 canvas.addEventListener('touchstart',e=>{
  if(e.touches.length===2){
    pinchStart=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
    pinchDistStart=distance;look=null;return;
  }
- let t=e.touches[0]; if(t.clientX>innerWidth*.30) look={x:t.clientX,y:t.clientY};
+ let t=e.touches[0];
+ if(t.clientX>innerWidth*.30)look={x:t.clientX,y:t.clientY};
 },{passive:false});
+
 canvas.addEventListener('touchmove',e=>{
  e.preventDefault();
  if(e.touches.length===2 && pinchStart){
@@ -138,48 +195,61 @@ canvas.addEventListener('touchmove',e=>{
  }
  if(!look)return;
  let t=e.touches[0],dx=t.clientX-look.x,dy=t.clientY-look.y;
- yaw-=dx*.006; pitch+=dy*.0045; pitch=Math.max(-.55,Math.min(.35,pitch));
+ yaw+=dx*.006;
+ pitch+=dy*.0045;
+ pitch=Math.max(-.55,Math.min(.35,pitch));
  look={x:t.clientX,y:t.clientY};
 },{passive:false});
+
 canvas.addEventListener('touchend',()=>{look=null;pinchStart=null;pinchDistStart=null});
 
 document.getElementById('zoomOut').onclick=()=>distance=Math.min(maxDist,distance+1);
 document.getElementById('zoomIn').onclick=()=>distance=Math.max(minDist,distance-1);
-
-let third=true;
-document.getElementById('view').onclick=()=>{
- third=!third;
- avatar.setEnabled(third);
- if(!third) distance=1.2; else distance=7.2;
-};
 
 let vy=0,onGround=true;
 document.getElementById('jump').onclick=()=>{if(onGround){vy=.19;onGround=false}};
 
 let phase=0;
 scene.onBeforeRenderObservable.add(()=>{
- let dt=Math.min(.033,engine.getDeltaTime()/1000);
+ const dt=Math.min(.033,engine.getDeltaTime()/1000);
+
+ /* directions corrigées */
  const forward=new BABYLON.Vector3(Math.sin(yaw),0,Math.cos(yaw));
- const right=new BABYLON.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
+ const right=new BABYLON.Vector3(-Math.cos(yaw),0,Math.sin(yaw));
  let mv=forward.scale(-jy).add(right.scale(jx));
- let moving=mv.lengthSquared()>.02;
- if(moving){
-   mv.normalize(); player.position.addInPlace(mv.scale(5.2*dt));
+
+ if(mv.lengthSquared()>.02){
+   mv.normalize();
+   player.position.addInPlace(mv.scale(5.2*dt));
    player.rotation.y=Math.atan2(mv.x,mv.z);
+
    phase+=dt*9;
-   legLPivot.rotation.x=Math.sin(phase)*.55; legRPivot.rotation.x=-Math.sin(phase)*.55;
-   armLPivot.rotation.x=-Math.sin(phase)*.42; armRPivot.rotation.x=Math.sin(phase)*.42;
+   legLPivot.rotation.x=Math.sin(phase)*.55;
+   legRPivot.rotation.x=-Math.sin(phase)*.55;
+   armLPivot.rotation.x=-Math.sin(phase)*.42;
+   armRPivot.rotation.x=Math.sin(phase)*.42;
  }else{
-   legLPivot.rotation.x*=.78;legRPivot.rotation.x*=.78;armLPivot.rotation.x*=.78;armRPivot.rotation.x*=.78;
+   legLPivot.rotation.x*=.78;legRPivot.rotation.x*=.78;
+   armLPivot.rotation.x*=.78;armRPivot.rotation.x*=.78;
  }
+
  if(!onGround){
-   vy-=.55*dt;player.position.y+=vy;
+   vy-=.55*dt;
+   player.position.y+=vy;
    if(player.position.y<=.55){player.position.y=.55;vy=0;onGround=true}
  }
+
  updateCamera();
 });
-updateCamera();
 
-document.getElementById('play').onclick=()=>{document.getElementById('start').style.display='none';document.getElementById('hud').style.display='block'};
-engine.runRenderLoop(()=>scene.render());addEventListener('resize',()=>engine.resize());
-</script></body></html>
+updateCamera();
+document.getElementById('play').onclick=()=>{
+ document.getElementById('start').style.display='none';
+ document.getElementById('hud').style.display='block';
+};
+
+engine.runRenderLoop(()=>scene.render());
+addEventListener('resize',()=>engine.resize());
+</script>
+</body>
+</html>
